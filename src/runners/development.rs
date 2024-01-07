@@ -32,7 +32,7 @@ pub fn is_node_installed() -> bool {
     output_str.contains("v")
 }
 
-pub fn start_development() {
+pub fn start_development(host: &str, port: &str) {
     // Set the ctrl-c handler to exit the program and clean up orphaned processes
     let running = Arc::new(AtomicBool::new(true));
     let r = running.clone();
@@ -70,12 +70,12 @@ pub fn start_development() {
     step("Starting cargo backend development server");
 
     let mut cargo_watch = std::process::Command::new("cargo")
+        .current_dir("./src/backend")
         .arg("watch")
-        .arg("-x")
-        .arg("run")
         .arg("-w")
         .arg("./src")
-        .current_dir("./src/backend")
+        .arg("-x")
+        .arg(format!("run -- --host={} --port={}", host, port))
         .spawn()
         .expect("Failed to start backend development server");
 
@@ -90,15 +90,18 @@ pub fn start_development() {
         .spawn()
         .expect("Failed to start frontend development server");
 
-    // Clean up section for orphaned processes
+    // Clean up section for orphaned processes, otherwise cargo watch and node watch will continue to run blocking the ports
     while running.load(Ordering::SeqCst) {}
     step("Cleaning up orphaned processes");
 
-    cargo_watch.kill().expect("Failed to kill cargo-watch process");
-    node_watch.kill().expect("Failed to kill node-watch process");
+    cargo_watch
+        .kill()
+        .expect("Failed to kill cargo-watch process");
+    node_watch
+        .kill()
+        .expect("Failed to kill node-watch process");
 
     step("Exiting");
 
     std::process::exit(0);
-
 }

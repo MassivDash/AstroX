@@ -1,6 +1,7 @@
 use actix_web::{get, post, App, HttpResponse, HttpServer, Responder};
 use actix_files::{Files, NamedFile};
 use actix_web::dev::{ServiceRequest, ServiceResponse, fn_service};
+use std::env;
 
 
 
@@ -22,6 +23,29 @@ async fn json_response_get() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+
+
+    let args: Vec<String> = env::args().collect();
+
+    let mut host = "127.0.0.1";
+    let mut port = 8080;    
+
+    for arg in &args {
+        if arg.starts_with("--host=") {
+            let split: Vec<&str> = arg.split('=').collect();
+            if split.len() == 2 {
+                host = split[1];
+            }
+        }
+        if arg.starts_with("--port=") {
+            let split: Vec<&str> = arg.split('=').collect();
+            if split.len() == 2 {
+                port = split[1].parse::<u16>().unwrap();
+            }
+        }
+    }
+
+
     HttpServer::new(|| {
         App::new()
         .service(json_response)
@@ -36,7 +60,7 @@ async fn main() -> std::io::Result<()> {
             Ok(ServiceResponse::new(req, res))
         })))
     })
-    .bind(("127.0.0.1", 8080))?
+    .bind((host, port))?
     .run()
     .await
 }

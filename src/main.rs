@@ -1,27 +1,57 @@
 
 mod runners;
+use runners::production::start_production;
+
 use crate::runners::development::start_development;
 
 use std::env;
 
 fn main() -> () {
 
-    // Get the additional arguments from "cargo run -- prod / dev"
+    // Get the additional arguments from "cargo run 
+    // List of arguments 
+    // --host=127.0.0.1
+    // --port=8080
+    // --env=prod / dev  
 
-    let args: Vec<String> = env::args().collect();    
+    let args: Vec<String> = env::args().collect();
 
+    let mut host = "127.0.0.1";
+    let mut port = "8080";    
     let mut env = "dev";
 
-    if args.len() > 1 {
-        env = &args[1];
+    for arg in &args {
+        if arg.starts_with("--env=") {
+            let split: Vec<&str> = arg.split('=').collect();
+            if split.len() == 2 {
+                env = split[1];
+            }
+        }
+        if arg.starts_with("--host=") {
+            let split: Vec<&str> = arg.split('=').collect();
+            if split.len() == 2 {
+                host = split[1];
+            }
+        }
+        if arg.starts_with("--port=") {
+            let split: Vec<&str> = arg.split('=').collect();
+            if split.len() == 2 {
+                port = split[1];
+            }
+        }
     }
+    
 
     // If the environment is development, then we want to start the frontend development astro server
     // Start the astro project in the frontend folder
     // Create a new thread to run the astro server
 
     if env == "dev" {
-        start_development();
+        start_development(host, port, env);
+    }
+
+    if env == "prod" {
+       start_production(host, port, env)
     }
 
 
