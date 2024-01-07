@@ -6,6 +6,8 @@ use crate::runners::development::start_development;
 
 use std::env;
 
+
+
 fn main() -> () {
 
     // Get the additional arguments from "cargo run 
@@ -47,11 +49,11 @@ fn main() -> () {
     // Create a new thread to run the astro server
 
     if env == "dev" {
-        start_development(host, port, env);
+        start_development(host, port);
     }
 
     if env == "prod" {
-       start_production(host, port, env)
+       start_production(host, port)
     }
 
 
