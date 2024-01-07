@@ -4,6 +4,6 @@ import { wasm } from '@rollup/plugin-wasm';
 // https://astro.build/config
 export default defineConfig({
     integrations: [
-        process.platform !== 'freebsd' && wasm()
+        process.platform === 'freebsd' && wasm()
     ]
 });
