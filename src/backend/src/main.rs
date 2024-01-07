@@ -22,9 +22,6 @@ async fn json_response_get() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-
-    println!("Hello, world!");
-
     HttpServer::new(|| {
         App::new()
         .service(json_response)

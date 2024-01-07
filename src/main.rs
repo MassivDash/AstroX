@@ -5,7 +5,8 @@ use crate::runners::development::start_development;
 use std::env;
 
 fn main() -> () {
-    // Get the additonal arguments from "cargo run -- prod / dev"
+
+    // Get the additional arguments from "cargo run -- prod / dev"
 
     let args: Vec<String> = env::args().collect();    
 
@@ -22,6 +23,8 @@ fn main() -> () {
     if env == "dev" {
         start_development();
     }
+
+
 
     // If the environment is production, then we want to serve the frontend from the dist folder
 
