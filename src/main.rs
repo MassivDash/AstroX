@@ -1,29 +1,28 @@
-use actix_web::{get, post, web, App, HttpResponse, HttpServer, Responder};
 
-#[get("/")]
-async fn hello() -> impl Responder {
-    HttpResponse::Ok().body("Hello world!")
-}
+mod runners;
+use crate::runners::development::start_development;
 
-#[post("/echo")]
-async fn echo(req_body: String) -> impl Responder {
-    HttpResponse::Ok().body(req_body)
-}
+use std::env;
 
-async fn manual_hello() -> impl Responder {
-    HttpResponse::Ok().body("Hey there!")
-}
+fn main() -> () {
+    // Get the additonal arguments from "cargo run -- prod / dev"
 
+    let args: Vec<String> = env::args().collect();    
 
-#[actix_web::main]
-async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| {
-        App::new()
-            .service(hello)
-            .service(echo)
-            .route("/hey", web::get().to(manual_hello))
-    })
-    .bind(("127.0.0.1", 8080))?
-    .run()
-    .await
+    let mut env = "dev";
+
+    if args.len() > 1 {
+        env = &args[1];
+    }
+
+    // If the environment is development, then we want to start the frontend development astro server
+    // Start the astro project in the frontend folder
+    // Create a new thread to run the astro server
+
+    if env == "dev" {
+        start_development();
+    }
+
+    // If the environment is production, then we want to serve the frontend from the dist folder
+
 }
