@@ -7,7 +7,8 @@
     "start": "astro dev",
     "build": "astro check && astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "astro:info": "astro info"
   },
   "dependencies": {
     "@astrojs/check": "^0.3.4",
@@ -15,6 +16,6 @@
     "typescript": "^5.3.3"
   },
   "devDependencies": {
-    "@rollup/plugin-wasm": "^6.2.2"
+    "@rollup/wasm-node": "^4.9.4"
   }
 }
