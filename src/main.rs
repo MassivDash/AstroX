@@ -15,6 +15,8 @@ fn main() -> () {
     // --host=127.0.0.1
     // --port=8080
     // --env=prod / dev  
+    // --astro-port=4321
+    // --prod-astro-build=true / false  
 
     let args: Vec<String> = env::args().collect();
 
@@ -22,6 +24,7 @@ fn main() -> () {
     let mut port = "8080";    
     let mut env = "dev";
     let mut astro_port = "4321";
+    let mut prod_astro_build: bool = true;
 
     for arg in &args {
         if arg.starts_with("--env=") {
@@ -49,6 +52,13 @@ fn main() -> () {
                 astro_port = split[1];
             }
         }
+
+        if arg.starts_with("--prod-astro-build=") {
+            let split: Vec<&str> = arg.split('=').collect();
+            if split.len() == 2 {
+                prod_astro_build = split[1].parse::<bool>().unwrap();
+            }
+        }
     }
     
 
@@ -61,7 +71,7 @@ fn main() -> () {
     }
 
     if env == "prod" {
-       start_production(host, port)
+       start_production(host, port, prod_astro_build)
     }
 
 
