@@ -1,11 +1,14 @@
 use ctrlc::set_handler;
+use std::io::Read;
+use std::process::Command;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
-use std::process::Command;
-use std::io::Read;
 
-use super::system_checks::{is_cargo_watch_installed, is_node_installed, NPM};
-use super::terminal::{do_splash, step};
+use super::system_checks::{
+    is_cargo_watch_installed, is_frontend_project_installed, is_node_installed, NPM,
+};
+use super::terminal::{dev_info, do_splash, error, spacer, step, warning};
+use inquire::Confirm;
 
 pub fn start_development(host: &str, port: &str, astro_port: &str) {
     // Set the ctrl-c handler to exit the program and clean up orphaned processes
@@ -17,32 +20,117 @@ pub fn start_development(host: &str, port: &str, astro_port: &str) {
     })
     .expect("Error setting Ctrl-C handler");
 
+    // Print the splash screen
+    do_splash();
+
     // Check if the user has cargo watch installed, panic and inform the user what to do
+
+    warning("Checking the prerequisites");
 
     let is_cargo_watch_installed = is_cargo_watch_installed();
 
     match is_cargo_watch_installed {
-                true => step("cargo-watch is installed, you are ready for 🚀"),
-                false => panic!("cargo-watch is not installed, please install it by running 'cargo install cargo-watch'"),
+        true => step("✅ Success cargo-watch is installed"),
+        false => {
+            error("cargo-watch is not installed");
+            spacer();
+            let ans = Confirm::new("Do you want to install cargo-watch ?")
+                .with_default(false)
+                .prompt();
+
+            match ans {
+                Ok(true) => {
+                    spacer();
+                    step("Installing cargo-watch ...");
+                    Command::new("cargo")
+                        .arg("install")
+                        .arg("cargo-watch")
+                        .spawn()
+                        .expect("Failed to install cargo-watch")
+                        .wait()
+                        .expect("Failed to install cargo-watch");
+                    spacer();
+                }
+                Ok(false) => {
+                    error("That's too bad, we have to quit now");
+                    panic!();
+                }
+                Err(_) => {
+                    error("Error with prompt, about to panic");
+                    panic!();
+                }
             }
+        }
+    }
 
     // Check if the user has node installed, panic and inform the user what to do
 
     let is_node_installed = is_node_installed();
 
     match is_node_installed {
-        true => step("node is installed"),
+        true => step("✅ Success: node is installed and its version is higher than 18.14.1"),
         false => {
-            panic!("node is not installed, please install it by running 'brew install node'")
+            error("node is not installed, or its version is below 18.14.1 please install it and try again. Panicking...");
+            panic!()
         }
     }
 
-    // Print the splash screen
-    do_splash();
+    let project = is_frontend_project_installed();
+
+    match project {
+        true => step("✅ Success: astro framework is installed"),
+        false => {
+            error("Astro framework is not installed");
+            let ans = Confirm::new("Do you want to install astro framework ?")
+                .with_default(false)
+                .prompt();
+
+            match ans {
+                Ok(true) => {
+                    spacer();
+                    step("Installing the astro framework ...");
+                    Command::new(NPM)
+                        .arg("install")
+                        .current_dir("./src/frontend")
+                        .spawn()
+                        .expect("Failed to install the frontend project")
+                        .wait()
+                        .expect("Failed to install the frontend project");
+                }
+                Ok(false) => {
+                    error("That's too bad, we have to quit now");
+                    panic!();
+                }
+                Err(_) => {
+                    error("Error with prompt, about to panic");
+                    panic!();
+                }
+            }
+        }
+    }
+
+    // Check if the port is available for the backend server
+
+    let port = port.parse::<u16>().unwrap();
+    let mut listener = std::net::TcpListener::bind(format!("{}:{}", host, port));
+
+    // Loop until you find the port that is available
+
+    let mut new_port = port;
+
+    while listener.is_err() {
+        warning(format!("Port {} is not available", new_port).as_str());
+        new_port += 1;
+        listener = std::net::TcpListener::bind(format!("{}:{}", host, new_port));
+    }
+
+    // kill the listener
+
+    drop(listener);
 
     // Start the backend development server
 
-    step("Starting cargo backend development server");
+    dev_info(&host, &new_port);
 
     let mut cargo_watch = Command::new("cargo")
         .current_dir("./src/backend")
@@ -50,7 +138,7 @@ pub fn start_development(host: &str, port: &str, astro_port: &str) {
         .arg("-w")
         .arg("./src")
         .arg("-x")
-        .arg(format!("run -- --host={} --port={}", host, port))
+        .arg(format!("run -- --host={} --port={}", host, new_port))
         .spawn()
         .expect("Failed to start backend development server");
 
@@ -88,7 +176,6 @@ pub fn start_development(host: &str, port: &str, astro_port: &str) {
             break;
         }
     }
-
 
     // Clean up section for orphaned processes, otherwise cargo watch and node watch will continue to run blocking the ports
     while running.load(Ordering::SeqCst) {}

@@ -1,4 +1,3 @@
-
 mod runners;
 use runners::production::start_production;
 
@@ -6,22 +5,19 @@ use crate::runners::development::start_development;
 
 use std::env;
 
-
-
 fn main() -> () {
-
-    // Get the additional arguments from "cargo run 
-    // List of arguments 
+    // Get the additional arguments from "cargo run
+    // List of arguments
     // --host=127.0.0.1
     // --port=8080
-    // --env=prod / dev  
+    // --env=prod / dev
     // --astro-port=4321
-    // --prod-astro-build=true / false  
+    // --prod-astro-build=true / false
 
     let args: Vec<String> = env::args().collect();
 
     let mut host = "127.0.0.1";
-    let mut port = "8080";    
+    let mut port = "8080";
     let mut env = "dev";
     let mut astro_port = "4321";
     let mut prod_astro_build: bool = true;
@@ -60,7 +56,6 @@ fn main() -> () {
             }
         }
     }
-    
 
     // If the environment is development, then we want to start the frontend development astro server
     // Start the astro project in the frontend folder
@@ -71,11 +66,8 @@ fn main() -> () {
     }
 
     if env == "prod" {
-       start_production(host, port, prod_astro_build)
+        start_production(host, port, prod_astro_build)
     }
 
-
-
     // If the environment is production, then we want to serve the frontend from the dist folder
-
 }
