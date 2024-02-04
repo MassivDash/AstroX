@@ -2,11 +2,12 @@ use ctrlc::set_handler;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::process::Command;
+use std::io::Read;
 
 use super::system_checks::{is_cargo_watch_installed, is_node_installed, NPM};
 use super::terminal::{do_splash, step};
 
-pub fn start_development(host: &str, port: &str) {
+pub fn start_development(host: &str, port: &str, astro_port: &str) {
     // Set the ctrl-c handler to exit the program and clean up orphaned processes
     let running = Arc::new(AtomicBool::new(true));
     let r = running.clone();
@@ -60,9 +61,34 @@ pub fn start_development(host: &str, port: &str) {
     let mut node_watch = Command::new(NPM)
         .arg("run")
         .arg("start")
+        .arg(format!("-- --port {}", astro_port))
+        .stdout(std::process::Stdio::piped())
         .current_dir("./src/frontend")
         .spawn()
         .expect("Failed to start frontend development server");
+
+    // Watch the std output of astro bundle if std will have "ready" then open the browser to the development server
+
+    let mut buffer = [0; 1024];
+    let mut stdout = node_watch.stdout.take().unwrap();
+    loop {
+        let n = stdout.read(&mut buffer).unwrap();
+        if n == 0 {
+            break;
+        }
+        let s = String::from_utf8_lossy(&buffer[..n]);
+        print!("{}", s);
+
+        if s.contains("ready") {
+            step("Astro is ready, opening the browser");
+            Command::new("open")
+                .arg(format!("http://localhost:{}", astro_port))
+                .spawn()
+                .expect("Failed to open the browser");
+            break;
+        }
+    }
+
 
     // Clean up section for orphaned processes, otherwise cargo watch and node watch will continue to run blocking the ports
     while running.load(Ordering::SeqCst) {}
