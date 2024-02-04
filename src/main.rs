@@ -21,6 +21,7 @@ fn main() -> () {
     let mut host = "127.0.0.1";
     let mut port = "8080";    
     let mut env = "dev";
+    let mut astro_port = "4321";
 
     for arg in &args {
         if arg.starts_with("--env=") {
@@ -41,6 +42,13 @@ fn main() -> () {
                 port = split[1];
             }
         }
+
+        if arg.starts_with("--astro-port=") {
+            let split: Vec<&str> = arg.split('=').collect();
+            if split.len() == 2 {
+                astro_port = split[1];
+            }
+        }
     }
     
 
@@ -49,7 +57,7 @@ fn main() -> () {
     // Create a new thread to run the astro server
 
     if env == "dev" {
-        start_development(host, port);
+        start_development(host, port, astro_port);
     }
 
     if env == "prod" {
