@@ -1,4 +1,5 @@
 /target
 /src/frontend/dist
 /src/backend/target
+syncDevil.sh
 ```
