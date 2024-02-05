@@ -149,3 +149,26 @@ pub fn run_system_checks(prod_astro_build: bool) {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_is_cargo_watch_installed() {
+        // Test when cargo-watch is installed
+        assert_eq!(is_cargo_watch_installed(), true);
+    }
+
+    #[test]
+    fn test_is_node_installed() {
+        // Test when node is installed with a version higher than 18.14.1
+        assert_eq!(is_node_installed(), true);
+    }
+
+    #[test]
+    fn test_is_frontend_project_installed() {
+        // Test when the frontend project is installed
+        assert_eq!(is_frontend_project_installed(), true);
+    }
+}
