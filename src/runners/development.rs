@@ -22,8 +22,6 @@ pub fn start_development(host: &str, port: &str, astro_port: &str) {
     // Print the splash screen
     do_splash();
 
-    // Check if the user has cargo watch installed, panic and inform the user what to do
-
     warning("Checking the prerequisites");
 
     let prod_astro_build = true;
