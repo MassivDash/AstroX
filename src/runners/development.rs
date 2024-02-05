@@ -4,11 +4,8 @@ use std::process::Command;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 
-use super::system_checks::{
-    is_cargo_watch_installed, is_frontend_project_installed, is_node_installed, NPM,
-};
-use super::terminal::{dev_info, do_splash, error, spacer, step, warning};
-use inquire::Confirm;
+use super::system_checks::{run_system_checks, NPM};
+use super::terminal::{dev_info, do_splash, step, warning};
 
 pub fn start_development(host: &str, port: &str, astro_port: &str) {
     // Set the ctrl-c handler to exit the program and clean up orphaned processes
@@ -27,87 +24,7 @@ pub fn start_development(host: &str, port: &str, astro_port: &str) {
 
     warning("Checking the prerequisites");
 
-    let is_cargo_watch_installed = is_cargo_watch_installed();
-
-    match is_cargo_watch_installed {
-        true => step("✅ Success cargo-watch is installed"),
-        false => {
-            error("cargo-watch is not installed");
-            spacer();
-            let ans = Confirm::new("Do you want to install cargo-watch ?")
-                .with_default(false)
-                .prompt();
-
-            match ans {
-                Ok(true) => {
-                    spacer();
-                    step("Installing cargo-watch ...");
-                    Command::new("cargo")
-                        .arg("install")
-                        .arg("cargo-watch")
-                        .spawn()
-                        .expect("Failed to install cargo-watch")
-                        .wait()
-                        .expect("Failed to install cargo-watch");
-                    spacer();
-                }
-                Ok(false) => {
-                    error("That's too bad, we have to quit now");
-                    panic!();
-                }
-                Err(_) => {
-                    error("Error with prompt, about to panic");
-                    panic!();
-                }
-            }
-        }
-    }
-
-    // Check if the user has node installed, panic and inform the user what to do
-
-    let is_node_installed = is_node_installed();
-
-    match is_node_installed {
-        true => step("✅ Success: node is installed and its version is higher than 18.14.1"),
-        false => {
-            error("node is not installed, or its version is below 18.14.1 please install it and try again. Panicking...");
-            panic!()
-        }
-    }
-
-    let project = is_frontend_project_installed();
-
-    match project {
-        true => step("✅ Success: astro framework is installed"),
-        false => {
-            error("Astro framework is not installed");
-            let ans = Confirm::new("Do you want to install astro framework ?")
-                .with_default(false)
-                .prompt();
-
-            match ans {
-                Ok(true) => {
-                    spacer();
-                    step("Installing the astro framework ...");
-                    Command::new(NPM)
-                        .arg("install")
-                        .current_dir("./src/frontend")
-                        .spawn()
-                        .expect("Failed to install the frontend project")
-                        .wait()
-                        .expect("Failed to install the frontend project");
-                }
-                Ok(false) => {
-                    error("That's too bad, we have to quit now");
-                    panic!();
-                }
-                Err(_) => {
-                    error("Error with prompt, about to panic");
-                    panic!();
-                }
-            }
-        }
-    }
+    run_system_checks();
 
     // Check if the port is available for the backend server
 
