@@ -1,20 +1,12 @@
 use std::process::Command;
 
-use super::system_checks::is_node_installed;
+use super::system_checks::run_system_checks;
 use super::terminal::step;
 
 pub fn start_production(host: &str, port: &str, prod_astro_build: bool) {
-
     // Check if the user has node installed, panic and inform the user what to do
 
-    let is_node_installed = is_node_installed();
-
-    match is_node_installed {
-        true => step("node is installed"),
-        false => {
-            panic!("node is not installed, panicking")
-        }
-    }
+    run_system_checks(prod_astro_build);
 
     // Bundle the frontend and wait for the process to finish
     // if the astro build is set to true
@@ -28,15 +20,16 @@ pub fn start_production(host: &str, port: &str, prod_astro_build: bool) {
             .arg("build")
             .current_dir("./src/frontend")
             .spawn()
-            .expect("Failed to bundle the frontend").wait().expect("Failed to bundle the frontend");
+            .expect("Failed to bundle the frontend")
+            .wait()
+            .expect("Failed to bundle the frontend");
 
         match bundle.success() {
             true => step("Frontend bundled successfully"),
             false => panic!("Failed to bundle the frontend"),
-            
         }
     }
-    
+
     // Start the backend production server
 
     step("Starting cargo backend production server");
@@ -50,5 +43,4 @@ pub fn start_production(host: &str, port: &str, prod_astro_build: bool) {
         .arg(format!("--port={}", port))
         .spawn()
         .expect("Failed to start backend production server");
-
 }

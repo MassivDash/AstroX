@@ -24,7 +24,9 @@ pub fn start_development(host: &str, port: &str, astro_port: &str) {
 
     warning("Checking the prerequisites");
 
-    run_system_checks();
+    let prod_astro_build = false;
+
+    run_system_checks(prod_astro_build);
 
     // Check if the port is available for the backend server
 
