@@ -1,4 +1,4 @@
-use super::terminal::{error, spacer, step};
+use super::terminal::{error, spacer, step, success};
 use inquire::Confirm;
 use std::process::Command;
 
@@ -64,7 +64,7 @@ pub fn run_system_checks(prod_astro_build: bool) {
     let is_cargo_watch_installed = is_cargo_watch_installed();
 
     match is_cargo_watch_installed {
-        true => step("✅ Success cargo-watch is installed"),
+        true => success("cargo-watch is installed"),
         false => {
             error("cargo-watch is not installed");
             spacer();
@@ -103,7 +103,7 @@ pub fn run_system_checks(prod_astro_build: bool) {
     let is_node_installed = is_node_installed();
 
     match is_node_installed {
-        true => step("✅ Success: node is installed and its version is higher than 18.14.1"),
+        true => success("node is installed and its version is higher than 18.14.1"),
         false => {
             error("node is not installed, or its version is below 18.14.1 please install it and try again. Panicking...");
             panic!()
@@ -114,7 +114,7 @@ pub fn run_system_checks(prod_astro_build: bool) {
         let project = is_frontend_project_installed();
 
         match project {
-            true => step("✅ Success: astro framework is installed"),
+            true => success("astro framework is installed"),
             false => {
                 error("Astro framework is not installed");
                 let ans = Confirm::new("Do you want to install astro framework ?")
@@ -132,6 +132,9 @@ pub fn run_system_checks(prod_astro_build: bool) {
                             .expect("Failed to install the frontend project")
                             .wait()
                             .expect("Failed to install the frontend project");
+
+                        spacer();
+                        success("Astro framework installed successfully")
                     }
                     Ok(false) => {
                         error("That's too bad, we have to quit now");
