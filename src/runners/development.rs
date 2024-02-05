@@ -4,6 +4,8 @@ use std::process::Command;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 
+use crate::runners::terminal::success;
+
 use super::system_checks::{run_system_checks, NPM};
 use super::terminal::{dev_info, do_splash, step, warning};
 
@@ -24,7 +26,7 @@ pub fn start_development(host: &str, port: &str, astro_port: &str) {
 
     warning("Checking the prerequisites");
 
-    let prod_astro_build = false;
+    let prod_astro_build = true;
 
     run_system_checks(prod_astro_build);
 
@@ -87,7 +89,7 @@ pub fn start_development(host: &str, port: &str, astro_port: &str) {
         print!("{}", s);
 
         if s.contains("ready") {
-            step("Astro is ready, opening the browser");
+            success("Astro is ready, opening the browser");
             Command::new("open")
                 .arg(format!("http://localhost:{}", astro_port))
                 .spawn()
