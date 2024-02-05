@@ -21,6 +21,7 @@ pub fn is_cargo_watch_installed() -> bool {
 
 // check if node is installed
 // check if the node version is above 18.14.1
+// versions below will panic on astro commands
 pub fn is_node_installed() -> bool {
     let output = Command::new("node")
         .arg("--version")
@@ -59,7 +60,7 @@ pub fn is_frontend_project_installed() -> bool {
     project && installed
 }
 
-pub fn run_system_checks() {
+pub fn run_system_checks(prod_astro_build: bool) {
     let is_cargo_watch_installed = is_cargo_watch_installed();
 
     match is_cargo_watch_installed {
@@ -109,35 +110,37 @@ pub fn run_system_checks() {
         }
     }
 
-    let project = is_frontend_project_installed();
+    if prod_astro_build {
+        let project = is_frontend_project_installed();
 
-    match project {
-        true => step("✅ Success: astro framework is installed"),
-        false => {
-            error("Astro framework is not installed");
-            let ans = Confirm::new("Do you want to install astro framework ?")
-                .with_default(false)
-                .prompt();
+        match project {
+            true => step("✅ Success: astro framework is installed"),
+            false => {
+                error("Astro framework is not installed");
+                let ans = Confirm::new("Do you want to install astro framework ?")
+                    .with_default(false)
+                    .prompt();
 
-            match ans {
-                Ok(true) => {
-                    spacer();
-                    step("Installing the astro framework ...");
-                    Command::new(NPM)
-                        .arg("install")
-                        .current_dir("./src/frontend")
-                        .spawn()
-                        .expect("Failed to install the frontend project")
-                        .wait()
-                        .expect("Failed to install the frontend project");
-                }
-                Ok(false) => {
-                    error("That's too bad, we have to quit now");
-                    panic!();
-                }
-                Err(_) => {
-                    error("Error with prompt, about to panic");
-                    panic!();
+                match ans {
+                    Ok(true) => {
+                        spacer();
+                        step("Installing the astro framework ...");
+                        Command::new(NPM)
+                            .arg("install")
+                            .current_dir("./src/frontend")
+                            .spawn()
+                            .expect("Failed to install the frontend project")
+                            .wait()
+                            .expect("Failed to install the frontend project");
+                    }
+                    Ok(false) => {
+                        error("That's too bad, we have to quit now");
+                        panic!();
+                    }
+                    Err(_) => {
+                        error("Error with prompt, about to panic");
+                        panic!();
+                    }
                 }
             }
         }
