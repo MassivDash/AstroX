@@ -16,5 +16,8 @@
     "[astro]": {
       "editor.defaultFormatter": "esbenp.prettier-vscode",
       "editor.formatOnSave": true
-    }
+    },
+    "rust-analyzer.linkedProjects": [
+        "./src/backend/Cargo.toml"
+    ]
 }
