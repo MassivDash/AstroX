@@ -12,10 +12,7 @@ cargo clippy -- -D warnings
 echo 'running cargo doc...'
 cargo doc --no-deps
 
-echo 'running npm run build'
-npm run build --prefix src/frontend
-
-echo 'running npm run lint'
-npm run lint --prefix src/frontend
+echo 'running cargo runner bride'
+cargo run -- --lint
 
 echo 'DONE'
