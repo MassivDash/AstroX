@@ -13,3 +13,4 @@ echo 'running cargo doc...'
 cargo doc --no-deps
 
 echo 'time for npm test...'
+npm run lint --prefix src/frontend
