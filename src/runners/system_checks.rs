@@ -6,7 +6,7 @@ use std::process::Command;
 pub const NPM: &'static str = "npm.cmd";
 
 #[cfg(not(windows))]
-pub const NPM: &'static str = "npm";
+pub const NPM: &str = "npm";
 
 pub fn is_cargo_watch_installed() -> bool {
     let output = Command::new("cargo")

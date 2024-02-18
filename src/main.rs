@@ -5,7 +5,7 @@ use crate::runners::development::start_development;
 
 use std::env;
 
-fn main() -> () {
+fn main() {
     // Get the additional arguments from "cargo run
     // List of arguments
     // --host=127.0.0.1

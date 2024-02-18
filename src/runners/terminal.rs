@@ -5,13 +5,13 @@ use termion::color;
 pub fn get_version() -> String {
     let cargo_toml = std::fs::read_to_string("Cargo.toml").expect("Failed to read Cargo.toml");
     let version = cargo_toml
-        .split("\n")
+        .split('\n')
         .find(|line| line.contains("version"))
         .unwrap()
-        .split("=")
+        .split('=')
         .collect::<Vec<&str>>()[1]
         .trim()
-        .replace("\"", "");
+        .replace('\"', "");
 
     version
 }
@@ -40,7 +40,6 @@ pub fn do_splash() {
 pub fn hr() {
     println!("{}", color::Fg(color::LightMagenta));
     println!(
-        "{}",
         "=============================================================================================================================================="
     );
     println!("{}", color::Fg(color::Reset));

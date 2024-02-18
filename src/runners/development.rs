@@ -49,7 +49,7 @@ pub fn start_development(host: &str, port: &str, astro_port: &str) {
 
     // Start the backend development server
 
-    dev_info(&host, &new_port);
+    dev_info(host, &new_port);
 
     let mut cargo_watch = Command::new("cargo")
         .current_dir("./src/backend")
