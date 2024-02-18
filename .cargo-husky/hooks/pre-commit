@@ -1,0 +1,13 @@
+set -e
+
+echo 'running cargo test...'
+cargo test
+
+echo 'running cargo fmt...'
+cargo fmt -- --check
+
+echo 'running cargo clippy...'
+cargo clippy --all-targets --all-features -- -D warnings
+
+echo 'running cargo doc...'
+cargo doc --no-deps

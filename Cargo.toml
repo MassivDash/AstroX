@@ -10,9 +10,7 @@ termion = "*"
 ctrlc = "*"
 inquire = "0.6.2"
 
-[dev_dependencies]
-commitlint-rs = "*"
-cargo-husky = "*"
-
-
-
+[dev-dependencies.cargo-husky]
+version = "1"
+default-features = false
+features = ["user-hooks"]
