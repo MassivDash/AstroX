@@ -17,3 +17,5 @@ npm run build --prefix src/frontend
 
 echo 'running npm run lint'
 npm run lint --prefix src/frontend
+
+echo 'DONE'
