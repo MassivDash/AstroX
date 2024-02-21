@@ -1,0 +1,31 @@
+<script>
+  import { navigate } from 'astro:transitions/client'
+
+  const homeLink = document.getElementById('home-link')
+  const aboutLink = document.getElementById('about-link')
+
+  homeLink?.addEventListener('click', (event) => {
+    event.preventDefault()
+    navigate('/')
+  })
+
+  aboutLink?.addEventListener('click', (event) => {
+    event.preventDefault()
+    navigate('/hello')
+  })
+</script>
+
+<nav>
+  <ul>
+    <li><a id='home-link' href='/'>Home</a></li>
+    <li><a id='about-link' href='/hello'>About</a></li>
+  </ul>
+</nav>
+
+<style>
+  nav {
+    display: flex;
+    justify-content: center;
+    background: linear-gradient(90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe);
+  }
+</style>
