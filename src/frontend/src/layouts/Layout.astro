@@ -1,6 +1,6 @@
 ---
 import { ViewTransitions } from 'astro:transitions'
-import Navbar from '../components/Navbar.astro'
+import Navbar from '../components/navbar/Navbar.astro'
 
 interface Props {
   title: string
@@ -42,7 +42,7 @@ const { title } = Astro.props
 
       body {
         margin: 0;
-        padding: 0;
+        padding-top: 50px;
         width: 100%;
       }
 
