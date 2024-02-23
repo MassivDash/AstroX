@@ -3,6 +3,7 @@ use runner::args::collect_args::collect_args;
 
 use crate::runner::development::start_development::start_development;
 use crate::runner::pre_run::git_hooks::copy_git_hooks;
+use crate::runner::pre_run::system_checks::run_system_checks;
 use crate::runner::production::start_production::start_production;
 use crate::runner::utils::terminal::{do_splash, step};
 
@@ -15,6 +16,10 @@ fn main() {
 
     // Get the cmd line arguments
     let args = collect_args();
+
+    // Run the system checks
+
+    run_system_checks(&args.env, args.prod_astro_build);
 
     if args.env == "dev" {
         // During development is could be possible that user starts the project fdr the first time, or has altered the git hooks

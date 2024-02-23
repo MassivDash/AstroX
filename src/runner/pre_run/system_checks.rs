@@ -15,6 +15,17 @@ pub fn is_cargo_watch_installed() -> bool {
     output_str.contains("cargo-watch")
 }
 
+pub fn is_commitlint_rs_installed() -> bool {
+    let output = Command::new("cargo")
+        .arg("install")
+        .arg("--list")
+        .output()
+        .expect("Failed to execute command");
+
+    let output_str = String::from_utf8_lossy(&output.stdout);
+    output_str.contains("commitlint-rs")
+}
+
 // check if node is installed
 // check if the node version is above 18.14.1
 // versions below will panic on astro commands
@@ -56,39 +67,80 @@ pub fn is_frontend_project_installed() -> bool {
     project && installed
 }
 
-pub fn run_system_checks(prod_astro_build: bool) {
-    let is_cargo_watch_installed = is_cargo_watch_installed();
+pub fn run_system_checks(env: &String, prod_astro_build: bool) {
+    if env == "dev" {
+        step("Running development system checks");
 
-    match is_cargo_watch_installed {
-        true => success("cargo-watch is installed"),
-        false => {
-            error("cargo-watch is not installed");
-            spacer();
-            let ans = Confirm::new("Do you want to install cargo-watch ?")
+        let is_cargo_watch_installed = is_cargo_watch_installed();
+
+        match is_cargo_watch_installed {
+            true => success("cargo-watch is installed"),
+            false => {
+                error("cargo-watch is not installed");
+                spacer();
+                let ans = Confirm::new("Do you want to install cargo-watch ?")
                 .with_default(false)
                 .with_help_message("cargo-watch must be installed globally in order to spy on changes to the server")
                 .prompt();
 
-            match ans {
-                Ok(true) => {
-                    spacer();
-                    step("Installing cargo-watch ...");
-                    Command::new("cargo")
-                        .arg("install")
-                        .arg("cargo-watch")
-                        .spawn()
-                        .expect("Failed to install cargo-watch")
-                        .wait()
-                        .expect("Failed to install cargo-watch");
-                    spacer();
+                match ans {
+                    Ok(true) => {
+                        spacer();
+                        step("Installing cargo-watch ...");
+                        Command::new("cargo")
+                            .arg("install")
+                            .arg("cargo-watch")
+                            .spawn()
+                            .expect("Failed to install cargo-watch")
+                            .wait()
+                            .expect("Failed to install cargo-watch");
+                        spacer();
+                    }
+                    Ok(false) => {
+                        error("That's too bad, we have to quit now");
+                        panic!();
+                    }
+                    Err(_) => {
+                        error("Error with prompt, about to panic");
+                        panic!();
+                    }
                 }
-                Ok(false) => {
-                    error("That's too bad, we have to quit now");
-                    panic!();
-                }
-                Err(_) => {
-                    error("Error with prompt, about to panic");
-                    panic!();
+            }
+        }
+
+        let is_commitlint_rs_installed = is_commitlint_rs_installed();
+
+        match is_commitlint_rs_installed {
+            true => success("commitlint-rs is installed"),
+            false => {
+                error("commitlint-rs is not installed");
+                spacer();
+                let ans = Confirm::new("Do you want to install commitlint-rs ?")
+                .with_default(false)
+                .with_help_message("commitlint-rs must be installed globally in order to lint the commit messages, this is the recommended way to lint commit messages.")
+                .prompt();
+
+                match ans {
+                    Ok(true) => {
+                        spacer();
+                        step("Installing commitlint-rs ...");
+                        Command::new("cargo")
+                            .arg("install")
+                            .arg("commitlint-rs")
+                            .spawn()
+                            .expect("Failed to install commitlint-rs")
+                            .wait()
+                            .expect("Failed to install commitlint-rs");
+                        spacer();
+                    }
+                    Ok(false) => {
+                        error("That's too bad, we have to quit now");
+                        panic!();
+                    }
+                    Err(_) => {
+                        error("Error with prompt, about to panic");
+                        panic!();
+                    }
                 }
             }
         }
