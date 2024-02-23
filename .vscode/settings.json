@@ -1,24 +1,21 @@
 {
-    "rust-analyzer.showUnlinkedFileNotification": true,
-    "[rust]": {
-        "editor.defaultFormatter": "rust-lang.rust-analyzer", // Makes the magic
-        "editor.formatOnSave": true // Optional
-    },
-    "editor.formatOnSave": true,
-    "eslint.validate": [
-        "javascript",
-        "javascriptreact",
-        "astro",
-        "typescript",
-        "typescriptreact"
-    ],
-    "prettier.documentSelectors": ["**/*.astro"],
-    "[astro]": {
-      "editor.defaultFormatter": "esbenp.prettier-vscode",
-      "editor.formatOnSave": true
-    },
-    "rust-analyzer.linkedProjects": [
-        "./src/backend/Cargo.toml",
-        "./Cargo.toml",
-    ]
+  "rust-analyzer.showUnlinkedFileNotification": false,
+  "[rust]": {
+    "editor.defaultFormatter": "rust-lang.rust-analyzer", // Makes the magic
+    "editor.formatOnSave": true // Optional
+  },
+  "editor.formatOnSave": true,
+  "eslint.validate": [
+    "javascript",
+    "javascriptreact",
+    "astro",
+    "typescript",
+    "typescriptreact"
+  ],
+  "prettier.documentSelectors": ["**/*.astro", "**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.css", "**/*.scss", "**/*.json", "**/*.md"],
+  "[astro]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "rust-analyzer.linkedProjects": ["./src/backend/Cargo.toml", "./Cargo.toml"]
 }
