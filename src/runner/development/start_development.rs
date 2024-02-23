@@ -5,7 +5,7 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 
 use crate::runner::pre_run::system_checks::run_system_checks;
-use crate::runner::utils::terminal::{dev_info, do_splash, step, success, warning};
+use crate::runner::utils::terminal::{dev_info, step, success, warning};
 
 use crate::runner::pre_run::npm::NPM;
 
@@ -18,9 +18,6 @@ pub fn start_development(host: String, port: String, astro_port: String) {
         r.store(false, Ordering::SeqCst);
     })
     .expect("Error setting Ctrl-C handler");
-
-    // Print the splash screen
-    do_splash();
 
     warning("Checking the prerequisites");
 
