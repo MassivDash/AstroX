@@ -69,7 +69,7 @@ pub fn warning(string: &str) {
 // print
 // | Local http://localhost:8080
 
-pub fn dev_info(host: &str, port: &u16) {
+pub fn dev_info(host: &String, port: &u16) {
     step("Starting cargo backend development server");
     println!("| Local development backend server running at:");
     println!("{}| http://{}:{}", color::Fg(color::Reset), host, port);
