@@ -1,7 +1,9 @@
 use std::process::Command;
 
-use super::system_checks::run_system_checks;
-use super::terminal::step;
+use crate::runner::pre_run::system_checks::run_system_checks;
+use crate::runner::utils::terminal::step;
+
+use crate::runner::pre_run::npm::NPM;
 
 pub fn start_production(host: &str, port: &str, prod_astro_build: bool) {
     // Check if the user has node installed, panic and inform the user what to do
@@ -15,7 +17,7 @@ pub fn start_production(host: &str, port: &str, prod_astro_build: bool) {
     if prod_astro_build {
         step("Bundling the frontend");
 
-        let bundle = Command::new("npm")
+        let bundle = Command::new(NPM)
             .arg("run")
             .arg("build")
             .current_dir("./src/frontend")

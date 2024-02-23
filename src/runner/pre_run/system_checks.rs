@@ -1,12 +1,8 @@
-use super::terminal::{error, spacer, step, success};
 use inquire::Confirm;
 use std::process::Command;
 
-#[cfg(windows)]
-pub const NPM: &'static str = "npm.cmd";
-
-#[cfg(not(windows))]
-pub const NPM: &str = "npm";
+use crate::runner::pre_run::npm::NPM;
+use crate::runner::utils::terminal::{error, spacer, step, success};
 
 pub fn is_cargo_watch_installed() -> bool {
     let output = Command::new("cargo")

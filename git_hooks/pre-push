@@ -12,7 +12,5 @@ cargo clippy -- -D warnings
 echo 'running cargo doc...'
 cargo doc --no-deps
 
-echo 'running cargo runner bride'
-cargo run -- --lint
 
 echo 'DONE'

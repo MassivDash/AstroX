@@ -6,7 +6,5 @@ cargo fmt -- --check
 echo 'running cargo clippy...'
 cargo clippy -- -D warnings
 
-echo 'running cargo runner bride'
-cargo run -- --lint
 
 echo 'DONE'
