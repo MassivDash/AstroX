@@ -1,6 +1,16 @@
+echo " "
+echo "Running commitlint..."
 
 commit_message=$(cat "$1")
 
 echo "$commit_message" | commitlint
 
+
 # If the commit message does not match the conventional commit format, then exit with a non-zero status
+
+if [ $? -ne 0 ]; then
+    echo "Invalid commit message. Please use the conventional commit format"
+    exit 1
+fi
+
+echo "---- Done ----"

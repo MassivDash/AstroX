@@ -25,5 +25,23 @@ pub fn copy_git_hooks() {
                 println!("Error: {}", e);
             }
         }
+
+        // Make the hook executable for all systems (linux, mac, windows)
+
+        #[cfg(not(windows))]
+        {
+            let output = std::process::Command::new("chmod")
+                .arg("+x")
+                .arg(git_hook_path)
+                .output()
+                .expect("Failed to execute command");
+            let output_str = String::from_utf8_lossy(&output.stdout);
+            println!("{}", output_str);
+        }
+
+        #[cfg(windows)]
+        {
+            // No need to make the file executable on windows
+        }
     }
 }
