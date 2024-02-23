@@ -9,4 +9,4 @@ cargo clippy -- -D warnings
 echo 'running frontend project lint...'
 npm run lint --prefix src/frontend/
 
-echo 'Pre commit check done'
+echo '------ Done ------'

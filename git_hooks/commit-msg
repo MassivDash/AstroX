@@ -2,3 +2,5 @@
 commit_message=$(cat "$1")
 
 echo "$commit_message" | commitlint
+
+# If the commit message does not match the conventional commit format, then exit with a non-zero status
