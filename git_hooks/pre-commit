@@ -6,5 +6,7 @@ cargo fmt -- --check
 echo 'running cargo clippy...'
 cargo clippy -- -D warnings
 
+echo 'running frontend project lint...'
+npm run lint --prefix src/frontend/
 
 echo 'DONE'
