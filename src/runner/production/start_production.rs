@@ -5,7 +5,7 @@ use crate::runner::utils::terminal::step;
 
 use crate::runner::pre_run::npm::NPM;
 
-pub fn start_production(host: &str, port: &str, prod_astro_build: bool) {
+pub fn start_production(host: String, port: String, prod_astro_build: bool) {
     // Check if the user has node installed, panic and inform the user what to do
 
     run_system_checks(prod_astro_build);

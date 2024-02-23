@@ -9,7 +9,7 @@ use crate::runner::utils::terminal::{dev_info, do_splash, step, success, warning
 
 use crate::runner::pre_run::npm::NPM;
 
-pub fn start_development(host: &str, port: &str, astro_port: &str) {
+pub fn start_development(host: String, port: String, astro_port: String) {
     // Set the ctrl-c handler to exit the program and clean up orphaned processes
     let running = Arc::new(AtomicBool::new(true));
     let r = running.clone();
@@ -49,7 +49,7 @@ pub fn start_development(host: &str, port: &str, astro_port: &str) {
 
     // Start the backend development server
 
-    dev_info(host, &new_port);
+    dev_info(&host, &new_port);
 
     let mut cargo_watch = Command::new("cargo")
         .current_dir("./src/backend")
