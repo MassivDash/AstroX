@@ -1,7 +1,7 @@
-mod runners;
-use runners::{linter::start_npm_linting, production::start_production};
-
-use crate::runners::development::start_development;
+mod runner;
+use crate::runner::development::start_development::start_development;
+use crate::runner::pre_run::git_hooks::copy_git_hooks;
+use crate::runner::production::start_production::start_production;
 
 use std::env;
 
@@ -9,7 +9,6 @@ fn main() {
     // Get the additional arguments from "cargo run
     // List of arguments
 
-    // --Lint
     // --host=127.0.0.1
     // --port=8080
     // --env=prod / dev
@@ -17,7 +16,6 @@ fn main() {
     // --prod-astro-build=true / false
 
     let args: Vec<String> = env::args().collect();
-    let mut lint = false;
     let mut host = "127.0.0.1";
     let mut port = "8080";
     let mut env = "dev";
@@ -57,28 +55,21 @@ fn main() {
                 prod_astro_build = split[1].parse::<bool>().unwrap();
             }
         }
-
-        if arg.starts_with("--lint") {
-            lint = true;
-        }
     }
 
-    // If the lint flag is set, then we want to start the linting process
-    // Start the linting process in a new thread
+    // Copy files from git_hooks folder to .git/hooks
 
-    if lint {
-        start_npm_linting();
-    }
+    copy_git_hooks();
 
     // If the environment is development, then we want to start the frontend development astro server
     // Start the astro project in the frontend folder
     // Create a new thread to run the astro server
 
-    if !lint && env == "dev" {
+    if env == "dev" {
         start_development(host, port, astro_port);
     }
 
-    if !lint && env == "prod" {
+    if env == "prod" {
         start_production(host, port, prod_astro_build)
     }
 

@@ -4,10 +4,10 @@ use std::process::Command;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 
-use crate::runners::terminal::success;
+use crate::runner::pre_run::system_checks::run_system_checks;
+use crate::runner::utils::terminal::{dev_info, do_splash, step, success, warning};
 
-use super::system_checks::{run_system_checks, NPM};
-use super::terminal::{dev_info, do_splash, step, warning};
+use crate::runner::pre_run::npm::NPM;
 
 pub fn start_development(host: &str, port: &str, astro_port: &str) {
     // Set the ctrl-c handler to exit the program and clean up orphaned processes
