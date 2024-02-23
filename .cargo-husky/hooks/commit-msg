@@ -1,0 +1,5 @@
+set -e 
+
+commit_message=$(cat "$1")
+
+echo "Commit message: $commit_message"
