@@ -1,97 +1,43 @@
 ---
 import Layout from '../layouts/Layout.astro'
-import Card from '../components/Card.astro'
 import Hero from '../components/Hero.astro'
+import Section from '../components/Section.astro'
+import AIcon from '../svgs/AstroIcon.astro'
+import Rust from '../svgs/RustIcon.astro'
 ---
 
 <Layout title='Welcome to Astro X'>
   <main transition:animate='slide'>
     <Hero />
-    <p class='instructions'>
-      To get started, open the directory <code>src/pages</code> in your project.<br
-      />
-      <strong>Code Challenge:</strong> Tweak the "Welcome to Astro" message above.
-    </p>
-    <ul class='link-card-grid'>
-      <Card
-        href='https://docs.astro.build/'
-        title='Documentation'
-        body='Learn how Astro works and explore the official API docs.'
-      />
-      <Card
-        href='https://astro.build/integrations/'
-        title='Integrations'
-        body='Supercharge your project with new frameworks and libraries.'
-      />
-      <Card
-        href='https://astro.build/themes/'
-        title='Themes'
-        body='Explore a galaxy of community-built starter themes.'
-      />
-      <Card
-        href='https://astro.build/chat/'
-        title='Community'
-        body='Come say hi to our amazing Discord community. ❤️'
-      />
-    </ul>
+    <Section>
+      <div class='icons'>
+        <AIcon width={80} height={80} />
+        <p>+</p>
+        <Rust width={80} height={80} />
+      </div>
+      <h2>
+        Astro X is a monolithic template for building modern fullstack web
+        applications.
+      </h2>
+      <p>
+        It comes with a variety of features and tools that make it easy to build
+        and maintain your application. Astro X is built with Astro, a modern
+        front-end framework that makes it easy to build fast, modern web
+        applications.
+      </p>
+    </Section>
   </main>
 </Layout>
 
 <style>
-  main {
-    margin: auto;
-    color: black;
-    font-size: 20px;
-    line-height: 1.6;
+  .icons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    font-size: x-large;
   }
-  .astro-a {
-    position: absolute;
-    top: -32px;
-    left: 50%;
-    transform: translatex(-50%);
-    width: 220px;
-    height: auto;
-    z-index: -1;
-  }
-  h1 {
-    font-size: 4rem;
-    font-weight: 700;
-    line-height: 1;
+
+  h2 {
     text-align: center;
-    margin-bottom: 1em;
-  }
-  .text-gradient {
-    background-image: var(--accent-gradient);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-size: 400%;
-    background-position: 0%;
-  }
-  .instructions {
-    margin-bottom: 2rem;
-    border: 1px solid rgba(var(--accent-light), 25%);
-    background: linear-gradient(
-      rgba(var(--accent-dark), 66%),
-      rgba(var(--accent-dark), 33%)
-    );
-    padding: 1.5rem;
-    border-radius: 8px;
-  }
-  .instructions code {
-    font-size: 0.8em;
-    font-weight: bold;
-    background: rgba(var(--accent-light), 12%);
-    color: rgb(var(--accent-light));
-    border-radius: 4px;
-    padding: 0.3em 0.4em;
-  }
-  .instructions strong {
-    color: rgb(var(--accent-light));
-  }
-  .link-card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(24ch, 1fr));
-    gap: 2rem;
-    padding: 0;
   }
 </style>
