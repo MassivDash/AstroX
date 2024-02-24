@@ -39,7 +39,7 @@ pub fn start_development(host: String, port: String, astro_port: String) {
 
     // Start the backend development server
 
-    dev_info(&host, &new_port);
+    step("Start the actix backend development server");
 
     let mut cargo_watch = Command::new("cargo")
         .current_dir("./src/backend")
@@ -48,8 +48,28 @@ pub fn start_development(host: String, port: String, astro_port: String) {
         .arg("./src")
         .arg("-x")
         .arg(format!("run -- --host={} --port={}", host, new_port))
+        .stdout(std::process::Stdio::piped())
         .spawn()
         .expect("Failed to start backend development server");
+
+    // Wait for the backend development server to start
+
+    let mut buffer_rust = [0; 1024];
+    let mut stdout_rust = cargo_watch.stdout.take().unwrap();
+    loop {
+        let n = stdout_rust.read(&mut buffer_rust).unwrap();
+        if n == 0 {
+            break;
+        }
+        let s = String::from_utf8_lossy(&buffer_rust[..n]);
+
+        print!("{}", s);
+        if s.contains("HttpServer has started") {
+            dev_info(&host, &new_port);
+            success("Actix server is running, starting the frontend development server");
+            break;
+        }
+    }
 
     // Start the frontend development server
 
@@ -66,14 +86,15 @@ pub fn start_development(host: String, port: String, astro_port: String) {
 
     // Watch the std output of astro bundle if std will have "ready" then open the browser to the development server
 
-    let mut buffer = [0; 1024];
-    let mut stdout = node_watch.stdout.take().unwrap();
+    let mut buffer_node = [0; 1024];
+    let mut stdout_node = node_watch.stdout.take().unwrap();
     loop {
-        let n = stdout.read(&mut buffer).unwrap();
+        let n = stdout_node.read(&mut buffer_node).unwrap();
         if n == 0 {
             break;
         }
-        let s = String::from_utf8_lossy(&buffer[..n]);
+        let s = String::from_utf8_lossy(&buffer_node[..n]);
+
         print!("{}", s);
 
         if s.contains("ready") {
