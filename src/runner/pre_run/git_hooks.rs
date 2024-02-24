@@ -1,5 +1,10 @@
 use std::fs;
 
+/// This function will copy the git hooks from the git_hooks folder to .git/hooks
+/// This will allow the user to use the pre-commit, pre-push and commit-msg hooks
+/// The hooks will help the user to maintain the code quality
+/// Alter the hooks in the git_hooks folder to fit your needs
+
 pub fn copy_git_hooks() {
     // Get the list of hooks from the git_hooks folder
     let hooks = fs::read_dir("git_hooks").unwrap();

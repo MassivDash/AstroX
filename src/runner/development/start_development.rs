@@ -8,6 +8,11 @@ use crate::runner::utils::terminal::{dev_info, step, success, warning};
 
 use crate::runner::pre_run::npm::NPM;
 
+/// Start the development server
+/// The development server will start the actix backend server and the astro frontend server
+/// The development server will also check if the port is available for the backend server, and loop until it finds the available port
+/// The development server will also clean up the orphaned processes, otherwise cargo watch and node watch will continue to run blocking the ports
+
 pub fn start_development(host: String, port: String, astro_port: String) {
     // Set the ctrl-c handler to exit the program and clean up orphaned processes
     let running = Arc::new(AtomicBool::new(true));
