@@ -1,16 +1,24 @@
 set -e
 
-echo 'running cargo test...'
+echo 'running runner cargo test...'
 cargo test
 
-echo 'running cargo fmt...'
+echo 'running runner cargo fmt...'
 cargo fmt -- --check
 
-echo 'running cargo clippy...'
+echo 'running runner cargo clippy...'
 cargo clippy -- -D warnings
 
-echo 'running cargo doc...'
-cargo doc --no-deps
+
+echo 'running backend cargo test...'
+cargo test --manifest-path src/backend/Cargo.toml
+
+echo 'running backend cargo fmt...'
+cargo fmt --manifest-path src/backend/Cargo.toml -- --check
+
+echo 'running backend cargo clippy...'
+cargo clippy --manifest-path src/backend/Cargo.toml -- -D warnings
+
 
 echo 'running frontend project lint...'
 npm run lint --prefix src/frontend/

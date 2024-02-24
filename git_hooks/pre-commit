@@ -6,6 +6,12 @@ cargo fmt -- --check
 echo 'running cargo clippy...'
 cargo clippy -- -D warnings
 
+echo 'running backend cargo fmt...'
+cargo fmt --manifest-path src/backend/Cargo.toml -- --check
+
+echo 'running backend cargo clippy...'
+cargo clippy --manifest-path src/backend/Cargo.toml -- -D warnings
+
 echo 'running frontend project lint...'
 npm run lint --prefix src/frontend/
 
