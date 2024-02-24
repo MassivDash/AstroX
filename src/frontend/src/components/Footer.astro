@@ -1,11 +1,13 @@
 <footer>
-  <div class='flex'>
-    <a href='https://github.com/MassivDash/astroX'>Astro X</a>
-    <p>by</p>
-    <a href='https://github.com/MassivDash'>Spaceghost</a>
-  </div>
-  <div class='flex'>
-    <a href='https://spaceout.pl'>spaceout.pl</a>
+  <div class='footer'>
+    <div class='flex'>
+      <a href='https://github.com/MassivDash/astroX'>Astro X</a>
+      <p>by</p>
+      <a href='https://github.com/MassivDash'>Spaceghost</a>
+    </div>
+    <div class='flex'>
+      <a href='https://spaceout.pl'>spaceout.pl</a>
+    </div>
   </div>
 </footer>
 
@@ -14,22 +16,26 @@
     background-color: rgb(44 44 44);
     color: white;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
-    padding: 10px 10px;
+  }
+
+  .footer {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1560px;
   }
 
   .flex {
     display: flex;
     align-items: center;
+    gap: 5px;
   }
 
   a {
     color: white;
     text-decoration: none;
-    margin: auto;
-    margin: 0 5px;
-
     &:hover {
       text-decoration: underline;
     }
