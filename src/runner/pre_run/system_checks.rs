@@ -4,6 +4,8 @@ use std::process::Command;
 use crate::runner::pre_run::npm::NPM;
 use crate::runner::utils::terminal::{error, spacer, step, success};
 
+/// Check if cargo-watch is installed
+/// cargo-watch is required to spy on changes to the actix server
 pub fn is_cargo_watch_installed() -> bool {
     let output = Command::new("cargo")
         .arg("install")
@@ -15,6 +17,8 @@ pub fn is_cargo_watch_installed() -> bool {
     output_str.contains("cargo-watch")
 }
 
+/// Check if commitlint-rs is installed
+/// commitlint-rs is required to lint the commit messages in development env
 pub fn is_commitlint_rs_installed() -> bool {
     let output = Command::new("cargo")
         .arg("install")
@@ -26,9 +30,9 @@ pub fn is_commitlint_rs_installed() -> bool {
     output_str.contains("commitlint-rs")
 }
 
-// check if node is installed
-// check if the node version is above 18.14.1
-// versions below will panic on astro commands
+/// check if node is installed
+/// check if the node version is above 18.14.1
+/// versions below will panic on astro commands
 pub fn is_node_installed() -> bool {
     let output = Command::new("node")
         .arg("--version")
@@ -61,11 +65,18 @@ pub fn is_node_installed() -> bool {
     false
 }
 
+/// Check if the frontend project is installed
+/// The frontend project is required to run the astro commands
+
 pub fn is_frontend_project_installed() -> bool {
     let project = std::path::Path::new("./src/frontend/package.json").exists();
     let installed = std::path::Path::new("./src/frontend/node_modules").exists();
     project && installed
 }
+
+/// Run system checks before starting the development or production server
+/// The system checks will check if the required tools are installed
+/// The system checks will also check if the required projects are installed
 
 pub fn run_system_checks(env: &String, prod_astro_build: bool) {
     if env == "dev" {

@@ -1,5 +1,24 @@
 use std::env;
 
+/// Get the additional arguments from "cargo run"
+
+/// List of arguments
+
+/// Bind actix server to a host, used for development and production
+/// --host=127.0.0.1
+
+/// Bind actix server to a port, used for development and production
+/// --port=8080
+
+/// Set the environment
+/// --env=prod / dev
+
+/// Set the astro development port, in production actix server will serve the frontend build Files
+/// --astro-port=4321
+
+/// Switch on / off the production build of the frontend during the production server start
+/// --prod-astro-build=true / false
+
 pub struct Args {
     pub host: String,
     pub port: String,
@@ -9,15 +28,6 @@ pub struct Args {
 }
 
 pub fn collect_args() -> Args {
-    // Get the additional arguments from "cargo run
-    // List of arguments
-
-    // --host=127.0.0.1
-    // --port=8080
-    // --env=prod / dev
-    // --astro-port=4321
-    // --prod-astro-build=true / false
-
     let args: Vec<String> = env::args().collect();
     let mut host = "127.0.0.1";
     let mut port = "8080";

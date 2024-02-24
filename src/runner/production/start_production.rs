@@ -4,6 +4,10 @@ use crate::runner::utils::terminal::step;
 
 use crate::runner::pre_run::npm::NPM;
 
+/// Start the production server
+/// The production server will start the actix backend server
+/// The production server will also bundle the frontend
+
 pub fn start_production(host: String, port: String, prod_astro_build: bool) {
     // Bundle the frontend and wait for the process to finish
     // if the astro build is set to true
