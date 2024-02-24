@@ -1,23 +1,16 @@
 use actix_files::{Files, NamedFile};
 use actix_rt::System;
 use actix_web::dev::{fn_service, ServiceRequest, ServiceResponse};
-use actix_web::{get, post, App, HttpResponse, HttpServer, Responder};
+use actix_web::{App, HttpServer};
 
 use std::env;
 
-#[post("/api/hello")]
-async fn json_response() -> impl Responder {
-    HttpResponse::Ok()
-        .content_type("application/json")
-        .body("{\"message\": \"Hello World\"}")
-}
+mod api;
 
-#[get("/api/hello")]
-async fn json_response_get() -> impl Responder {
-    HttpResponse::Ok()
-        .content_type("application/json")
-        .body("{\"message\": \"Hello World\"}")
-}
+use crate::api::hello::get::json_response_get;
+use crate::api::hello::post::json_response;
+
+use crate::api::space_x::get::json_get_space_x;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -45,6 +38,7 @@ async fn main() -> std::io::Result<()> {
         App::new()
             .service(json_response)
             .service(json_response_get)
+            .service(json_get_space_x)
             .service(
                 Files::new("/", "../frontend/dist/")
                     .prefer_utf8(true)
