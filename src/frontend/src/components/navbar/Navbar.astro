@@ -21,56 +21,69 @@ import SpaceoutIcon from './Spaceout.astro'
 </script>
 
 <nav transition:persist>
-  <div>
-    <p>astro <span>X</span></p>
+  <div class='nav'>
+    <div class='logo'>
+      <p>astro <span>X</span></p>
+    </div>
+    <ul>
+      <li><a id='home-link' href='/'>home</a></li>
+      <li><a id='astro-link' href='/astro'>astro</a></li>
+      <li><a id='actix-link' href='/actix'>actiX</a></li>
+      <li>
+        <a
+          title='github repo link'
+          href='https://github.com/MassivDash/AstroX'
+          target='_blank'
+        >
+          <GithubIcon width={24} height={24} />
+        </a>
+      </li>
+      <li>
+        <a
+          title='spaceout.pl'
+          class='add-top-margin'
+          href='https://spaceout.pl'
+          target='_blank'
+        >
+          <SpaceoutIcon width={35} height={35} />
+        </a>
+      </li>
+    </ul>
   </div>
-  <ul>
-    <li><a id='home-link' href='/'>home</a></li>
-    <li><a id='astro-link' href='/astro'>astro</a></li>
-    <li><a id='actix-link' href='/actix'>actiX</a></li>
-    <li>
-      <a
-        title='github repo link'
-        href='https://github.com/MassivDash/AstroX'
-        target='_blank'
-      >
-        <GithubIcon width={24} height={24} />
-      </a>
-    </li>
-    <li>
-      <a
-        title='spaceout.pl'
-        class='add-top-margin'
-        href='https://spaceout.pl'
-        target='_blank'
-      >
-        <SpaceoutIcon width={35} height={35} />
-      </a>
-    </li>
-  </ul>
 </nav>
 
 <style>
   nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     position: fixed;
     top: 0;
     width: 100%;
     z-index: 100;
-    height: 50px;
+    height: 70px;
     background: linear-gradient(90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe);
   }
 
-  div {
+  .nav {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 1560px;
+  }
+
+  .logo {
     padding-left: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   p {
     font-weight: 700;
-    font-size: 1.2rem;
-    line-height: 1;
+    font-size: 1.7rem;
     color: #333;
+    line-height: 1;
+    margin: auto;
 
     span {
       color: #8b8b8b;
@@ -86,7 +99,7 @@ import SpaceoutIcon from './Spaceout.astro'
 
   li {
     margin: 0 1rem;
-    font-size: 1rem;
+    font-size: 1.3rem;
   }
 
   a {
