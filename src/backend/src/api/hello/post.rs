@@ -10,6 +10,8 @@ pub async fn json_response() -> impl Responder {
 
 mod tests {
     use actix_web::{test, App};
+    use super::*;
+    
     #[actix_rt::test]
     async fn test_json_response() {
         let mut app = test::init_service(App::new().service(json_response)).await;
