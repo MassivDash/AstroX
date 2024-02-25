@@ -15,6 +15,7 @@
     "@astrojs/svelte": "^5.0.3",
     "@fontsource/pacifico": "^5.0.8",
     "astro": "^4.1.1",
+    "axios": "^1.6.7",
     "svelte": "^4.2.12",
     "typescript": "^5.3.3"
   },

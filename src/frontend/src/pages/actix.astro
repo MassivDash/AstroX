@@ -1,9 +1,10 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import SpaceX from '../components/spaceX/spacex.svelte'
 ---
 
 <Layout title='Welcome to Astro X'>
   <main transition:animate='slide'>
-    <h1>Hello !!!!</h1>
+    <SpaceX client:load />
   </main>
 </Layout>
