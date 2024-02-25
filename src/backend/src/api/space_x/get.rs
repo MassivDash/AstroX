@@ -59,8 +59,10 @@ pub async fn json_get_space_x() -> Result<HttpResponse, ActixError> {
     }
 }
 #[cfg(test)]
-use actix_web::{test, App};
+
 mod tests {
+    use actix_web::{test, App};
+
     #[actix_rt::test]
     async fn test_json_get_space_x() {
         let mut app = test::init_service(App::new().service(json_get_space_x)).await;
