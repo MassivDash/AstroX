@@ -34,6 +34,12 @@
   }
 
   import { onMount } from 'svelte'
+
+  // Astro has a built-in fetch function
+  // Its available in "---" filed or other components globally
+  // It will render pages at the build time and then hydrate them on the client
+
+  // For client side data fetching, we can use axios or others, but fetch does not fire up
   import axios from 'axios'
 
   const getSpaceXRockets = async () => {
