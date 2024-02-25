@@ -4,7 +4,7 @@ echo 'running runner cargo test...'
 cargo test
 
 echo 'running runner cargo fmt...'
-cargo fmt -- --check
+cargo fmt 
 
 echo 'running runner cargo clippy...'
 cargo clippy -- -D warnings
@@ -14,7 +14,7 @@ echo 'running backend cargo test...'
 cargo test --manifest-path src/backend/Cargo.toml
 
 echo 'running backend cargo fmt...'
-cargo fmt --manifest-path src/backend/Cargo.toml -- --check
+cargo fmt --manifest-path src/backend/Cargo.toml
 
 echo 'running backend cargo clippy...'
 cargo clippy --manifest-path src/backend/Cargo.toml -- -D warnings

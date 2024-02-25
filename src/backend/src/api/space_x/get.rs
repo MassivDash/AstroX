@@ -1,5 +1,4 @@
 use actix_web::{get, Error as ActixError, HttpResponse};
-use actix_web::{test, App};
 use reqwest::{get, Error};
 use serde::{Deserialize, Serialize};
 
@@ -43,10 +42,11 @@ struct Rocket {
 }
 
 #[get("/api/space-x")]
-async fn json_get_space_x() -> Result<HttpResponse, ActixError> {
+
+pub async fn json_get_space_x() -> Result<HttpResponse, ActixError> {
     let response = get("https://api.spacexdata.com/v3/rockets").await;
 
-    return match response {
+    match response {
         Ok(response) => {
             let response: Result<Vec<Rocket>, Error> = response.json().await;
 
@@ -56,11 +56,11 @@ async fn json_get_space_x() -> Result<HttpResponse, ActixError> {
             }
         }
         Err(error) => Ok(HttpResponse::InternalServerError().body(error.to_string())),
-    };
+    }
 }
 #[cfg(test)]
+use actix_web::{test, App};
 mod tests {
-    use super::*;
     #[actix_rt::test]
     async fn test_json_get_space_x() {
         let mut app = test::init_service(App::new().service(json_get_space_x)).await;
