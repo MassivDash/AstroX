@@ -8,8 +8,8 @@ async fn json_response_get() -> impl Responder {
 }
 #[cfg(test)]
 mod tests {
-    use actix_web::{test, App};
     use super::*;
+    use actix_web::{test, App};
 
     #[actix_rt::test]
     async fn test_json_response_get() {

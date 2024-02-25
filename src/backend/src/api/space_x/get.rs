@@ -61,8 +61,8 @@ pub async fn json_get_space_x() -> Result<HttpResponse, ActixError> {
 #[cfg(test)]
 
 mod tests {
-    use actix_web::{test, App};
     use super::*;
+    use actix_web::{test, App};
 
     #[actix_rt::test]
     async fn test_json_get_space_x() {
