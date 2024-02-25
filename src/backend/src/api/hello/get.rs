@@ -1,5 +1,4 @@
 use actix_web::{get, HttpResponse, Responder};
-use actix_web::{test, App};
 
 #[get("/api/hello")]
 async fn json_response_get() -> impl Responder {
@@ -8,8 +7,8 @@ async fn json_response_get() -> impl Responder {
         .body("{\"message\": \"Hello World\"}")
 }
 #[cfg(test)]
+use actix_web::{test, App};
 mod tests {
-    use super::*;
     #[actix_rt::test]
     async fn test_json_response_get() {
         let mut app = test::init_service(App::new().service(json_response_get)).await;

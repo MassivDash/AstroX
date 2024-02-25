@@ -3,39 +3,29 @@ use actix_rt::System;
 use actix_web::dev::{fn_service, ServiceRequest, ServiceResponse};
 use actix_web::{App, HttpServer};
 
-use std::env;
-
 mod api;
+mod args;
+mod cors;
+
+use crate::args::collect_args::collect_args;
+use crate::cors::get_cors_options::get_cors_options;
 
 use crate::api::hello::get::json_response_get;
 use crate::api::hello::post::json_response;
-
 use crate::api::space_x::get::json_get_space_x;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let args: Vec<String> = env::args().collect();
+    let args = collect_args();
 
-    let mut host = "127.0.0.1";
-    let mut port = 8080;
+    let host = args.host;
+    let port = args.port.parse::<u16>().unwrap();
 
-    for arg in &args {
-        if arg.starts_with("--host=") {
-            let split: Vec<&str> = arg.split('=').collect();
-            if split.len() == 2 {
-                host = split[1];
-            }
-        }
-        if arg.starts_with("--port=") {
-            let split: Vec<&str> = arg.split('=').collect();
-            if split.len() == 2 {
-                port = split[1].parse::<u16>().unwrap();
-            }
-        }
-    }
-
-    let server = HttpServer::new(|| {
+    let server = HttpServer::new(move || {
+        let env = args.env.to_string();
+        let cors = get_cors_options(env);
         App::new()
+            .wrap(cors)
             .service(json_response)
             .service(json_response_get)
             .service(json_get_space_x)
@@ -56,9 +46,9 @@ async fn main() -> std::io::Result<()> {
     let server = server.run();
 
     System::current().arbiter().spawn(async {
-        println!("");
+        println!("----");
         println!("HttpServer has started");
-        println!("");
+        println!("----");
     });
 
     server.await
