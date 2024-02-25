@@ -61,11 +61,20 @@
 </script>
 
 <div>
-  <p>Svelte</p>
+  <h3>Svelte Component (Client side call example)</h3>
   {#each data as rocket}
-    <div>
-      <h1>{rocket.rocket_name}</h1>
-      <p>{rocket.description}</p>
-    </div>
+    <ul>
+      <li>
+        <h1>{rocket.rocket_name}</h1>
+        <p>{rocket.description}</p>
+      </li>
+    </ul>
   {/each}
 </div>
+
+<style>
+  ul {
+    list-style: none;
+    padding: 0;
+  }
+</style>

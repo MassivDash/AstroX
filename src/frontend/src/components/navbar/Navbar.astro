@@ -7,16 +7,23 @@ import SpaceoutIcon from './Spaceout.astro'
   import { navigate } from 'astro:transitions/client'
 
   const homeLink = document.getElementById('home-link')
-  const aboutLink = document.getElementById('astro-link')
+  const astro = document.getElementById('astro-link')
 
   homeLink?.addEventListener('click', (event) => {
     event.preventDefault()
     navigate('/')
   })
 
-  aboutLink?.addEventListener('click', (event) => {
+  astro?.addEventListener('click', (event) => {
     event.preventDefault()
-    navigate('/hello')
+    navigate('/astro')
+  })
+
+  const actix = document.getElementById('actix-link')
+
+  actix?.addEventListener('click', (event) => {
+    event.preventDefault()
+    navigate('/actix')
   })
 </script>
 
