@@ -1,8 +1,7 @@
-use inquire::Confirm;
-use std::process::Command;
-
 use crate::runner::pre_run::npm::NPM;
 use crate::runner::utils::terminal::{error, spacer, step, success};
+use inquire::Confirm;
+use std::process::Command;
 
 /// Check if cargo-watch is installed
 /// cargo-watch is required to spy on changes to the actix server
