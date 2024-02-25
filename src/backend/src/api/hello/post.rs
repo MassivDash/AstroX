@@ -7,8 +7,9 @@ pub async fn json_response() -> impl Responder {
         .body("{\"message\": \"Hello World\"}")
 }
 #[cfg(test)]
-use actix_web::{test, App};
+
 mod tests {
+    use actix_web::{test, App};
     #[actix_rt::test]
     async fn test_json_response() {
         let mut app = test::init_service(App::new().service(json_response)).await;
