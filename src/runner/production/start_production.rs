@@ -1,8 +1,6 @@
-use std::process::Command;
-
-use crate::runner::utils::terminal::step;
-
 use crate::runner::pre_run::npm::NPM;
+use crate::runner::utils::terminal::step;
+use std::process::Command;
 
 /// Start the production server
 /// The production server will start the actix backend server

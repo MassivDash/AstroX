@@ -1,11 +1,10 @@
 mod runner;
-use runner::args::collect_args::collect_args;
-
 use crate::runner::development::start_development::start_development;
 use crate::runner::pre_run::git_hooks::copy_git_hooks;
 use crate::runner::pre_run::system_checks::run_system_checks;
 use crate::runner::production::start_production::start_production;
 use crate::runner::utils::terminal::{do_splash, step};
+use runner::args::collect_args::collect_args;
 
 /// The main Astro X runner function
 /// The runner is responsible for starting the development and production servers

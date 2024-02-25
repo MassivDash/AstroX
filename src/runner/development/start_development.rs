@@ -1,12 +1,10 @@
+use crate::runner::pre_run::npm::NPM;
+use crate::runner::utils::terminal::{dev_info, step, success, warning};
 use ctrlc::set_handler;
 use std::io::Read;
 use std::process::Command;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
-
-use crate::runner::utils::terminal::{dev_info, step, success, warning};
-
-use crate::runner::pre_run::npm::NPM;
 
 /// Start the development server
 /// The development server will start the actix backend server and the astro frontend server
