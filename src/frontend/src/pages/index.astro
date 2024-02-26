@@ -4,6 +4,7 @@ import Hero from '../components/Hero.astro'
 import Section from '../components/Section.astro'
 import AIcon from '../svgs/AstroIcon.astro'
 import Rust from '../svgs/RustIcon.astro'
+import Card from '../components/Card.astro'
 ---
 
 <Layout title='Welcome to Astro X'>
@@ -14,30 +15,77 @@ import Rust from '../svgs/RustIcon.astro'
         <AIcon width={80} height={80} />
         <p>+</p>
         <Rust width={80} height={80} />
+        <h2>
+          Rust orienatinted monolithic template for building web applications.
+        </h2>
       </div>
-      <h2>
-        Astro X is a monolithic template for building modern fullstack web
-        applications.
-      </h2>
-      <p>
-        It comes with a variety of features and tools that make it easy to build
-        and maintain your application. Astro X is built with Astro, a modern
-        front-end framework that makes it easy to build fast, modern web
-        applications.
-      </p>
+    </Section>
+    <Section>
+      <p>clone the repo</p>
+      <pre>
+      <code>
+        git clone https://github.com/MassivDash/AstroX.git
+      </code>
+    </pre>
+      <p>start the development server</p>
+      <pre>
+      <code>
+        cargo run
+      </code>
+    </pre>
+    </Section>
+    <Section>
+      <div class='grid'>
+        <Card
+          title='Runner'
+          body='Reference guide for astro x runner'
+          href='/actix'
+        />
+        <Card
+          title='Astro'
+          body='Reference guide for astro frontend'
+          href='/astro'
+        />
+        <Card
+          title='Actix'
+          body='Reference guide for actix backend'
+          href='/actix'
+        />
+      </div>
     </Section>
   </main>
+
+  <style>
+    .icons {
+      display: flex;
+      gap: 2rem;
+      width: 100%;
+      justify-content: start;
+      font-size: x-large;
+      align-items: center;
+    }
+
+    .grid {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2rem;
+      padding: 2rem;
+    }
+
+    pre code {
+      display: block;
+      background: #24262e;
+      white-space: pre;
+      color: white;
+      -webkit-overflow-scrolling: touch;
+      overflow-x: scroll;
+      max-width: 100%;
+      min-width: 100px;
+      padding: 0;
+      border-radius: 5px;
+    }
+  </style>
 </Layout>
-
-<style>
-  .icons {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    font-size: x-large;
-  }
-
-  h2 {
-    text-align: center;
-  }
-</style>
