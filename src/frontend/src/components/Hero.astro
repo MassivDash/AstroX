@@ -30,11 +30,12 @@ import '@fontsource/pacifico'
     color: transparent;
     filter: invert(1);
     margin: auto;
+    text-shadow: 9px 4px #00000017;
     padding-left: 10vw;
     span {
       font-size: 4rem;
       font-family: Pacifico, cursive;
-      color: #8b8b8b;
+      color: #fff;
     }
   }
 
@@ -45,6 +46,9 @@ import '@fontsource/pacifico'
     display: flex;
     justify-content: center;
     align-items: center;
-    background: url('/hero.jpeg') no-repeat center center/cover;
+    background:
+      linear-gradient(90deg, #fff, #fff),
+      url('/hero.jpeg') no-repeat center center/cover;
+    background-blend-mode: saturation;
   }
 </style>

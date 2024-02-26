@@ -21,7 +21,7 @@ fn main() {
     run_system_checks(&args.env, args.prod_astro_build);
 
     if args.env == "dev" {
-        // During development is could be possible that user starts the project fdr the first time, or has altered the git hooks
+        // During development is could be possible that user starts the project for the first time, or has altered the git hooks
         // Copy the git hooks to the .git/hooks folder
         // Enjoy pre-commit, pre-push and commit-msg hooks that will help you to maintain the code quality
         step("Syncing the git hooks");
