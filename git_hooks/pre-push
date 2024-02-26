@@ -1,12 +1,12 @@
 set -e
 
-echo 'running runner cargo test...'
+echo 'running cli cargo test...'
 cargo test
 
-echo 'running runner cargo fmt...'
+echo 'running cli runner cargo fmt...'
 cargo fmt 
 
-echo 'running runner cargo clippy...'
+echo 'running cli cargo clippy...'
 cargo clippy -- -D warnings
 
 
