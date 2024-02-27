@@ -1,4 +1,4 @@
-use super::collect_args::collect_args;
+use super::collect_args::collect_config_args;
 use super::toml::read_toml;
 use serde::Deserialize;
 use serde::Serialize;
@@ -12,7 +12,7 @@ pub struct Config {
     pub prod_astro_build: bool,
 }
 
-pub fn get_config() -> Config {
+pub fn get_config(args: &Vec<String>) -> Config {
     // create default config
 
     let mut config: Config = Config {
@@ -31,7 +31,7 @@ pub fn get_config() -> Config {
         config = toml.unwrap();
     }
 
-    config = collect_args(config);
+    config = collect_config_args(config, args);
 
     config
 }

@@ -1,5 +1,5 @@
-env = 'dev'
-host = '127.0.0.1'
+host = "localhost"
 port = 8080
-astro_port = 5432
-prod_astro_build = true
+env = "dev"
+astro_port = 5431
+prod_astro_build = false

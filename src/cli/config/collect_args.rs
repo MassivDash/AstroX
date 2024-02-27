@@ -1,9 +1,6 @@
-use std::env;
-
 use super::get_config::Config;
 
-/// Get the additional arguments from "cargo run"
-/// List of arguments
+/// List of config arguments
 /// Bind actix server to a host, used for development and production
 /// --host=127.0.0.1
 /// Bind actix server to a port, used for development and production
@@ -14,6 +11,19 @@ use super::get_config::Config;
 /// --astro-port=4321
 /// Switch on / off the production build of the frontend during the production server start
 /// --prod-astro-build=true / false
+
+/// List of commands
+/// --help
+/// --sync-git-hooks
+/// --create-toml
+
+#[derive(Debug, PartialEq)]
+pub enum CliCmds {
+    Help,
+    SyncGitHooks,
+    CreateToml,
+    Run,
+}
 
 fn split_and_collect(arg: &str) -> String {
     let split: Vec<&str> = arg.split('=').collect();
@@ -31,12 +41,25 @@ fn parse_to_bool(arg: &str) -> bool {
     }
 }
 
-pub fn collect_args(config: Config) -> Config {
-    let args: Vec<String> = env::args().collect();
+pub fn check_for_cli_cmds(args: &Vec<String>) -> CliCmds {
+    for arg in args {
+        if arg.starts_with("--help") {
+            return CliCmds::Help;
+        }
+        if arg.starts_with("--sync-git-hooks") {
+            return CliCmds::SyncGitHooks;
+        }
+        if arg.starts_with("--create-toml") {
+            return CliCmds::CreateToml;
+        }
+    }
+    CliCmds::Run
+}
 
+pub fn collect_config_args(config: Config, args: &Vec<String>) -> Config {
     let mut config = config;
 
-    for arg in &args {
+    for arg in args {
         if arg.starts_with("--env=") {
             config.env = split_and_collect(arg);
         }
@@ -58,6 +81,7 @@ pub fn collect_args(config: Config) -> Config {
 
     config
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -77,5 +101,34 @@ mod tests {
         assert_eq!(parse_to_bool("true"), true);
         assert_eq!(parse_to_bool("false"), false);
         assert_eq!(parse_to_bool("invalid"), false);
+    }
+
+    #[test]
+    fn test_collect_config_args() {
+        let config = Config {
+            env: "".to_string(),
+            host: "".to_string(),
+            port: None,
+            astro_port: None,
+            prod_astro_build: false,
+        };
+
+        let args = vec![
+            "--env=prod".to_string(),
+            "--host=127.0.0.1".to_string(),
+            "--port=8080".to_string(),
+            "--astro-port=4321".to_string(),
+            "--prod-astro-build=true".to_string(),
+        ];
+
+        let expected_config = Config {
+            env: "prod".to_string(),
+            host: "127.0.0.1".to_string(),
+            port: Some(8080),
+            astro_port: Some(4321),
+            prod_astro_build: true,
+        };
+
+        assert_eq!(collect_config_args(config, &args), expected_config);
     }
 }
