@@ -127,7 +127,7 @@ pub fn run_system_checks(env: &String, prod_astro_build: bool) {
                 spacer();
                 let ans = Confirm::new("Do you want to install commitlint-rs ?")
                 .with_default(false)
-                .with_help_message("commitlint-rs must be installed globally in order to lint the commit messages, this is the recommended way to lint commit messages.")
+                .with_help_message("commitlint-rs must be installed globally in order to lint the commit messages, this is the recommended way to go")
                 .prompt();
 
                 match ans {
