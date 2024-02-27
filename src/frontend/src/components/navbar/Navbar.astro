@@ -1,6 +1,8 @@
 ---
-import GithubIcon from './Github.astro'
-import SpaceoutIcon from './Spaceout.astro'
+import GithubIcon from '../../svgs/Github.astro'
+import SpaceoutIcon from '../../svgs/Spaceout.astro'
+import AstroIcon from '../../svgs/AstroIcon.astro'
+import RustIcon from '../../svgs/RustIcon.astro'
 ---
 
 <script>
@@ -9,13 +11,36 @@ import SpaceoutIcon from './Spaceout.astro'
   const homeLink = document.getElementById('home-link')
   const astro = document.getElementById('astro-link')
 
+  const clearLinks = () => {
+    const links = document.querySelectorAll('a')
+    // The url has changed
+    links.forEach((link) => link.parentElement?.classList.remove('active'))
+    document.getElementById('homeIcon')?.classList.remove('active')
+  }
+
+  const findActiveLink = () => {
+    const links = document.querySelectorAll('a')
+    links.forEach((link) => {
+      console.log(window, window.location.href, link.href)
+      if (link.href === window.location.href) {
+        link.parentElement?.classList.add('active')
+      }
+    })
+  }
+
   homeLink?.addEventListener('click', (event) => {
     event.preventDefault()
+    clearLinks()
+    document.getElementById('homeIcon')?.classList.add('active')
     navigate('/')
   })
 
   astro?.addEventListener('click', (event) => {
     event.preventDefault()
+    clearLinks()
+    document
+      .getElementById('astro-link')
+      ?.parentElement?.classList.add('active')
     navigate('/astro')
   })
 
@@ -23,36 +48,56 @@ import SpaceoutIcon from './Spaceout.astro'
 
   actix?.addEventListener('click', (event) => {
     event.preventDefault()
+    clearLinks()
     navigate('/actix')
+    document
+      .getElementById('actix-link')
+      ?.parentElement?.classList.add('active')
   })
+
+  findActiveLink()
 </script>
 
 <nav transition:persist>
   <div class='nav'>
-    <div class='logo'>
-      <p>astro <span>X</span></p>
-    </div>
     <ul>
-      <li><a id='home-link' href='/'>home</a></li>
-      <li><a id='astro-link' href='/astro'>astro</a></li>
-      <li><a id='actix-link' href='/actix'>actiX</a></li>
       <li>
+        <a id='home-link' href='/'>
+          <div class='logo'>
+            <p>astro <span id='homeIcon' class='navi-link'>X</span></p>
+          </div></a
+        >
+      </li>
+      <li class='navi-link'>
+        <a id='astro-link' href='/astro'>
+          <AstroIcon height={30} width={30} />
+          <p>astro</p>
+        </a>
+      </li>
+      <li class='navi-link'>
+        <a id='actix-link' href='/actix'>
+          <RustIcon height={28} width={28} /><p>actiX</p>
+        </a>
+      </li>
+      <li class='navi-link'>
         <a
           title='github repo link'
           href='https://github.com/MassivDash/AstroX'
           target='_blank'
         >
-          <GithubIcon width={24} height={24} />
+          <GithubIcon height={28} width={28} />
+          <p>Repository</p>
         </a>
       </li>
-      <li>
+      <li class='navi-link'>
         <a
           title='spaceout.pl'
           class='add-top-margin'
           href='https://spaceout.pl'
           target='_blank'
         >
-          <SpaceoutIcon width={35} height={35} />
+          <SpaceoutIcon height={35} width={35} />
+          <p>Spaceout</p>
         </a>
       </li>
     </ul>
@@ -63,19 +108,18 @@ import SpaceoutIcon from './Spaceout.astro'
   nav {
     display: flex;
     justify-content: center;
-    position: fixed;
+    position: relative;
     top: 0;
     width: 100%;
     z-index: 100;
-    height: 70px;
-    background: linear-gradient(90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe);
   }
 
   .nav {
     display: flex;
-    justify-content: space-between;
+    justify-content: start;
     width: 100%;
     max-width: 1560px;
+    background: linear-gradient(90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe);
   }
 
   .logo {
@@ -87,40 +131,110 @@ import SpaceoutIcon from './Spaceout.astro'
 
   p {
     font-weight: 700;
-    font-size: 1.7rem;
+    font-size: 2rem;
     color: #333;
-    line-height: 1;
-    margin: auto;
-
-    span {
-      color: #8b8b8b;
-    }
+    display: flex;
+    align-items: center;
+    gap: 20px;
   }
 
   ul {
     display: flex;
     list-style: none;
-    padding-right: 1rem;
+    padding: 1rem;
     align-items: center;
   }
 
   li {
     margin: 0 1rem;
-    font-size: 1.3rem;
   }
 
   a {
     text-decoration: none;
     color: #8b8b8b;
-    text-transform: capitalize;
-
+    text-transform: lowercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: smaller;
+    transition: all 0.7s ease-in-out;
     &:hover {
-      color: #000;
+      color: #0a0909;
+    }
+  }
+
+  span {
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: #8b8b8b;
+    line-height: 1.5;
+    padding-bottom: 5px;
+  }
+
+  .navi-link {
+    display: flex;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe);
+    border-radius: 45px;
+    box-shadow: inset 0 0 4px 1px #35332d1f;
+    transition: all 0.7s cubic-bezier(0, 1.5, 1, 1.5);
+    p {
+      position: absolute;
+      margin: 10px auto;
+      font-size: 0.6rem;
+      opacity: 0;
+      bottom: -40px;
+      transition: all 0.7s ease-in-out;
     }
 
-    &.add-top-margin {
-      margin-top: 0.1rem;
-      display: flex;
+    &:hover {
+      box-shadow: inset 0 0 0px 0px hsla(45, 8%, 19%, 0.122);
+      color: #0a0909;
+      transform: scale(1.1);
+      p {
+        display: block;
+        opacity: 1;
+        transition: all 0.7s ease-in-out;
+      }
+
+      a {
+        color: #0a0909;
+        transition: all 0.7s ease-in-out;
+      }
+    }
+  }
+
+  .active {
+    box-shadow: inset 0 0 0px 0px hsla(45, 8%, 19%, 0.122);
+    color: #0a0909;
+    transform: scale(1.1);
+    position: relative;
+    p {
+      display: block;
+      opacity: 1;
+      position: absolute;
+      margin: 10px auto;
+      font-size: 0.6rem;
+      opacity: 1;
+      bottom: -40px;
+      transition: all 0.7s ease-in-out;
+    }
+
+    .logo > p {
+      color: #0a0909;
+      position: relative;
+      font-size:;
+      transition: all 0.7s ease-in-out;
+    }
+
+    a {
+      color: #0a0909;
+      transition: all 0.7s ease-in-out;
     }
   }
 </style>
