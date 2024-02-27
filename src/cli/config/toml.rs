@@ -1,7 +1,7 @@
-use super::config::Config;
+use super::get_config::Config;
 use crate::cli::utils::terminal::{error, spacer, step, success, warning};
 
-pub fn read_toml(filename: String) -> Result<Config, ()> {
+pub fn read_toml(filename: &String) -> Result<Config, ()> {
     let toml_str = std::fs::read_to_string(filename);
 
     match toml_str {
@@ -33,6 +33,13 @@ pub fn read_toml(filename: String) -> Result<Config, ()> {
 mod tests {
     use super::*;
 
+    fn remove_file(file_name: &String) -> () {
+        match std::fs::remove_file(&file_name) {
+            Ok(_) => (),
+            Err(e) => println!("Error: {}", e),
+        }
+    }
+
     #[test]
     fn test_read_toml_success() {
         // Arrange
@@ -47,10 +54,10 @@ mod tests {
         let file_name: String = "Astrox-test.toml".to_string();
 
         let toml_str = toml::to_string(&expected_config).unwrap();
-        std::fs::write(file_name, toml_str).unwrap();
+        std::fs::write(&file_name, toml_str).unwrap();
 
         // Act
-        let result = read_toml(file_name);
+        let result = read_toml(&file_name);
 
         // Assert
         assert!(result.is_ok());
@@ -62,13 +69,13 @@ mod tests {
         assert!(config.prod_astro_build == expected_config.prod_astro_build);
 
         // delete file after test completion
-        std::fs::remove_file(file_name);
+        remove_file(&file_name)
     }
 
     #[test]
     fn test_read_toml_file_not_found() {
         let file_name: String = "Astrox-not.toml".to_string();
-        let result = read_toml(file_name);
+        let result = read_toml(&file_name);
 
         // Assert
         assert!(result.is_err());
@@ -80,12 +87,12 @@ mod tests {
         std::fs::write("Astrox-test.toml", "invalid toml").unwrap();
 
         // Act
-        let result = read_toml(file_name);
+        let result = read_toml(&file_name);
 
         // Assert
         assert!(result.is_err());
 
         // delete file after test completion
-        std::fs::remove_file(file_name);
+        remove_file(&file_name);
     }
 }

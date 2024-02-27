@@ -1,10 +1,10 @@
 mod cli;
+use crate::cli::config::get_config::get_config;
 use crate::cli::development::start_development::start_development;
 use crate::cli::pre_run::git_hooks::copy_git_hooks;
 use crate::cli::pre_run::system_checks::run_system_checks;
 use crate::cli::production::start_production::start_production;
 use crate::cli::utils::terminal::{do_splash, step};
-use cli::config_maker::config::get_config;
 
 /// The main Astro X cli
 /// The cli is responsible for starting the development and production servers

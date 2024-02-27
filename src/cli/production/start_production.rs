@@ -1,4 +1,4 @@
-use crate::cli::config_maker::config::Config;
+use crate::cli::config::get_config::Config;
 use crate::cli::pre_run::npm::NPM;
 use crate::cli::utils::terminal::step;
 use std::process::Command;

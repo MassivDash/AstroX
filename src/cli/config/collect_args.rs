@@ -1,6 +1,6 @@
 use std::env;
 
-use super::config::Config;
+use super::get_config::Config;
 
 /// Get the additional arguments from "cargo run"
 /// List of arguments
