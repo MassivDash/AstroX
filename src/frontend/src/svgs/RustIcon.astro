@@ -10,7 +10,7 @@ const { width = 24, height = 24 }: Props = Astro.props
 <svg
   version='1.1'
   xmlns='http://www.w3.org/2000/svg'
-  viewBox='0 0 128 128'
+  viewBox='0 0 100 100'
   xmlns:xlink='http://www.w3.org/1999/xlink'
   {width}
   {height}
@@ -21,6 +21,7 @@ const { width = 24, height = 24 }: Props = Astro.props
       transform='translate(0.5, 0.5)'
       stroke-width='1'
       stroke-linejoin='round'
+      fill='currentColor'
       d='     M -9,-15 H 4 C 12,-15 12,-7 4,-7 H -9 Z     M -40,22 H 0 V 11 H -9 V 3 H 1 C 12,3 6,22 15,22 H 40     V 3 H 34 V 5 C 34,13 25,12 24,7 C 23,2 19,-2 18,-2 C 33,-10 24,-26 12,-26 H -35     V -15 H -25 V 11 H -40 Z'
     ></path>
     <g id='gear' mask='url(#holes)'>
