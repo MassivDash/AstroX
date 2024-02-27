@@ -25,9 +25,7 @@ fn main() {
 
     if cli_cmd != CliCmds::Run {
         match cli_cmd {
-            CliCmds::Help => {
-                return help();
-            }
+            CliCmds::Help => return help(),
             CliCmds::SyncGitHooks => {
                 // Copy the git hooks to the .git/hooks folder
                 // Enjoy pre-commit, pre-push and commit-msg hooks that will help you to maintain the code quality
@@ -39,6 +37,12 @@ fn main() {
                     .expect("Failed to create Astrox.toml file");
                 return;
             }
+            CliCmds::Interactive => print!("Interactive mode is not yet implemented"),
+            CliCmds::SystemCheck => {
+                run_system_checks(&"dev".to_string(), false);
+                return;
+            }
+
             CliCmds::Run => {}
         }
         return;
