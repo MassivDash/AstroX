@@ -75,7 +75,7 @@ pub fn collect_config_args(config: Config, args: &Vec<String>) -> Config {
         }
 
         if arg.starts_with("--prod-astro-build=") {
-            config.prod_astro_build = parse_to_bool(arg);
+            config.prod_astro_build = parse_to_bool(split_and_collect(arg).as_str());
         }
     }
 
