@@ -4,7 +4,10 @@ use crate::cli::{
     utils::terminal::{help, step},
 };
 
-use super::cmd_list::{check_for_cli_cmds, CliCmds};
+use super::{
+    cmd_list::{check_for_cli_cmds, CliCmds},
+    interactive::start_interactive,
+};
 
 pub fn execute_cmd(args: &Vec<String>) {
     let cmd = check_for_cli_cmds(args);
@@ -26,7 +29,7 @@ pub fn execute_cmd(args: &Vec<String>) {
                     .expect("Failed to create Astrox.toml file");
                 std::process::exit(0);
             }
-            CliCmds::Interactive => print!("Interactive mode is not yet implemented"),
+            CliCmds::Interactive => start_interactive(),
             CliCmds::SystemCheck => {
                 run_system_checks(&"dev".to_string(), false);
                 std::process::exit(0);
