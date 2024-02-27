@@ -12,21 +12,6 @@ use super::get_config::Config;
 /// Switch on / off the production build of the frontend during the production server start
 /// --prod-astro-build=true / false
 
-/// List of commands
-/// --help
-/// --sync-git-hooks
-/// --create-toml
-
-#[derive(Debug, PartialEq)]
-pub enum CliCmds {
-    Help,
-    SyncGitHooks,
-    CreateToml,
-    Interactive,
-    SystemCheck,
-    Run,
-}
-
 fn split_and_collect(arg: &str) -> String {
     let split: Vec<&str> = arg.split('=').collect();
     if split.len() == 2 {
@@ -41,20 +26,6 @@ fn parse_to_bool(arg: &str) -> bool {
         "false" => false,
         _ => false,
     }
-}
-
-pub fn check_for_cli_cmds(args: &Vec<String>) -> CliCmds {
-    for arg in args {
-        match arg.as_str() {
-            s if s.starts_with("--help") => return CliCmds::Help,
-            s if s.starts_with("--sync-git-hooks") => return CliCmds::SyncGitHooks,
-            s if s.starts_with("--create-toml") => return CliCmds::CreateToml,
-            s if s.starts_with("--interactive") => return CliCmds::Interactive,
-            s if s.starts_with("--system-check") => return CliCmds::SystemCheck,
-            _ => continue,
-        }
-    }
-    CliCmds::Run
 }
 
 pub fn collect_config_args(config: Config, args: &Vec<String>) -> Config {
@@ -131,15 +102,5 @@ mod tests {
         };
 
         assert_eq!(collect_config_args(config, &args), expected_config);
-    }
-
-    #[test]
-    fn test_check_if_help_always_executed() {
-        let mut args = vec!["--invalid-arg".to_string()];
-        assert_eq!(check_for_cli_cmds(&args), CliCmds::Run);
-        args.push("--help".to_string());
-        assert_eq!(check_for_cli_cmds(&args), CliCmds::Help);
-        args.push("--create-toml".to_string());
-        assert_eq!(check_for_cli_cmds(&args), CliCmds::Help);
     }
 }
