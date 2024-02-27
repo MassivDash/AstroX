@@ -1,8 +1,7 @@
-use serde::Deserialize;
-use serde::Serialize;
-
 use super::collect_args::collect_args;
 use super::toml::read_toml;
+use serde::Deserialize;
+use serde::Serialize;
 
 #[derive(Deserialize, Debug, Serialize, PartialEq)]
 pub struct Config {
@@ -26,7 +25,7 @@ pub fn get_config() -> Config {
 
     let file_name = "Astrox.toml".to_string();
 
-    let toml = read_toml(file_name);
+    let toml = read_toml(&file_name);
 
     if toml.is_ok() {
         config = toml.unwrap();

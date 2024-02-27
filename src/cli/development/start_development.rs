@@ -1,4 +1,4 @@
-use crate::cli::config_maker::config::Config;
+use crate::cli::config::get_config::Config;
 use crate::cli::pre_run::npm::NPM;
 use crate::cli::utils::terminal::{dev_info, step, success, warning};
 use ctrlc::set_handler;
@@ -31,7 +31,6 @@ pub fn start_development(config: Config) {
 
     let astro_port = config.astro_port.unwrap_or(5431);
     // Loop until you find the port that is available
-    print!("{}", &astro_port.to_string());
 
     while listener.is_err() {
         warning(format!("Port {} is not available", port).as_str());
