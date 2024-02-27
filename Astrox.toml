@@ -2,4 +2,4 @@ host = "localhost"
 port = 8080
 env = "dev"
 astro_port = 5431
-prod_astro_build = false
+prod_astro_build = true
