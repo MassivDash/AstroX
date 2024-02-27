@@ -44,7 +44,7 @@ pub fn collect_args(config: Config) -> Config {
             config.host = split_and_collect(arg)
         }
         if arg.starts_with("--port=") {
-            config.port = split_and_collect(arg).parse::<u16>().unwrap_or_default();
+            config.port = Some(split_and_collect(arg).parse::<u16>().unwrap_or_default());
         }
 
         if arg.starts_with("--astro-port=") {
@@ -57,4 +57,54 @@ pub fn collect_args(config: Config) -> Config {
     }
 
     config
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_split_and_collect() {
+        assert_eq!(split_and_collect("--env=prod"), "prod");
+        assert_eq!(split_and_collect("--host=127.0.0.1"), "127.0.0.1");
+        assert_eq!(split_and_collect("--port=8080"), "8080");
+        assert_eq!(split_and_collect("--astro-port=4321"), "4321");
+        assert_eq!(split_and_collect("--prod-astro-build=true"), "true");
+        assert_eq!(split_and_collect("--invalid-arg"), "");
+    }
+
+    #[test]
+    fn test_parse_to_bool() {
+        assert_eq!(parse_to_bool("true"), true);
+        assert_eq!(parse_to_bool("false"), false);
+        assert_eq!(parse_to_bool("invalid"), false);
+    }
+
+    #[test]
+    fn test_collect_args() {
+        let config = Config {
+            env: "".to_string(),
+            host: "".to_string(),
+            port: None,
+            astro_port: None,
+            prod_astro_build: false,
+        };
+
+        let args = vec![
+            "--env=prod".to_string(),
+            "--host=127.0.0.1".to_string(),
+            "--port=8080".to_string(),
+            "--astro-port=4321".to_string(),
+            "--prod-astro-build=true".to_string(),
+        ];
+
+        let expected_config = Config {
+            env: "prod".to_string(),
+            host: "127.0.0.1".to_string(),
+            port: Some(8080),
+            astro_port: Some(4321),
+            prod_astro_build: true,
+        };
+
+        assert_eq!(collect_args(config), expected_config);
+    }
 }
