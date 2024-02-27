@@ -23,9 +23,6 @@ pub fn start_development(config: Config) {
     .expect("Error setting Ctrl-C handler");
 
     // Check if the port is available for the backend server
-
-    print!("{}", &config.astro_port.is_some().to_string());
-
     let mut port = config.port.unwrap_or(8080);
     let mut astro_port = config.astro_port.unwrap_or(5431);
     let mut rust_port_listener = std::net::TcpListener::bind(format!("{}:{}", config.host, port));
@@ -50,10 +47,12 @@ pub fn start_development(config: Config) {
             std::net::TcpListener::bind(format!("{}:{}", config.host, astro_port));
     }
 
+    // kill the listener
+    drop(astro_port_listener);
+
     // Start the backend development server
 
     step("Start the actix backend development server");
-
     let mut cargo_watch = Command::new("cargo")
         .current_dir("./src/backend")
         .arg("watch")
@@ -85,7 +84,6 @@ pub fn start_development(config: Config) {
     }
 
     // Start the frontend development server
-
     step("Starting astro frontend development server");
 
     let mut node_watch = Command::new(NPM)

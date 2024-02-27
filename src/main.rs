@@ -1,14 +1,10 @@
 mod cli;
-use cli::utils::terminal::help;
-
-use crate::cli::config::collect_args::{check_for_cli_cmds, CliCmds};
 use crate::cli::config::get_config::get_config;
-use crate::cli::config::toml::create_toml_file;
 use crate::cli::development::start_development::start_development;
-use crate::cli::pre_run::git_hooks::copy_git_hooks;
 use crate::cli::pre_run::system_checks::run_system_checks;
 use crate::cli::production::start_production::start_production;
-use crate::cli::utils::terminal::{do_splash, step};
+use crate::cli::utils::terminal::do_splash;
+use cli::cmds::execute_cmd::execute_cmd;
 use std::env;
 
 /// The main Astro X cli
@@ -21,32 +17,7 @@ fn main() {
     // Get the arguments from the command line
     let args = env::args().collect::<Vec<String>>();
 
-    let cli_cmd = check_for_cli_cmds(&args);
-
-    if cli_cmd != CliCmds::Run {
-        match cli_cmd {
-            CliCmds::Help => return help(),
-            CliCmds::SyncGitHooks => {
-                // Copy the git hooks to the .git/hooks folder
-                // Enjoy pre-commit, pre-push and commit-msg hooks that will help you to maintain the code quality
-                step("Syncing the git hooks");
-                return copy_git_hooks();
-            }
-            CliCmds::CreateToml => {
-                create_toml_file("Astrox.toml".to_string())
-                    .expect("Failed to create Astrox.toml file");
-                return;
-            }
-            CliCmds::Interactive => print!("Interactive mode is not yet implemented"),
-            CliCmds::SystemCheck => {
-                run_system_checks(&"dev".to_string(), false);
-                return;
-            }
-
-            CliCmds::Run => {}
-        }
-        return;
-    }
+    execute_cmd(&args);
 
     // Create config
     let config = get_config(&args);
