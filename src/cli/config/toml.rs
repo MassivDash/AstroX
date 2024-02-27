@@ -36,7 +36,7 @@ pub fn create_toml_file(file_name: String) -> Result<Config, ()> {
         port: Some(8080),
         env: "dev".to_string(),
         astro_port: Some(5431),
-        prod_astro_build: false,
+        prod_astro_build: true,
     };
 
     let toml_str = toml::to_string(&config);
@@ -117,7 +117,7 @@ mod tests {
 
     #[test]
     fn test_read_toml_parse_error() {
-        let file_name: String = "Astrox-test.toml".to_string();
+        let file_name: String = "Astrox-error.toml".to_string();
         std::fs::write("Astrox-test.toml", "invalid toml").unwrap();
         let result = read_toml(&file_name);
         assert!(result.is_err());
@@ -126,7 +126,7 @@ mod tests {
 
     #[test]
     fn test_create_toml_file() {
-        let file_name: String = "Astrox-test.toml".to_string();
+        let file_name: String = "Astrox-test-write.toml".to_string();
         let result = create_toml_file(file_name.clone());
         assert!(result.is_ok());
         remove_file(&file_name);

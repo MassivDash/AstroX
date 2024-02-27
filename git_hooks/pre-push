@@ -9,7 +9,6 @@ cargo fmt
 echo 'running cli cargo clippy...'
 cargo clippy -- -D warnings
 
-
 echo 'running backend cargo test...'
 cargo test --manifest-path src/backend/Cargo.toml
 
