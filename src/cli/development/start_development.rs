@@ -26,7 +26,7 @@ pub fn start_development(config: Config) {
 
     print!("{}", &config.astro_port.is_some().to_string());
 
-    let mut port = config.port;
+    let mut port = config.port.unwrap_or(8080);
     let mut listener = std::net::TcpListener::bind(format!("{}:{}", config.host, port));
 
     let astro_port = config.astro_port.unwrap_or(5431);

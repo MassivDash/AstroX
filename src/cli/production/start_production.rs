@@ -40,7 +40,7 @@ pub fn start_production(config: Config) {
         .arg("--release")
         .arg("--")
         .arg(format!("--host={}", config.host))
-        .arg(format!("--port={}", config.port))
+        .arg(format!("--port={}", config.port.unwrap_or(8080)))
         .spawn()
         .expect("Failed to start backend production server");
 }
