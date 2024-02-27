@@ -1,3 +1,4 @@
+use crate::cli::config_maker::config::Config;
 use crate::cli::pre_run::npm::NPM;
 use crate::cli::utils::terminal::{dev_info, step, success, warning};
 use ctrlc::set_handler;
@@ -11,7 +12,7 @@ use std::sync::Arc;
 /// The development server will also check if the port is available for the backend server, and loop until it finds the available port
 /// The development server will also clean up the orphaned processes, otherwise cargo watch and node watch will continue to run, blocking the ports.
 
-pub fn start_development(host: String, port: String, astro_port: String) {
+pub fn start_development(config: Config) {
     // Set the ctrl-c handler to exit the program and clean up orphaned processes
     let running = Arc::new(AtomicBool::new(true));
     let r = running.clone();
@@ -23,17 +24,19 @@ pub fn start_development(host: String, port: String, astro_port: String) {
 
     // Check if the port is available for the backend server
 
-    let port = port.parse::<u16>().unwrap();
-    let mut listener = std::net::TcpListener::bind(format!("{}:{}", host, port));
+    print!("{}", &config.astro_port.is_some().to_string());
 
+    let mut port = config.port;
+    let mut listener = std::net::TcpListener::bind(format!("{}:{}", config.host, port));
+
+    let astro_port = config.astro_port.unwrap_or(5431);
     // Loop until you find the port that is available
-
-    let mut new_port = port;
+    print!("{}", &astro_port.to_string());
 
     while listener.is_err() {
-        warning(format!("Port {} is not available", new_port).as_str());
-        new_port += 1;
-        listener = std::net::TcpListener::bind(format!("{}:{}", host, new_port));
+        warning(format!("Port {} is not available", port).as_str());
+        port += 1;
+        listener = std::net::TcpListener::bind(format!("{}:{}", config.host, port));
     }
 
     // kill the listener
@@ -50,7 +53,7 @@ pub fn start_development(host: String, port: String, astro_port: String) {
         .arg("-w")
         .arg("./src")
         .arg("-x")
-        .arg(format!("run -- --host={} --port={}", host, new_port))
+        .arg(format!("run -- --host={} --port={}", config.host, port))
         .stdout(std::process::Stdio::piped())
         .spawn()
         .expect("Failed to start backend development server");
@@ -68,7 +71,7 @@ pub fn start_development(host: String, port: String, astro_port: String) {
 
         print!("{}", s);
         if s.contains("HttpServer has started") {
-            dev_info(&host, &new_port);
+            dev_info(&config.host, &port);
             success("Actix server is running, starting the frontend development server");
             break;
         }
@@ -81,7 +84,9 @@ pub fn start_development(host: String, port: String, astro_port: String) {
     let mut node_watch = Command::new(NPM)
         .arg("run")
         .arg("start")
-        .arg(format!("-- --port {}", astro_port))
+        .arg("--")
+        .arg("--port")
+        .arg(astro_port.to_string())
         .stdout(std::process::Stdio::piped())
         .current_dir("./src/frontend")
         .spawn()
