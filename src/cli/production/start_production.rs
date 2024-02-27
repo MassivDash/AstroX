@@ -1,3 +1,4 @@
+use crate::cli::config_maker::config::Config;
 use crate::cli::pre_run::npm::NPM;
 use crate::cli::utils::terminal::step;
 use std::process::Command;
@@ -6,12 +7,12 @@ use std::process::Command;
 /// The production server will start the actix backend server
 /// The production server will also bundle the frontend
 
-pub fn start_production(host: String, port: String, prod_astro_build: bool) {
+pub fn start_production(config: Config) {
     // Bundle the frontend and wait for the process to finish
     // if the astro build is set to true
     // start the build process
 
-    if prod_astro_build {
+    if config.prod_astro_build {
         step("Bundling the frontend");
 
         let bundle = Command::new(NPM)
@@ -38,8 +39,8 @@ pub fn start_production(host: String, port: String, prod_astro_build: bool) {
         .arg("run")
         .arg("--release")
         .arg("--")
-        .arg(format!("--host={}", host))
-        .arg(format!("--port={}", port))
+        .arg(format!("--host={}", config.host))
+        .arg(format!("--port={}", config.port))
         .spawn()
         .expect("Failed to start backend production server");
 }
