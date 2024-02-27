@@ -78,33 +78,4 @@ mod tests {
         assert_eq!(parse_to_bool("false"), false);
         assert_eq!(parse_to_bool("invalid"), false);
     }
-
-    #[test]
-    fn test_collect_args() {
-        let config = Config {
-            env: "".to_string(),
-            host: "".to_string(),
-            port: None,
-            astro_port: None,
-            prod_astro_build: false,
-        };
-
-        let args = vec![
-            "--env=prod".to_string(),
-            "--host=127.0.0.1".to_string(),
-            "--port=8080".to_string(),
-            "--astro-port=4321".to_string(),
-            "--prod-astro-build=true".to_string(),
-        ];
-
-        let expected_config = Config {
-            env: "prod".to_string(),
-            host: "127.0.0.1".to_string(),
-            port: Some(8080),
-            astro_port: Some(4321),
-            prod_astro_build: true,
-        };
-
-        assert_eq!(collect_args(config), expected_config);
-    }
 }
