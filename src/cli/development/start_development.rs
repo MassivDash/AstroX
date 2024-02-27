@@ -27,20 +27,28 @@ pub fn start_development(config: Config) {
     print!("{}", &config.astro_port.is_some().to_string());
 
     let mut port = config.port.unwrap_or(8080);
-    let mut listener = std::net::TcpListener::bind(format!("{}:{}", config.host, port));
+    let mut astro_port = config.astro_port.unwrap_or(5431);
+    let mut rust_port_listener = std::net::TcpListener::bind(format!("{}:{}", config.host, port));
+    let mut astro_port_listener =
+        std::net::TcpListener::bind(format!("{}:{}", config.host, astro_port));
 
-    let astro_port = config.astro_port.unwrap_or(5431);
     // Loop until you find the port that is available
 
-    while listener.is_err() {
+    while rust_port_listener.is_err() {
         warning(format!("Port {} is not available", port).as_str());
         port += 1;
-        listener = std::net::TcpListener::bind(format!("{}:{}", config.host, port));
+        rust_port_listener = std::net::TcpListener::bind(format!("{}:{}", config.host, port));
     }
 
     // kill the listener
+    drop(rust_port_listener);
 
-    drop(listener);
+    while astro_port_listener.is_err() {
+        warning(format!("Port {} is not available", astro_port).as_str());
+        astro_port += 1;
+        astro_port_listener =
+            std::net::TcpListener::bind(format!("{}:{}", config.host, astro_port));
+    }
 
     // Start the backend development server
 
