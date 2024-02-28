@@ -1,0 +1,147 @@
+---
+interface Props {
+  id: string
+  href: string
+  external?: boolean
+}
+
+const { id, href, external } = Astro.props
+---
+
+<script>
+  import { navigate } from 'astro:transitions/client'
+
+  const clearLinks = () => {
+    const links = document.querySelectorAll('a')
+    // The url has changed
+    links.forEach((link) => link.parentElement?.classList.remove('active'))
+    document.getElementById('homeIcon')?.classList.remove('active')
+  }
+
+  class MenuItem extends HTMLElement {
+    constructor() {
+      super()
+      const external = this.dataset.external
+      const id = this.dataset.id || 'astro-link'
+      const link = document.getElementById(id)
+      const href = this.dataset.href || '/'
+      link?.addEventListener('click', (event) => {
+        event.preventDefault()
+        clearLinks()
+        link.parentElement?.classList.add('active')
+        !external && navigate(href)
+      })
+    }
+  }
+  customElements.define('menu-item', MenuItem)
+</script>
+
+<menu-item data-id={id} data-href={href} data-external={external}>
+  <li class='navi-link' data-=''>
+    <a id={id} href={href} target={external ? '_blank' : '_self'}>
+      <slot />
+    </a>
+  </li>
+</menu-item>
+
+<style>
+  li {
+    margin: 0 1rem;
+
+    &:first-child {
+      margin-right: 30px;
+    }
+  }
+
+  a {
+    text-decoration: none;
+    color: #8b8b8b;
+    text-transform: lowercase;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    font-size: smaller;
+    transition: all 0.7s ease-in-out;
+    &:hover {
+      color: #0a0909;
+    }
+  }
+
+  .navi-link {
+    display: flex;
+    position: relative;
+    width: 80px;
+    height: 80px;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe);
+    border-radius: 45px;
+    box-shadow: inset 0px 1px 2px 1px #1f1e1a69;
+    transition: all 0.7s cubic-bezier(0, 1.5, 1, 1.5);
+    p {
+      position: absolute;
+      margin: 10px auto;
+      font-size: 0.6rem;
+      opacity: 0;
+      bottom: -40px;
+      transition: all 0.7s ease-in-out;
+    }
+
+    &:hover {
+      color: #0a0909;
+      box-shadow: inset 0px 0px 0px 0px #1f1e1a69;
+      p {
+        display: block;
+        opacity: 1;
+        transition: all 0.7s ease-in-out;
+      }
+
+      a {
+        color: #0a0909;
+        transition: all 0.7s ease-in-out;
+      }
+
+      &:active {
+        box-shadow: inset 0px 1px 2px 3px #1f1e1a69;
+      }
+    }
+  }
+
+  .active {
+    box-shadow: none;
+    color: #0a0909;
+    transform: scale(1);
+    filter: drop-shadow(1px 1px 1px rgba(30, 21, 21, 3.47));
+    backhround: linear-gradient(-90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe);
+    position: relative;
+    transitions: all 0.7s ease-in-out;
+
+    &: hover {
+      filter: none;
+      transform: rotate(360deg);
+    }
+
+    &:active {
+      box-shadow: inset 0px 1px 2px 3px #1f1e1a69;
+    }
+
+    p {
+      display: none;
+    }
+
+    .logo > p {
+      color: #0a0909;
+      display: flex;
+      margin: auto;
+      position: relative;
+      font-size: 2rem;
+      transition: all 0.7s ease-in-out;
+    }
+
+    a {
+      color: #0a0909;
+      transition: all 0.7s ease-in-out;
+    }
+  }
+</style>

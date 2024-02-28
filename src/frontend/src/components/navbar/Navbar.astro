@@ -3,13 +3,14 @@ import GithubIcon from '../../svgs/Github.astro'
 import SpaceoutIcon from '../../svgs/Spaceout.astro'
 import AstroIcon from '../../svgs/AstroIcon.astro'
 import RustIcon from '../../svgs/RustIcon.astro'
+import ActixIcon from '../../svgs/Actix.astro'
+import NavbarItem from './NavbarItem.astro'
 ---
 
 <script>
   import { navigate } from 'astro:transitions/client'
 
   const homeLink = document.getElementById('home-link')
-  const astro = document.getElementById('astro-link')
 
   const clearLinks = () => {
     const links = document.querySelectorAll('a')
@@ -21,9 +22,16 @@ import RustIcon from '../../svgs/RustIcon.astro'
   const findActiveLink = () => {
     const links = document.querySelectorAll('a')
     links.forEach((link) => {
-      console.log(window, window.location.href, link.href)
-      if (link.href === window.location.href) {
+      console.log(window.location.href, link.href)
+      if (
+        link.href === window.location.href &&
+        link.href !== 'http://localhost:5431/'
+      ) {
         link.parentElement?.classList.add('active')
+      }
+
+      if (link.href === window.location.href && link.href === '/') {
+        document.getElementById('homeIcon')?.classList.add('active')
       }
     })
   }
@@ -33,26 +41,6 @@ import RustIcon from '../../svgs/RustIcon.astro'
     clearLinks()
     document.getElementById('homeIcon')?.classList.add('active')
     navigate('/')
-  })
-
-  astro?.addEventListener('click', (event) => {
-    event.preventDefault()
-    clearLinks()
-    document
-      .getElementById('astro-link')
-      ?.parentElement?.classList.add('active')
-    navigate('/astro')
-  })
-
-  const actix = document.getElementById('actix-link')
-
-  actix?.addEventListener('click', (event) => {
-    event.preventDefault()
-    clearLinks()
-    navigate('/actix')
-    document
-      .getElementById('actix-link')
-      ?.parentElement?.classList.add('active')
   })
 
   findActiveLink()
@@ -68,38 +56,32 @@ import RustIcon from '../../svgs/RustIcon.astro'
           </div></a
         >
       </li>
-      <li class='navi-link'>
-        <a id='astro-link' href='/astro'>
-          <AstroIcon height={30} width={30} />
-          <p>astro</p>
-        </a>
-      </li>
-      <li class='navi-link'>
-        <a id='actix-link' href='/actix'>
-          <RustIcon height={28} width={28} /><p>actiX</p>
-        </a>
-      </li>
-      <li class='navi-link'>
-        <a
-          title='github repo link'
-          href='https://github.com/MassivDash/AstroX'
-          target='_blank'
-        >
-          <GithubIcon height={28} width={28} />
-          <p>Repository</p>
-        </a>
-      </li>
-      <li class='navi-link'>
-        <a
-          title='spaceout.pl'
-          class='add-top-margin'
-          href='https://spaceout.pl'
-          target='_blank'
-        >
-          <SpaceoutIcon height={35} width={35} />
-          <p>Spaceout</p>
-        </a>
-      </li>
+      <NavbarItem id='cli-link' href='/cli'>
+        <RustIcon height={30} width={30} />
+        <p>cli</p>
+      </NavbarItem>
+      <NavbarItem id='actix-link' href='/actix'>
+        <ActixIcon height={30} width={30} />
+        <p>actiX</p>
+      </NavbarItem>
+      <NavbarItem id='astro-link' href='/astro'>
+        <AstroIcon height={30} width={30} />
+        <p>astro</p>
+      </NavbarItem>
+    </ul>
+    <ul class='social-links'>
+      <NavbarItem
+        external
+        id='github-link'
+        href="href='https://github.com/MassivDash/AstroX"
+      >
+        <GithubIcon height={28} width={28} />
+        <p>Repository</p>
+      </NavbarItem>
+      <NavbarItem external id='spaceout-link' href='https://spaceout.pl'>
+        <SpaceoutIcon height={35} width={35} />
+        <p>Spaceout</p>
+      </NavbarItem>
     </ul>
   </div>
 </nav>
@@ -107,7 +89,7 @@ import RustIcon from '../../svgs/RustIcon.astro'
 <style>
   nav {
     display: flex;
-    justify-content: center;
+    justify-content: flex-start;
     position: relative;
     top: 0;
     width: 100%;
@@ -116,10 +98,8 @@ import RustIcon from '../../svgs/RustIcon.astro'
 
   .nav {
     display: flex;
-    justify-content: start;
+    justify-content: center;
     width: 100%;
-    max-width: 1560px;
-    background: linear-gradient(90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe);
   }
 
   .logo {
@@ -141,12 +121,29 @@ import RustIcon from '../../svgs/RustIcon.astro'
   ul {
     display: flex;
     list-style: none;
-    padding: 1rem;
+    padding: 0 1rem;
     align-items: center;
+    width: 100%;
+  }
+
+  .social-links {
+    justify-content: flex-end;
+  }
+
+  span {
+    font-weight: 700;
+    font-size: 2.5rem;
+    color: #8b8b8b;
+    line-height: 1.5;
+    padding-bottom: 5px;
   }
 
   li {
     margin: 0 1rem;
+
+    &:first-child {
+      margin-right: 30px;
+    }
   }
 
   a {
@@ -164,14 +161,6 @@ import RustIcon from '../../svgs/RustIcon.astro'
     }
   }
 
-  span {
-    font-weight: 700;
-    font-size: 2.5rem;
-    color: #8b8b8b;
-    line-height: 1.5;
-    padding-bottom: 5px;
-  }
-
   .navi-link {
     display: flex;
     position: relative;
@@ -181,7 +170,7 @@ import RustIcon from '../../svgs/RustIcon.astro'
     justify-content: center;
     background: linear-gradient(90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe);
     border-radius: 45px;
-    box-shadow: inset 0 0 4px 1px #35332d1f;
+    box-shadow: inset 0px 1px 2px 1px #1f1e1a69;
     transition: all 0.7s cubic-bezier(0, 1.5, 1, 1.5);
     p {
       position: absolute;
@@ -193,9 +182,8 @@ import RustIcon from '../../svgs/RustIcon.astro'
     }
 
     &:hover {
-      box-shadow: inset 0 0 0px 0px hsla(45, 8%, 19%, 0.122);
       color: #0a0909;
-      transform: scale(1.1);
+      box-shadow: inset 0px 0px 0px 0px #1f1e1a69;
       p {
         display: block;
         opacity: 1;
@@ -206,29 +194,41 @@ import RustIcon from '../../svgs/RustIcon.astro'
         color: #0a0909;
         transition: all 0.7s ease-in-out;
       }
+
+      &:active {
+        box-shadow: inset 0px 1px 2px 3px #1f1e1a69;
+      }
     }
   }
 
   .active {
-    box-shadow: inset 0 0 0px 0px hsla(45, 8%, 19%, 0.122);
+    box-shadow: none;
     color: #0a0909;
-    transform: scale(1.1);
+    transform: scale(1);
+    filter: drop-shadow(1px 1px 1px rgba(30, 21, 21, 3.47));
+    backhround: linear-gradient(-90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe);
     position: relative;
+    transitions: all 0.7s ease-in-out;
+
+    &: hover {
+      filter: none;
+      transform: rotate(360deg);
+    }
+
+    &:active {
+      box-shadow: inset 0px 1px 2px 3px #1f1e1a69;
+    }
+
     p {
-      display: block;
-      opacity: 1;
-      position: absolute;
-      margin: 10px auto;
-      font-size: 0.6rem;
-      opacity: 1;
-      bottom: -40px;
-      transition: all 0.7s ease-in-out;
+      display: none;
     }
 
     .logo > p {
       color: #0a0909;
+      display: flex;
+      margin: auto;
       position: relative;
-      font-size:;
+      font-size: 2rem;
       transition: all 0.7s ease-in-out;
     }
 
