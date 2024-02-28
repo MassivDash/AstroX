@@ -1,0 +1,56 @@
+---
+import AIcon from '../../svgs/AstroIcon.astro'
+import Rust from '../../svgs/RustIcon.astro'
+---
+
+<section class='secondary'>
+  <div class='icons'>
+    <AIcon width={80} height={80} />
+    <p>+</p>
+    <Rust width={80} height={80} />
+
+    <div class='box'>
+      <h2>
+        Rust orienatinted monolithic template for building modern web
+        applications.
+      </h2>
+    </div>
+  </div>
+</section>
+
+<style>
+  .icons {
+    display: flex;
+    gap: 4rem;
+    width: 100%;
+    justify-content: center;
+    font-size: x-large;
+    align-items: center;
+  }
+
+  .box {
+    min-height: 200px;
+    background-color: #23262d;
+    border-radius: 25px;
+    padding: 2rem;
+    width: 400px;
+    color: #eaeaea;
+    box-shadow:
+      0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+      0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+      0 12.5px 10px rgba(0, 0, 0, 0.06),
+      0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+      0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+      0 100px 80px rgba(0, 0, 0, 0.12);
+  }
+
+  .secondary {
+    display: flex;
+    min-height: 400px;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    padding: 2rem;
+    background: linear-gradient(92deg, #ededede0, #eaeaea, #ebebeb, #e6e6e6);
+  }
+</style>

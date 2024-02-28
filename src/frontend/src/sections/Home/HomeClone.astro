@@ -1,0 +1,75 @@
+---
+import { Image } from 'astro:assets'
+import YoungG from '../imgs/bgAstro.png'
+---
+
+<div class='clone-container'>
+  <div class='get-started'>
+    <Image src={YoungG} alt='Astro X is the best template evraa' />
+  </div>
+  <div class='clone-instructions'>
+    <h2>Get Started</h2>
+    <p>Clone the repo and start the development server *</p>
+    <pre>
+        <code>
+          git clone https://github.com/MassivDash/AstroX.git
+        </code>
+      </pre>
+    <pre>
+        <code>
+          cargo run
+        </code>
+      </pre>
+    <p class='prereqs'>{`*prerequisites: rustc > 1.76.0 && node > 18.14.1`}</p>
+  </div>
+</div>
+
+<style>
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    font-family: 'Pacifico', cursive;
+  }
+
+  .clone-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 70px 70px 0 0px;
+    gap: 50px;
+    background: linear-gradient(88deg, #efefef, #e7e7e7);
+  }
+
+  .prereqs {
+    font-size: 0.8rem;
+    margin-top: 1rem;
+    text-align: right;
+  }
+
+  pre code {
+    display: block;
+    background: #24262e;
+    white-space: pre;
+    color: white;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: scroll;
+    max-width: 100%;
+    min-width: 100px;
+    padding: 0;
+    border-radius: 5px;
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    border-radius: 25px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    box-shadow:
+      0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+      0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+      0 12.5px 10px rgba(0, 0, 0, 0.06),
+      0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+      0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+      0 100px 80px rgba(0, 0, 0, 0.12);
+  }
+</style>
