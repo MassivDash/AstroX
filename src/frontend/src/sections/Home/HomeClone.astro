@@ -1,11 +1,18 @@
 ---
 import { Image } from 'astro:assets'
+import Card from '../../components/Card.astro'
 import YoungG from '../imgs/bgAstro.png'
 ---
 
 <div class='clone-container'>
   <div class='get-started'>
     <Image src={YoungG} alt='Astro X is the best template evraa' />
+    <Card
+      title='Cli'
+      body='Reference guide for astro x cli'
+      href='/actix'
+      moreInfo='git hooks, astrox.toml and interactive options'
+    />
   </div>
   <div class='clone-instructions'>
     <h2>Get Started</h2>
@@ -56,6 +63,13 @@ import YoungG from '../imgs/bgAstro.png'
     min-width: 100px;
     padding: 0;
     border-radius: 5px;
+  }
+
+  .get-started {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
   }
 
   img {
