@@ -8,45 +8,16 @@ import NavbarItem from './NavbarItem.astro'
 ---
 
 <script>
-  import { navigate } from 'astro:transitions/client'
+  document.addEventListener('astro:page-load', () => {
+    const homeLink = document.getElementById('homeIcon')
+    const isHome = window.location.pathname === '/'
+    console.log(isHome, window.location.pathname)
 
-  const homeLink = document.getElementById('home-link')
-
-  const clearLinks = () => {
-    const links = document.querySelectorAll('a')
-    // The url has changed
-    links.forEach((link) => link.parentElement?.classList.remove('active'))
-    document.getElementById('homeIcon')?.classList.remove('active')
-  }
-
-  const findActiveLink = () => {
-    const links = document.querySelectorAll('a')
-    links.forEach((link) => {
-      console.log(window.location.href, link.href)
-      if (
-        link.href === window.location.href &&
-        link.href !== 'http://localhost:5431/'
-      ) {
-        link.parentElement?.classList.add('active')
-      }
-
-      if (link.href === window.location.href && link.href === '/') {
-        document.getElementById('homeIcon')?.classList.add('active')
-      }
-    })
-  }
-
-  homeLink?.addEventListener('click', (event) => {
-    event.preventDefault()
-    clearLinks()
-    document.getElementById('homeIcon')?.classList.add('active')
-    navigate('/')
+    isHome && homeLink?.classList.add('active')
   })
-
-  findActiveLink()
 </script>
 
-<nav transition:persist>
+<nav>
   <div class='nav'>
     <ul>
       <li>
@@ -73,7 +44,7 @@ import NavbarItem from './NavbarItem.astro'
       <NavbarItem
         external
         id='github-link'
-        href="href='https://github.com/MassivDash/AstroX"
+        href='https://github.com/MassivDash/AstroX'
       >
         <GithubIcon height={28} width={28} />
         <p>Repository</p>

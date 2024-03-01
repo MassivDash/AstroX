@@ -9,35 +9,30 @@ const { id, href, external } = Astro.props
 ---
 
 <script>
-  import { navigate } from 'astro:transitions/client'
-
-  const clearLinks = () => {
-    const links = document.querySelectorAll('a')
-    // The url has changed
-    links.forEach((link) => link.parentElement?.classList.remove('active'))
-    document.getElementById('homeIcon')?.classList.remove('active')
-  }
-
   class MenuItem extends HTMLElement {
     constructor() {
       super()
-      const external = this.dataset.external
       const id = this.dataset.id || 'astro-link'
       const link = document.getElementById(id)
       const href = this.dataset.href || '/'
-      link?.addEventListener('click', (event) => {
-        event.preventDefault()
-        clearLinks()
-        link.parentElement?.classList.add('active')
-        !external && navigate(href)
-      })
+
+      document.addEventListener(
+        'astro:page-load',
+        () => {
+          // This only runs once.
+          if (window.location.pathname === href) {
+            link?.parentElement?.classList.add('active')
+          }
+        },
+        { once: true }
+      )
     }
   }
   customElements.define('menu-item', MenuItem)
 </script>
 
 <menu-item data-id={id} data-href={href} data-external={external}>
-  <li class='navi-link' data-=''>
+  <li class='navi-link'>
     <a id={id} href={href} target={external ? '_blank' : '_self'}>
       <slot />
     </a>

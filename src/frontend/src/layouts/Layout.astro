@@ -22,7 +22,7 @@ const { title } = Astro.props
     <ViewTransitions />
   </head>
   <body>
-    <Navbar />
+    <Navbar transition:persist />
     <slot />
     <Footer />
     <style is:global>
