@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets'
 import Card from '../../components/Card.astro'
 import YoungG from '../imgs/bgAstro.png'
+import RustIcon from '../../svgs/RustIcon.astro'
 ---
 
 <div class='clone-container'>
@@ -11,8 +12,10 @@ import YoungG from '../imgs/bgAstro.png'
       title='Cli'
       body='Reference guide for astro x cli'
       href='/actix'
-      moreInfo='git hooks, astrox.toml and interactive options'
-    />
+      moreInfo='Fast and easy, native rust runner with everything you need to get started.'
+    >
+      <RustIcon width={58} height={58} />
+    </Card>
   </div>
   <div class='clone-instructions'>
     <h2>Get Started</h2>
