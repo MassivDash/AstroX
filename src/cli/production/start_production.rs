@@ -2,7 +2,10 @@ use crate::cli::config::create_dotenv::create_dotenv_frontend;
 use crate::cli::config::get_config::Config;
 use crate::cli::pre_run::npm::NPM;
 use crate::cli::utils::terminal::step;
+use ctrlc::set_handler;
 use std::process::Command;
+use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 
 /// Start the production server
 /// The production server will start the actix backend server
@@ -12,6 +15,14 @@ pub fn start_production(config: Config) {
     // Bundle the frontend and wait for the process to finish
     // if the astro build is set to true
     // start the build process
+
+    let running = Arc::new(AtomicBool::new(true));
+    let r = running.clone();
+
+    set_handler(move || {
+        r.store(false, Ordering::SeqCst);
+    })
+    .expect("Error setting Ctrl-C handler");
 
     if config.prod_astro_build {
         // take production build url from config
@@ -40,13 +51,25 @@ pub fn start_production(config: Config) {
 
     step("Starting cargo backend production server");
 
-    Command::new("cargo")
+    let mut cargo_server = Command::new("cargo")
         .current_dir("./src/backend")
         .arg("run")
         .arg("--release")
         .arg("--")
         .arg(format!("--host={}", config.host))
         .arg(format!("--port={}", config.port.unwrap_or(8080)))
+        .arg(format!("--env={}", config.env))
         .spawn()
         .expect("Failed to start backend production server");
+
+    while running.load(Ordering::SeqCst) {}
+    step("Cleaning up orphaned processes");
+
+    cargo_server
+        .kill()
+        .expect("Failed to kill cargo-watch process");
+
+    step("Exiting");
+
+    std::process::exit(0);
 }
