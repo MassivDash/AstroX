@@ -1,3 +1,4 @@
+use crate::cli::config::create_dotenv::create_dotenv_frontend;
 use crate::cli::config::get_config::Config;
 use crate::cli::pre_run::npm::NPM;
 use crate::cli::utils::terminal::{dev_info, step, success, warning};
@@ -49,6 +50,12 @@ pub fn start_development(config: Config) {
 
     // kill the listener
     drop(astro_port_listener);
+
+    // Crate the host env for astro to call the actix backend server
+    create_dotenv_frontend(
+        &format!("http://{}:{}/api/", config.host, port),
+        "./src/frontend/.env",
+    );
 
     // Start the backend development server
 

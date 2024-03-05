@@ -1,3 +1,4 @@
+use crate::cli::config::create_dotenv::create_dotenv_frontend;
 use crate::cli::config::get_config::Config;
 use crate::cli::pre_run::npm::NPM;
 use crate::cli::utils::terminal::step;
@@ -13,6 +14,11 @@ pub fn start_production(config: Config) {
     // start the build process
 
     if config.prod_astro_build {
+        // take production build url from config
+        let prod_build_url = config.public_keys.public_api_url;
+
+        create_dotenv_frontend(&prod_build_url, "./src/frontend/.env");
+
         step("Bundling the frontend");
 
         let bundle = Command::new(NPM)

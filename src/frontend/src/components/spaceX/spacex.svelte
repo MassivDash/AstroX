@@ -40,11 +40,12 @@
   // It will render pages at the build time and then hydrate them on the client
 
   // For client side data fetching, we can use axios or others, but fetch does not fire up
-  import axios from 'axios'
+  import { axiosBackendInstance } from '../../axiosInstance/axiosBackendInstance.ts'
 
+  console.log(axiosBackendInstance)
   const getSpaceXRockets = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/api/space-x')
+      const res = await axiosBackendInstance.get('space-x')
       const data = res.data
       return data
     } catch (error) {

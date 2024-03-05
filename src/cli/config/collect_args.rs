@@ -56,6 +56,8 @@ pub fn collect_config_args(config: Config, args: &Vec<String>) -> Config {
 
 #[cfg(test)]
 mod tests {
+    use crate::cli::config::get_config::PublicKeys;
+
     use super::*;
 
     #[test]
@@ -83,6 +85,10 @@ mod tests {
             port: None,
             astro_port: None,
             prod_astro_build: false,
+            public_keys: {
+                let public_api_url = "http://localhost:8080/api".to_string();
+                PublicKeys { public_api_url }
+            },
         };
 
         let args = vec![
@@ -99,6 +105,10 @@ mod tests {
             port: Some(8080),
             astro_port: Some(4321),
             prod_astro_build: true,
+            public_keys: {
+                let public_api_url = "http://localhost:8080/api".to_string();
+                PublicKeys { public_api_url }
+            },
         };
 
         assert_eq!(collect_config_args(config, &args), expected_config);

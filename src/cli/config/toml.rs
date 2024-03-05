@@ -1,4 +1,4 @@
-use super::get_config::Config;
+use super::get_config::{Config, PublicKeys};
 use crate::cli::utils::terminal::{error, spacer, step, success, warning};
 
 pub fn read_toml(filename: &String) -> Result<Config, ()> {
@@ -37,6 +37,10 @@ pub fn create_toml_file(file_name: String) -> Result<Config, ()> {
         env: "dev".to_string(),
         astro_port: Some(5431),
         prod_astro_build: true,
+        public_keys: {
+            let public_api_url = "http://localhost:8080/api".to_string();
+            PublicKeys { public_api_url }
+        },
     };
 
     let toml_str = toml::to_string(&config);
@@ -83,6 +87,10 @@ mod tests {
             env: "dev".to_string(),
             astro_port: Some(5431),
             prod_astro_build: true,
+            public_keys: {
+                let public_api_url = "http://localhost:8080/api".to_string();
+                PublicKeys { public_api_url }
+            },
         };
 
         let file_name: String = "Astrox-test.toml".to_string();
