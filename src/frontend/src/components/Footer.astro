@@ -1,3 +1,15 @@
+<nav>
+  <ul>
+    <li>
+      <a href='/cli'>main</a>
+    </li>
+    <li>
+      <a href='/cli'>cli</a>
+    </li>
+    <li><a href='/astro'>astro</a></li>
+    <li><a href='/actix'>actix</a></li>
+  </ul>
+</nav>
 <footer>
   <div class='footer'>
     <div class='flex'>
@@ -38,6 +50,24 @@
     text-decoration: none;
     &:hover {
       text-decoration: underline;
+    }
+  }
+
+  ul {
+    list-style: none;
+    display: flex;
+    height: 100px;
+    justify-content: center;
+    align-items: center;
+    gap: 50px;
+    background-color: whitesmoke;
+
+    a {
+      color: rgba(6, 6, 6, 0.854);
+    }
+
+    &:hover {
+      color: rgb(6, 6, 6);
     }
   }
 </style>

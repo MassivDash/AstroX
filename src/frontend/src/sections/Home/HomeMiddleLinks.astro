@@ -1,21 +1,86 @@
 ---
 import Card from '../../components/Card.astro'
+import { Image } from 'astro:assets'
+import AstroImage from '../imgs/astro2.jpeg'
+import AxtixImage from '../imgs/actix.png'
+import AstroIcon from '../../svgs/AstroIcon.astro'
+import ActixIcon from '../../svgs/Actix.astro'
 ---
 
 <div class='grid'>
-  <Card title='Astro' body='Reference guide for astro frontend' href='/astro' />
-  <Card title='Actix' body='Reference guide for actix backend' href='/actix' />
-</div>
+  <div></div>
+  <div class='align-left'>
+    <Image src={AstroImage} alt='Astro' class='left' />
+    <Card
+      title='Astro'
+      body='Reference guide for astro frontend'
+      href='/astro'
+      moreInfo='React, Svelte, Vue and others, all major frameworks in place'
+    >
+      <AstroIcon width={58} height={58} />
+    </Card>
+  </div>
+  <div class='align-right'>
+    <Image src={AxtixImage} alt='The activix core' class='right' />
+    <Card
+      title='Actix'
+      body='Reference guide for actix backend'
+      href='/actix'
+      moreInfo='actix rust backend server'
+    >
+      <ActixIcon width={58} height={58} />
+    </Card>
+  </div>
 
-<style>
-  .grid {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    min-height: 100vh;
-    align-items: flex-start;
-    gap: 2rem;
-    padding: 2rem;
-    background: linear-gradient(88deg, #efefef, #e7e7e7);
-  }
-</style>
+  <style>
+    .grid {
+      display: grid;
+      justify-content: center;
+      flex-wrap: wrap;
+      grid-template-columns: 1fr 1fr;
+      min-height: 100vh;
+      align-items: flex-start;
+      gap: 2rem;
+      padding-top: 150px;
+      padding-bottom: 150px;
+      background: linear-gradient(88deg, #efefef, #e7e7e7);
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      border-radius: 25px;
+      box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+        0 12.5px 10px rgba(0, 0, 0, 0.06),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+        0 100px 80px rgba(0, 0, 0, 0.12);
+    }
+
+    .left {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    .right {
+      border-bottom-left-radius: 0;
+      border-top-left-radius: 0;
+    }
+
+    .align-right {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      align-items: flex-end;
+    }
+
+    .align-left {
+      display: flex;
+      width: 100%;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  </style>
+</div>
