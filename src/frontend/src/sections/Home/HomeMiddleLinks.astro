@@ -10,7 +10,9 @@ import ActixIcon from '../../svgs/Actix.astro'
 <div class='grid'>
   <div></div>
   <div class='align-left'>
-    <Image src={AstroImage} alt='Astro' class='left' />
+    <div class='overflow left'>
+      <Image src={AstroImage} alt='Astro' />
+    </div>
     <Card
       title='Astro'
       body='Reference guide for astro frontend'
@@ -21,7 +23,10 @@ import ActixIcon from '../../svgs/Actix.astro'
     </Card>
   </div>
   <div class='align-right'>
-    <Image src={AxtixImage} alt='The activix core' class='right' />
+    <div class='overflow right'>
+      <Image src={AxtixImage} alt='The activix core' />
+    </div>
+
     <Card
       title='Actix'
       body='Reference guide for actix backend'
@@ -46,7 +51,11 @@ import ActixIcon from '../../svgs/Actix.astro'
       background: linear-gradient(88deg, #efefef, #e7e7e7);
     }
 
-    img {
+    .overflow {
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: stretch;
       width: 100%;
       height: 100%;
       border-radius: 25px;
@@ -57,6 +66,28 @@ import ActixIcon from '../../svgs/Actix.astro'
         0 22.3px 17.9px rgba(0, 0, 0, 0.072),
         0 41.8px 33.4px rgba(0, 0, 0, 0.086),
         0 100px 80px rgba(0, 0, 0, 0.12);
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      transition: all 2.5s;
+      &:hover {
+        transform: scale3d(1.4, 1.4, 1.8);
+        transition: all 9.5s;
+      }
+    }
+
+    @keyframes blurInAndOut {
+      0% {
+        filter: blur(0px);
+      }
+      50% {
+        filter: blur(2.5px);
+      }
+      100% {
+        filter: blur(0px);
+      }
     }
 
     .left {
