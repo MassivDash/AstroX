@@ -1,15 +1,17 @@
 ---
-import { Image } from 'astro:assets'
 import Card from '../../components/Card.astro'
 import YoungG from '../imgs/cli.png'
 import RustIcon from '../../svgs/RustIcon.astro'
+import ZoomImage from '../../components/zoomImage/zoomImage.astro'
 ---
 
 <div class='clone-container'>
   <div class='get-started'>
-    <div class='overflow right'>
-      <Image src={YoungG} alt='Astro X is the best template evraa' />
-    </div>
+    <ZoomImage
+      src={YoungG}
+      alt='Astro X Cli reference guide'
+      borderFlat='right'
+    />
     <Card
       title='Cli'
       body='Reference guide for astro x cli'

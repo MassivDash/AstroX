@@ -20,6 +20,6 @@ cargo clippy --manifest-path src/backend/Cargo.toml -- -D warnings
 
 
 echo 'running frontend project lint...'
-npm run lint --prefix src/frontend/
+npm run lint:all --prefix src/frontend/
 
 echo '------ Done ------'

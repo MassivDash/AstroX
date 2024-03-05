@@ -1,18 +1,20 @@
 ---
 import Card from '../../components/Card.astro'
-import { Image } from 'astro:assets'
 import AstroImage from '../imgs/astro2.jpeg'
 import AxtixImage from '../imgs/actix.png'
 import AstroIcon from '../../svgs/AstroIcon.astro'
 import ActixIcon from '../../svgs/Actix.astro'
+import ZoomImage from '../../components/zoomImage/zoomImage.astro'
 ---
 
 <div class='grid'>
   <div></div>
   <div class='align-left'>
-    <div class='overflow left'>
-      <Image src={AstroImage} alt='Astro' />
-    </div>
+    <ZoomImage
+      src={AstroImage}
+      alt='Astro framework referance guide'
+      borderFlat='left'
+    />
     <Card
       title='Astro'
       body='Reference guide for astro frontend'
@@ -23,10 +25,7 @@ import ActixIcon from '../../svgs/Actix.astro'
     </Card>
   </div>
   <div class='align-right'>
-    <div class='overflow right'>
-      <Image src={AxtixImage} alt='The activix core' />
-    </div>
-
+    <ZoomImage src={AxtixImage} alt='The actix core' borderFlat='right' />
     <Card
       title='Actix'
       body='Reference guide for actix backend'
@@ -49,55 +48,6 @@ import ActixIcon from '../../svgs/Actix.astro'
       padding-top: 150px;
       padding-bottom: 150px;
       background: linear-gradient(88deg, #efefef, #e7e7e7);
-    }
-
-    .overflow {
-      overflow: hidden;
-      display: flex;
-      justify-content: center;
-      align-items: stretch;
-      width: 100%;
-      height: 100%;
-      border-radius: 25px;
-      box-shadow:
-        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
-        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-        0 12.5px 10px rgba(0, 0, 0, 0.06),
-        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-        0 100px 80px rgba(0, 0, 0, 0.12);
-    }
-
-    img {
-      width: 100%;
-      height: 100%;
-      transition: all 2.5s;
-      &:hover {
-        transform: scale3d(1.4, 1.4, 1.8);
-        transition: all 9.5s;
-      }
-    }
-
-    @keyframes blurInAndOut {
-      0% {
-        filter: blur(0px);
-      }
-      50% {
-        filter: blur(2.5px);
-      }
-      100% {
-        filter: blur(0px);
-      }
-    }
-
-    .left {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
-
-    .right {
-      border-bottom-left-radius: 0;
-      border-top-left-radius: 0;
     }
 
     .align-right {
