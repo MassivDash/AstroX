@@ -19,6 +19,6 @@ echo 'running backend cargo clippy...'
 cargo clippy --manifest-path src/backend/Cargo.toml -- -D warnings
 
 echo 'running frontend project lint...'
-npm run lint --prefix src/frontend/
+npm run lint:staged --prefix src/frontend/
 
 echo '----- Done -----'

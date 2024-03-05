@@ -8,7 +8,10 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lint": "prettier --write  \"**/*.{js,jsx,ts,tsx,md,mdx,astro}\" && eslint --fix \"src/**/*.{js,ts,jsx,tsx,astro}\""
+    "lint:all": "prettier --write  \"**/*.{js,jsx,ts,tsx,md,mdx,astro}\" && eslint --fix \"src/**/*.{js,ts,jsx,tsx,astro}\"",
+    "lint:staged": "npm run lint:staged::prettier && npm run lint:staged::eslint",
+    "lint:staged::prettier": "git diff --cached --name-only | grep -E \"\\.(js|jsx|ts|tsx|md|mdx|astro)$\" | xargs prettier --write",
+    "lint:staged::eslint": "git diff --cached --name-only | grep -E \"src/.*\\.(js|ts|jsx|tsx|astro)$\" | xargs eslint --fix"
   },
   "dependencies": {
     "@astrojs/check": "^0.3.4",
