@@ -37,5 +37,15 @@ module.exports = {
     sourceType: 'module'
   },
   plugins: ['@typescript-eslint', 'astro'],
-  rules: {}
+  rules: {
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        varsIgnorePattern: '^_',
+        args: 'after-used',
+        argsIgnorePattern: '^_'
+      }
+    ]
+  }
 }
