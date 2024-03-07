@@ -96,9 +96,6 @@ export default class Canvas {
 
   setupListeners() {
     window.addEventListener('resize', this.setCanvasSize)
-    // window.addEventListener('mousedown', this.handleMousedown);
-    // window.addEventListener('mouseup', this.handleClick);
-    // window.addEventListener('mousemove', this.handleMouse);
     window.addEventListener('keydown', this.handleKeydown)
     window.addEventListener('keyup', this.handleKeyup)
   }
@@ -292,6 +289,10 @@ export default class Canvas {
     // Stop any running animations
     // Remove event listeners
     this.stopListeners()
+    this.rocket.destroy()
+    this.rocket = null as unknown as Rocket
+    this.particles = []
+
     // Clear the canvas
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
   }
@@ -464,6 +465,7 @@ class Rocket {
 
   destroy() {
     this.power = 0
+    this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize)
   }
 }
 

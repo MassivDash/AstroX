@@ -7,18 +7,23 @@
     const canvas = new Canvas()
 
     const observer = new IntersectionObserver(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       (entries, _observer) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             canvas.init()
+            window.scrollTo({
+              left: 0,
+              top: document.body.scrollHeight,
+              behavior: 'smooth'
+            })
+            canvas.demo()
           } else {
             console.log('out of view')
-            canvas.stopListeners()
+            canvas.destroy()
           }
         })
       },
-      { threshold: 0.5 }
+      { threshold: 0.7 }
     )
 
     observer.observe(document.querySelector('#canvas-container') as Element)
@@ -46,22 +51,16 @@
   }
 
   canvas {
-    max-height: 500px;
+    max-height: 600px;
   }
 
   .keys {
-    position: block;
-    background: linear-gradient(88deg, #efefef, #e7e7e7);
+    position: absolute;
     bottom: 1em;
     text-align: center;
     font-size: 25px;
     width: 100%;
     margin-left: (5em * 3 + 0, 4rem * 6) / -2;
-    &:hover {
-      .key {
-        background-color: rgba(white, 0.3);
-      }
-    }
 
     .key {
       margin: 0 0.4rem;
@@ -69,14 +68,14 @@
       line-height: 2.5em;
       width: 5em;
       border-radius: 0.4em;
-      background-color: rgba(white, 0.15);
+      background-color: transparent;
 
       &.up {
         margin: 0 5em 0.4rem * 2;
       }
       &:hover,
       &.is-down {
-        background-color: rgba(#27d49c, 0.7);
+        background-color: #2f3231;
         color: white;
       }
     }
