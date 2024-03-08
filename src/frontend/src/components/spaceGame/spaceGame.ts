@@ -29,8 +29,8 @@ export default class Canvas {
   private particles!: Particle[]
   private rocket!: Rocket
   private demo1!: boolean
+  public timerCanvas: ReturnType<typeof setTimeout>
   private demo2!: boolean
-  private timer!: ReturnType<typeof setTimeout>
 
   constructor() {
     // setup a canvas
@@ -48,6 +48,7 @@ export default class Canvas {
     this.handleKeydown = this.handleKeydown.bind(this)
     this.handleKeyup = this.handleKeyup.bind(this)
     this.loop = this.loop.bind(this)
+    this.timerCanvas = setTimeout(() => {}, 0)
 
     this.init()
   }
@@ -72,14 +73,13 @@ export default class Canvas {
     this.demo2 = false
     this.upEl.className = 'key up is-down'
     this.rightEl.className = 'key right is-down'
-
-    this.timer = setTimeout(() => {
+    this.timerCanvas = setTimeout(() => {
       this.demo1 = false
       this.demo2 = true
       this.rightEl.className = 'key right'
       this.leftEl.className = 'key left is-down'
 
-      this.timer = setTimeout(() => {
+      this.timerCanvas = setTimeout(() => {
         this.demo2 = false
         this.upEl.className = 'key up'
         this.leftEl.className = 'key left'
@@ -119,20 +119,20 @@ export default class Canvas {
   handleKeydown(event: KeyboardEvent) {
     event.preventDefault()
     // key event
-    switch (event.keyCode) {
-      case 32:
+    switch (event.key) {
+      case ' ':
         this.keys.space = true
         break
-      case 40:
+      case 'ArrowDown':
         this.keys.down = true
         break
-      case 39:
+      case 'ArrowRight':
         this.keys.right = true
         break
-      case 38:
+      case 'ArrowUp':
         this.keys.up = true
         break
-      case 37:
+      case 'ArrowLeft':
         this.keys.left = true
         break
     }
@@ -146,20 +146,20 @@ export default class Canvas {
     this.downEl.className = 'key down'
 
     // key events
-    switch (event.keyCode) {
-      case 32:
+    switch (event.key) {
+      case ' ':
         this.keys.space = false
         break
-      case 40:
+      case 'ArrowDown':
         this.keys.down = false
         break
-      case 39:
+      case 'ArrowRight':
         this.keys.right = false
         break
-      case 38:
+      case 'ArrowUp':
         this.keys.up = false
         break
-      case 37:
+      case 'ArrowLeft':
         this.keys.left = false
         break
     }
