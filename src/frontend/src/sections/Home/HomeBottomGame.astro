@@ -4,12 +4,13 @@
   // Use Intersection Observer to see if container is sight\
 
   document.addEventListener('astro:page-load', () => {
-    const canvas = new Canvas()
+    let canvas = new Canvas()
 
     const observer = new IntersectionObserver(
       (entries, _observer) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
+            if (!canvas) canvas = new Canvas()
             canvas.init()
             window.scrollTo({
               left: 0,
@@ -19,14 +20,15 @@
             canvas.demo()
           } else {
             console.log('out of view')
-            canvas.destroy()
+            canvas = null as unknown as Canvas // remove canvas
           }
         })
       },
       { threshold: 0.7 }
     )
-
-    observer.observe(document.querySelector('#canvas-container') as Element)
+    const container = document.querySelector('#canvas-container')
+    container &&
+      observer.observe(document.querySelector('#canvas-container') as Element)
   })
 </script>
 

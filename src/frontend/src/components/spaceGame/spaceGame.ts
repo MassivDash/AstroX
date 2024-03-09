@@ -36,7 +36,7 @@ export default class Canvas {
     // setup a canvas
     this.canvas = document.getElementById('canvas') as HTMLCanvasElement
     this.dpr = window.devicePixelRatio || 1
-    this.ctx = this.canvas.getContext('2d') as CanvasRenderingContext2D
+    this.ctx = this.canvas?.getContext('2d') as CanvasRenderingContext2D
     this.ctx?.scale(this.dpr, this.dpr)
 
     this.upEl = document.getElementById('up')!
@@ -54,18 +54,19 @@ export default class Canvas {
   }
 
   init() {
-    this.setCanvasSize()
-    this.setupListeners()
-    this.setupKeys()
+    if (this.canvas) {
+      this.setCanvasSize()
+      this.setupListeners()
+      this.setupKeys()
+      this.particles = []
+      this.rocket = new Rocket(
+        this.canvas?.width / 2,
+        this.canvas?.height / 2,
+        ROCKET_SIZE
+      )
 
-    this.particles = []
-    this.rocket = new Rocket(
-      this.canvas.width / 2,
-      this.canvas.height / 2,
-      ROCKET_SIZE
-    )
-
-    this.loop()
+      this.loop()
+    }
   }
 
   demo() {
@@ -284,18 +285,6 @@ export default class Canvas {
     this.drawParticles()
     this.drawRocket()
   }
-
-  destroy() {
-    // Stop any running animations
-    // Remove event listeners
-    this.stopListeners()
-    this.rocket.destroy()
-    this.rocket = null as unknown as Rocket
-    this.particles = []
-
-    // Clear the canvas
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-  }
 }
 
 /*============================
@@ -461,11 +450,6 @@ class Rocket {
 
     // reset translate/rotation
     this.ctx.restore()
-  }
-
-  destroy() {
-    this.power = 0
-    this.ctx.clearRect(0, 0, this.canvasSize, this.canvasSize)
   }
 }
 
