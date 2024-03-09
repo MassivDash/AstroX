@@ -8,10 +8,10 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "lint:all": "prettier --write  \"**/*.{js,jsx,ts,tsx,md,mdx,astro}\" && eslint --fix \"src/**/*.{js,ts,jsx,tsx,astro}\"",
+    "lint:all": "prettier --write  \"**/*.{js,jsx,ts,tsx,md,mdx,astro,svelte}\" && eslint --fix \"src/**/*.{js,ts,jsx,tsx,astro,svelte}\"",
     "lint:staged": "npm run lint:staged::prettier && npm run lint:staged::eslint",
-    "lint:staged::prettier": "git diff --cached --name-only | sed 's/src\\/frontend\\///' | grep -E \"\\.(js|jsx|ts|tsx|md|mdx|astro)$\" | xargs prettier --write",
-    "lint:staged::eslint": "git diff --cached --name-only | sed 's/src\\/frontend\\///' | grep -E \"\\.(js|ts|jsx|tsx|astro)$\" | xargs eslint --fix"
+    "lint:staged::prettier": "git diff --cached --name-only | sed 's/src\\/frontend\\///' | grep -E \"\\.(js|jsx|ts|tsx|md|mdx|astro|svelte)$\" | xargs prettier --write",
+    "lint:staged::eslint": "git diff --cached --name-only | sed 's/src\\/frontend\\///' | grep -E \"\\.(js|ts|jsx|tsx|astro|svelte)$\" | xargs eslint --fix"
   },
   "dependencies": {
     "@astrojs/check": "^0.3.4",
@@ -25,12 +25,14 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.0.1",
     "@typescript-eslint/parser": "^7.0.1",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-astro": "^0.31.4",
     "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-svelte": "^2.35.1",
     "prettier": "^3.2.5",
     "prettier-config-standard": "^7.0.0",
     "prettier-plugin-astro": "^0.13.0",
+    "prettier-plugin-svelte": "^3.2.2",
     "vitest": "^1.3.0"
   }
 }

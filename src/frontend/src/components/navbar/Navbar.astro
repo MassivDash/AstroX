@@ -11,8 +11,6 @@ import NavbarItem from './NavbarItem.astro'
   document.addEventListener('astro:page-load', () => {
     const homeLink = document.getElementById('homeIcon')
     const isHome = window.location.pathname === '/'
-    console.log(isHome, window.location.pathname)
-
     isHome && homeLink?.classList.add('active')
   })
 </script>

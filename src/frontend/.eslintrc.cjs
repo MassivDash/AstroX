@@ -9,7 +9,8 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:astro/recommended',
-    'plugin:astro/jsx-a11y-recommended'
+    'plugin:astro/jsx-a11y-recommended',
+    'plugin:svelte/recommended'
   ],
   overrides: [
     {
@@ -19,6 +20,14 @@ module.exports = {
       files: ['.eslintrc.{js,cjs}'],
       parserOptions: {
         sourceType: 'script'
+      }
+    },
+    {
+      files: ['*.svelte'],
+      parser: 'svelte-eslint-parser',
+      // Parse the `<script>` in `.svelte` as TypeScript by adding the following configuration.
+      parserOptions: {
+        parser: '@typescript-eslint/parser'
       }
     },
     {
@@ -38,6 +47,7 @@ module.exports = {
   },
   plugins: ['@typescript-eslint', 'astro'],
   rules: {
+    'no-console': 'warn',
     '@typescript-eslint/no-unused-vars': [
       'warn',
       {
