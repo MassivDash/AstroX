@@ -1,6 +1,6 @@
 use crate::cli::{
     config::toml::create_toml_file,
-    pre_run::{git_hooks::copy_git_hooks, system_checks::run_system_checks},
+    pre_run::{system_checks::run_system_checks, utils::git_hooks::copy_git_hooks},
     utils::terminal::{help, step},
 };
 
@@ -31,7 +31,7 @@ pub fn execute_cmd(args: &Vec<String>) {
             }
             CliCmds::Interactive => start_interactive(),
             CliCmds::SystemCheck => {
-                run_system_checks(&"dev".to_string(), false);
+                run_system_checks("dev");
                 std::process::exit(0);
             }
 

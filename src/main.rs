@@ -1,7 +1,7 @@
 mod cli;
 use crate::cli::config::get_config::get_config;
 use crate::cli::development::start_development::start_development;
-use crate::cli::pre_run::system_checks::run_system_checks;
+use crate::cli::pre_run::execute::execute as pre_run;
 use crate::cli::production::start_production::start_production;
 use crate::cli::utils::terminal::do_splash;
 use cli::cmds::execute_cmd::execute_cmd;
@@ -23,7 +23,7 @@ fn main() {
     let config = get_config(&args);
 
     // Run the system checks
-    run_system_checks(&config.env, config.prod_astro_build);
+    pre_run(&config.env);
 
     if config.env == "dev" {
         // Start the development server

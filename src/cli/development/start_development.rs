@@ -1,6 +1,6 @@
 use crate::cli::config::create_dotenv::create_dotenv_frontend;
 use crate::cli::config::get_config::Config;
-use crate::cli::pre_run::npm::NPM;
+use crate::cli::pre_run::npm::checks::NPM;
 use crate::cli::utils::terminal::{dev_info, step, success, warning};
 use ctrlc::set_handler;
 use std::io::Read;
