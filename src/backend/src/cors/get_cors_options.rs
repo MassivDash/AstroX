@@ -4,7 +4,7 @@ use actix_web::http;
 pub fn get_cors_options(env: String) -> Cors {
     if env == "prod" {
         Cors::default()
-            .allowed_origin("https://exodus.spaceout.pl/")
+            .allowed_origin("https://astrox.spaceout.pl/")
             .allowed_methods(vec!["GET", "POST"])
             .allowed_headers(vec![http::header::AUTHORIZATION, http::header::ACCEPT])
             .allowed_header(http::header::CONTENT_TYPE)

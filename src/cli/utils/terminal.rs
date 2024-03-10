@@ -112,6 +112,24 @@ pub fn help() {
         "{}--sync-git-hooks [copy git_hooks folder contents to .git/hooks]",
         Fg(LightBlue)
     );
+
+    println!(
+        "{}--remove-git-hooks [remove hooks from .git/hooks folder]",
+        Fg(LightBlue)
+    );
+
+    println!(
+        "{}--build [build production bundle for frontend and backend]",
+        Fg(LightBlue)
+    );
+
+    println!(
+        "{}--serve [start the production server with the frontend build]",
+        Fg(LightBlue)
+    );
+
+    println!("{}--test [run the tests]", Fg(LightBlue));
+
     println!(
         "{}--create-toml [create a new Astrox.toml file]",
         Fg(LightBlue)

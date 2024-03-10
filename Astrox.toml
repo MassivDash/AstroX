@@ -5,4 +5,4 @@ astro_port = 5431
 prod_astro_build = true
 
 [public_keys]
-public_api_url = "https://exodus.spaceout.pl/api/"
+public_api_url = "https://astrox.spaceout.pl/api/"
