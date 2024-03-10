@@ -12,25 +12,25 @@ const PARTICLE_SIZE: number = 14
  *===========================*/
 
 export default class Canvas {
-  private canvas: HTMLCanvasElement
-  private dpr: number
-  private ctx: CanvasRenderingContext2D
-  private upEl: HTMLElement
-  private downEl: HTMLElement
-  private leftEl: HTMLElement
-  private rightEl: HTMLElement
-  private keys!: {
+  public canvas: HTMLCanvasElement
+  public dpr: number
+  public ctx: CanvasRenderingContext2D
+  public upEl: HTMLElement
+  public downEl: HTMLElement
+  public leftEl: HTMLElement
+  public rightEl: HTMLElement
+  public keys!: {
     space: boolean
     up: boolean
     down: boolean
     right: boolean
     left: boolean
   }
-  private particles!: Particle[]
-  private rocket!: Rocket
-  private demo1!: boolean
+  public particles!: Particle[]
+  public rocket!: Rocket
+  public demo1!: boolean
   public timerCanvas: ReturnType<typeof setTimeout>
-  private demo2!: boolean
+  public demo2!: boolean
 
   constructor() {
     // setup a canvas
@@ -354,7 +354,7 @@ class Rocket {
   public rotation: number
   public canvasSize: number
   public center: number
-  private ctx: CanvasRenderingContext2D
+  public ctx: CanvasRenderingContext2D
   public canvas: HTMLCanvasElement
 
   constructor(x: number, y: number, size: number) {

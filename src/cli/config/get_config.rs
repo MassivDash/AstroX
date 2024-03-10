@@ -32,9 +32,7 @@ pub fn get_config(args: &Vec<String>) -> Config {
         },
     };
 
-    let file_name = "Astrox.toml".to_string();
-
-    let toml = read_toml(&file_name);
+    let toml = read_toml(&ASTROX_TOML.to_string());
 
     if toml.is_ok() {
         config = toml.unwrap();
@@ -44,3 +42,5 @@ pub fn get_config(args: &Vec<String>) -> Config {
 
     config
 }
+
+pub const ASTROX_TOML: &str = "Astrox.toml";

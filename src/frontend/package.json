@@ -8,6 +8,7 @@
     "build": "astro check && astro build",
     "preview": "astro preview",
     "astro": "astro",
+    "test": "vitest run",
     "lint:all": "prettier --write  \"**/*.{js,jsx,ts,tsx,md,mdx,astro,svelte}\" && eslint --fix \"src/**/*.{js,ts,jsx,tsx,astro,svelte}\"",
     "lint:staged": "npm run lint:staged::prettier && npm run lint:staged::eslint",
     "lint:staged::prettier": "git diff --cached --name-only | sed 's/src\\/frontend\\///' | grep -E \"\\.(js|jsx|ts|tsx|md|mdx|astro|svelte)$\" | xargs -r prettier --write",

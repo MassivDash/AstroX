@@ -3,27 +3,12 @@ use crate::cli::config::get_config::{get_config, Config, ASTROX_TOML};
 use crate::cli::config::toml::read_toml;
 use crate::cli::pre_run::npm::checks::NPM;
 use crate::cli::utils::terminal::step;
-use ctrlc::set_handler;
 use std::process::Command;
-use std::sync::atomic::{AtomicBool, Ordering};
-use std::sync::Arc;
 
-/// Start the production server
-/// The production server will start the actix backend server
-/// The production server will also bundle the frontend
-
-pub fn start_production(config: Config) {
+pub fn build_production(config: Config) {
     // Bundle the frontend and wait for the process to finish
     // if the astro build is set to true
     // start the build process
-
-    let running = Arc::new(AtomicBool::new(true));
-    let r = running.clone();
-
-    set_handler(move || {
-        r.store(false, Ordering::SeqCst);
-    })
-    .expect("Error setting Ctrl-C handler");
 
     if config.prod_astro_build {
         // take production build url from config
@@ -31,7 +16,7 @@ pub fn start_production(config: Config) {
 
         create_dotenv_frontend(&prod_build_url, "./src/frontend/.env");
 
-        step("Bundling the frontend");
+        step("Building the frontend package");
 
         let bundle = Command::new(NPM)
             .arg("run")
@@ -50,42 +35,34 @@ pub fn start_production(config: Config) {
 
     // Start the backend production server
 
-    step("Starting cargo backend production server");
+    step("Building cargo backend production server");
 
-    let mut cargo_server = Command::new("cargo")
+    let cargo_server = Command::new("cargo")
         .current_dir("./src/backend")
-        .arg("run")
+        .arg("build")
         .arg("--release")
-        .arg("--")
-        .arg(format!("--host={}", config.host))
-        .arg(format!("--port={}", config.port.unwrap_or(8080)))
-        .arg(format!("--env={}", config.env))
         .spawn()
+        .expect("Failed to start backend production server")
+        .wait()
         .expect("Failed to start backend production server");
 
-    while running.load(Ordering::SeqCst) {}
-    step("Cleaning up orphaned processes");
-
-    cargo_server
-        .kill()
-        .expect("Failed to kill cargo-watch process");
-
-    step("Exiting");
-
-    std::process::exit(0);
+    match cargo_server.success() {
+        true => step("Backend built successfully"),
+        false => panic!("Failed to build the backend"),
+    }
 }
 
-pub fn execute_serve() {
+pub fn execute_build() {
     let config = read_toml(&ASTROX_TOML.to_string());
     match config {
         Ok(mut config) => {
             config.env = "prod".to_string();
-            start_production(config);
+            build_production(config)
         }
         Err(_) => {
             let mut config = get_config(&vec![]);
             config.env = "prod".to_string();
-            start_production(config);
+            build_production(config);
         }
     }
 }

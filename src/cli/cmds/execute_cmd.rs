@@ -1,9 +1,11 @@
 use crate::cli::{
-    config::toml::create_toml_file,
+    config::{get_config::ASTROX_TOML, toml::create_toml_file},
     pre_run::{
         system_checks::run_system_checks,
         utils::git_hooks::{copy_git_hooks, remove_git_hooks},
     },
+    production::{build_production::execute_build, start_production::execute_serve},
+    tests::execute::execute_tests,
     utils::terminal::{help, step},
 };
 
@@ -35,7 +37,7 @@ pub fn execute_cmd(args: &Vec<String>) {
                 std::process::exit(0);
             }
             CliCmds::CreateToml => {
-                create_toml_file("Astrox.toml".to_string())
+                create_toml_file(ASTROX_TOML.to_string())
                     .expect("Failed to create Astrox.toml file");
                 std::process::exit(0);
             }
@@ -44,7 +46,21 @@ pub fn execute_cmd(args: &Vec<String>) {
                 run_system_checks("dev");
                 std::process::exit(0);
             }
-
+            CliCmds::Build => {
+                step("Building the project");
+                execute_build();
+                std::process::exit(0);
+            }
+            CliCmds::Test => {
+                step("Testing the project");
+                execute_tests();
+                std::process::exit(0);
+            }
+            CliCmds::Serve => {
+                step("Serving the project");
+                execute_serve();
+                std::process::exit(0);
+            }
             CliCmds::Run => {}
         }
     }
