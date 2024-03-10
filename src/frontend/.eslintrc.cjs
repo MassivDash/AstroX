@@ -11,7 +11,6 @@ module.exports = {
     'plugin:astro/recommended',
     'plugin:astro/jsx-a11y-recommended',
     'plugin:svelte/recommended',
-    'plugin:prettier/recommended'
   ],
   overrides: [
     {
