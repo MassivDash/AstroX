@@ -10,7 +10,8 @@ module.exports = {
     'plugin:@typescript-eslint/recommended',
     'plugin:astro/recommended',
     'plugin:astro/jsx-a11y-recommended',
-    'plugin:svelte/recommended'
+    'plugin:svelte/recommended',
+    'plugin:prettier/recommended'
   ],
   overrides: [
     {

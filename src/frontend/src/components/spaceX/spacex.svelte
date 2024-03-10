@@ -48,7 +48,9 @@
       const data = res.data
       return data
     } catch (error) {
-      console.error(error)
+      // implement error handling
+      // console.log(error)
+      return []
     }
   }
 
