@@ -50,3 +50,43 @@ pub fn copy_git_hooks() {
         }
     }
 }
+
+// Try and find match between git_hooks and .git/hooks
+pub fn check_if_git_hooks_are_installed() -> bool {
+    // Get the list of hooks from the .git/hooks folder
+    let hooks = fs::read_dir(".git/hooks");
+    if hooks.is_err() {
+        return false;
+    }
+    let hooks = hooks.unwrap();
+    // Check if the folder is empty
+    if hooks.count() == 0 {
+        return false;
+    }
+    true
+}
+
+pub fn remove_git_hooks() {
+    // Get the list of hooks from the git_hooks folder
+    let hooks = fs::read_dir("git_hooks").unwrap();
+
+    // For each hook, copy the file to .git/hooks
+
+    for hook in hooks {
+        let hook = hook.unwrap();
+        let hook_name = hook.file_name();
+        let hook_name = hook_name.to_str().unwrap();
+        let git_hook_path = format!(".git/hooks/{}", hook_name);
+        let git_hook_path = git_hook_path.as_str();
+
+        // Remove the hook from .git/hooks
+        match fs::remove_file(git_hook_path) {
+            Ok(_) => {
+                println!("{} removed from {}", hook_name, git_hook_path);
+            }
+            Err(e) => {
+                println!("Error: {}", e);
+            }
+        }
+    }
+}

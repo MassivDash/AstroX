@@ -1,15 +1,9 @@
-use super::{
-    system_checks::run_system_checks,
-    utils::{first_run, git_hooks},
-};
+use super::{system_checks::run_system_checks, utils::git_hooks};
 
 pub fn execute(env: &str) {
-    if first_run::is_first_run() && env == "dev" {
+    if git_hooks::check_if_git_hooks_are_installed() {
         git_hooks::copy_git_hooks();
-        run_system_checks(env);
     }
 
-    if env == "prod" {
-        run_system_checks(env);
-    }
+    run_system_checks(env);
 }

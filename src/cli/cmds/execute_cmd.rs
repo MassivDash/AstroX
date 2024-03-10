@@ -1,6 +1,9 @@
 use crate::cli::{
     config::toml::create_toml_file,
-    pre_run::{system_checks::run_system_checks, utils::git_hooks::copy_git_hooks},
+    pre_run::{
+        system_checks::run_system_checks,
+        utils::git_hooks::{copy_git_hooks, remove_git_hooks},
+    },
     utils::terminal::{help, step},
 };
 
@@ -22,6 +25,13 @@ pub fn execute_cmd(args: &Vec<String>) {
                 // Enjoy pre-commit, pre-push and commit-msg hooks that will help you to maintain the code quality
                 step("Syncing the git hooks");
                 copy_git_hooks();
+                std::process::exit(0);
+            }
+            CliCmds::RemoveGitHooks => {
+                // Remove the git hooks from the .git/hooks folder
+                // This will remove the pre-commit, pre-push and commit-msg hooks
+                step("Removing the git hooks");
+                remove_git_hooks();
                 std::process::exit(0);
             }
             CliCmds::CreateToml => {

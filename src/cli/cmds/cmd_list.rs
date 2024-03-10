@@ -2,6 +2,7 @@
 pub enum CliCmds {
     Help,
     SyncGitHooks,
+    RemoveGitHooks,
     CreateToml,
     Interactive,
     SystemCheck,
@@ -16,6 +17,7 @@ pub fn check_for_cli_cmds(args: &Vec<String>) -> CliCmds {
             s if s.starts_with("--create-toml") => return CliCmds::CreateToml,
             s if s.starts_with("--interactive") => return CliCmds::Interactive,
             s if s.starts_with("--system-check") => return CliCmds::SystemCheck,
+            s if s.starts_with("--remove-git-hooks") => return CliCmds::RemoveGitHooks,
             _ => continue,
         }
     }
