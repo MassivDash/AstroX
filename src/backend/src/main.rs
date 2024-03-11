@@ -1,7 +1,7 @@
 use actix_files::{Files, NamedFile};
 use actix_rt::System;
 use actix_web::dev::{fn_service, ServiceRequest, ServiceResponse};
-use actix_web::{App, HttpServer};
+use actix_web::{middleware, App, HttpServer};
 
 mod api;
 mod args;
@@ -21,10 +21,16 @@ async fn main() -> std::io::Result<()> {
     let host = args.host;
     let port = args.port.parse::<u16>().unwrap();
 
+    // configure logging
+    std::env::set_var("RUST_LOG", "actix_web=info");
+    env_logger::init();
+
     let server = HttpServer::new(move || {
         let env = args.env.to_string();
         let cors = get_cors_options(env);
         App::new()
+            .wrap(middleware::Compress::default())
+            .wrap(middleware::Logger::default())
             .wrap(cors)
             .service(json_response)
             .service(json_response_get)
