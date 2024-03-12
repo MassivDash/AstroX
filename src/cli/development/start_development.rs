@@ -7,6 +7,8 @@ use std::io::Read;
 use std::process::Command;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
+use std::thread::sleep;
+use std::time::Duration;
 
 /// Start the development server
 /// The development server will start the actix backend server and the astro frontend server
@@ -128,7 +130,9 @@ pub fn start_development(config: Config) {
     }
 
     // Clean up section for orphaned processes, otherwise cargo watch and node watch will continue to run blocking the ports
-    while running.load(Ordering::SeqCst) {}
+    while running.load(Ordering::SeqCst) {
+        sleep(Duration::from_millis(100));
+    }
     step("Cleaning up orphaned processes");
 
     cargo_watch

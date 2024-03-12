@@ -7,6 +7,8 @@ use ctrlc::set_handler;
 use std::process::Command;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
+use std::thread::sleep;
+use std::time::Duration;
 
 /// Start the production server
 /// The production server will start the actix backend server
@@ -63,7 +65,9 @@ pub fn start_production(config: Config) {
         .spawn()
         .expect("Failed to start backend production server");
 
-    while running.load(Ordering::SeqCst) {}
+    while running.load(Ordering::SeqCst) {
+        sleep(Duration::from_millis(100));
+    }
     step("Cleaning up orphaned processes");
 
     cargo_server
