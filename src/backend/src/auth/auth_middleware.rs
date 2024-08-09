@@ -6,6 +6,8 @@ use std::{
     task::{Context, Poll},
 };
 
+use globset::{Glob, GlobSetBuilder};
+
 use actix_utils::future::{ok, Either, Ready};
 use actix_web::{
     body::{EitherBody, MessageBody},
@@ -62,12 +64,14 @@ where
     fn call(&self, req: ServiceRequest) -> Self::Future {
         let session: Session = req.get_session();
         let auth = validate_session(&session);
-
-        if self
-            .routes
-            .iter()
-            .any(|route| req.path().starts_with(route))
-        {
+        let routes: Vec<String> = self.routes.iter().map(|s| s.to_string()).collect();
+        println!(
+            "{:?} {:?} {:?}",
+            match_glob_patterns(routes.clone(), req.path()),
+            req.path(),
+            routes.clone()
+        );
+        if match_glob_patterns(routes, req.path()) {
             if auth.is_ok() {
                 Either::left(AuthenticationFuture {
                     fut: self.service.call(req),
@@ -113,5 +117,58 @@ where
         };
 
         Poll::Ready(Ok(res.map_into_left_body()))
+    }
+}
+
+fn match_glob_patterns(patterns: Vec<String>, path: &str) -> bool {
+    let mut builder = GlobSetBuilder::new();
+
+    for pattern in patterns {
+        if let Ok(glob) = Glob::new(pattern.as_str()) {
+            builder.add(glob);
+        } else {
+            panic!("Failed to create glob pattern");
+        }
+    }
+    let set = builder.build().expect("Failed to build glob set");
+    !set.matches(path).is_empty()
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_match_glob_patterns() {
+        // Test matching pattern
+        let patterns = vec!["/auth/*".to_string(), "/posts/*".to_string()];
+        assert_eq!(match_glob_patterns(patterns.clone(), "/auth/auth"), true);
+        assert_eq!(match_glob_patterns(patterns.clone(), "/auth/"), true);
+
+        let patterns = vec!["*/auth/*".to_string(), "*/posts/*".to_string()];
+        assert_eq!(match_glob_patterns(patterns.clone(), "/auth/auth"), true);
+        assert_eq!(match_glob_patterns(patterns.clone(), "/auth/"), true);
+
+        assert_eq!(
+            match_glob_patterns(patterns.clone(), "/auth/protected"),
+            true
+        );
+        assert_eq!(match_glob_patterns(patterns.clone(), "/posts/456"), true);
+        assert_eq!(match_glob_patterns(patterns.clone(), "/login"), false);
+
+        // Test non-matching pattern
+        let patterns = vec!["/users/*".to_string(), "/posts/*".to_string()];
+        assert_eq!(
+            match_glob_patterns(patterns.clone(), "/comments/789"),
+            false
+        );
+
+        // Test empty patterns
+        let patterns: Vec<String> = vec![];
+        assert_eq!(match_glob_patterns(patterns, "/users/123"), false);
+
+        // Test invalid glob pattern
+        let patterns = vec!["[".to_string(), "/posts/*".to_string()];
+        assert!(std::panic::catch_unwind(|| match_glob_patterns(patterns, "/users/123")).is_err());
     }
 }

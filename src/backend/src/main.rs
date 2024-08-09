@@ -32,7 +32,7 @@ async fn main() -> std::io::Result<()> {
     let server = HttpServer::new(move || {
         let env = args.env.to_string();
         let cors = get_cors_options(env);
-        let auth_routes: Vec<String> = vec!["/auth/".to_string()];
+        let auth_routes: Vec<String> = vec!["/auth/*".to_string()];
         App::new()
             .route("/login", web::get().to(login_form))
             .route("/login", web::post().to(login))
