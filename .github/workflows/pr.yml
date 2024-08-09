@@ -45,7 +45,7 @@ jobs:
       - name: Run Project Build
         run: cargo run --build
   test_frontend:
-    runs-on: ubuntu-lates
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - name: Install Node.js
