@@ -42,16 +42,22 @@ jobs:
         uses: dethereum/github-actions-report-lcov@v1.0.0
         with:
           coverage-files: lcovCli.info
-          artifact-name: code-coverage-report
+          artifact-name: code-coverage-cli-report
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          update-comment: true
+          title-prefix: "CLI"
       - name: Test Backend
         run: cargo llvm-cov --all-features --workspace --lcov --output-path lcovBackend.info --manifest-path src/backend/Cargo.toml
+      - name: Setup LCOV
+        uses: hrishikesh-kadam/setup-lcov@v1
       - name: Report code coverage
-        uses: dethereum/github-actions-report-lcov@v1.0.0
+        uses: zgosalvez/github-actions-report-lcov@v3
         with:
           coverage-files: lcovBackend.info
-          artifact-name: code-coverage-report
+          artifact-name: code-coverage-backend-report
           github-token: ${{ secrets.GITHUB_TOKEN }}
+          update-comment: true
+          title-prefix: "Backend"
       - name: Run Project Build
         run: cargo run --build
   test_frontend:
