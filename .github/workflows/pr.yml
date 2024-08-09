@@ -6,7 +6,12 @@ on:
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
-
+permissions:
+  # Required to checkout the code
+  contents:
+    read
+    # Required to put a comment into the pull-request
+  pull-requests: write
 jobs:
   test_rust:
     runs-on: ubuntu-latest
@@ -17,7 +22,7 @@ jobs:
       - name: Install Rust
         run: rustup update stable
       - name: Install cargo-watch
-        run: cargo install cargo-watch /
+        run: cargo install cargo-watch
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
