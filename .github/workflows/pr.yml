@@ -21,8 +21,11 @@ jobs:
       - uses: actions/checkout@v4
       - name: Install Rust
         run: rustup update stable
-      - name: Install cargo-watch
-        run: cargo install cargo-watch
+      - name: Install rust dependencies
+        run: |
+          cargo install cargo-watch
+          cargo install cargo-llvm-cov
+          cargo install commitlint-rs
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
