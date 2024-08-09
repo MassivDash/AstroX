@@ -16,8 +16,9 @@ use actix_web::{
 use futures::{ready, Future};
 
 use crate::session::validate_session::validate_session;
-pub struct Authentication;
-
+pub struct Authentication {
+    pub routes: Vec<String>,
+}
 impl<S, B> Transform<S, ServiceRequest> for Authentication
 where
     S: Service<ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
@@ -31,11 +32,15 @@ where
     type Future = Ready<Result<Self::Transform, Self::InitError>>;
 
     fn new_transform(&self, service: S) -> Self::Future {
-        ok(AuthenticationMiddleware { service })
+        ok(AuthenticationMiddleware {
+            service,
+            routes: self.routes.clone(),
+        })
     }
 }
 pub struct AuthenticationMiddleware<S> {
     service: S,
+    routes: Vec<String>,
 }
 
 impl<S, B> Service<ServiceRequest> for AuthenticationMiddleware<S>
@@ -58,7 +63,11 @@ where
         let session: Session = req.get_session();
         let auth = validate_session(&session);
 
-        if req.path().starts_with("/auth/") {
+        if self
+            .routes
+            .iter()
+            .any(|route| req.path().starts_with(route))
+        {
             if auth.is_ok() {
                 Either::left(AuthenticationFuture {
                     fut: self.service.call(req),
