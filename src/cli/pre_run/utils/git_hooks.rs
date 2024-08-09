@@ -90,3 +90,33 @@ pub fn remove_git_hooks() {
         }
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_copy_git_hooks() {
+        // Arrange
+
+        // Act
+        copy_git_hooks();
+
+        // Assert
+        // Verify that the hooks are copied to .git/hooks
+        assert!(check_if_git_hooks_are_installed());
+    }
+
+    #[test]
+    fn test_remove_git_hooks() {
+        // Arrange
+        copy_git_hooks();
+
+        // Act
+        remove_git_hooks();
+
+        // Assert
+        // Verify that the hooks are removed from .git/hooks
+        assert!(!check_if_git_hooks_are_installed());
+    }
+}
