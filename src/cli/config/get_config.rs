@@ -25,17 +25,15 @@ pub fn get_config(args: &Vec<String>) -> Config {
         host: "localhost".to_string(),
         port: Some(8080),
         env: "dev".to_string(),
-        astro_port: Some(5431),
+        astro_port: Some(5432),
         prod_astro_build: false,
         public_keys: PublicKeys {
             public_api_url: "http://localhost:8080/api".to_string(),
         },
     };
 
-    let toml = read_toml(&ASTROX_TOML.to_string());
-
-    if toml.is_ok() {
-        config = toml.unwrap();
+    if let Ok(toml) = read_toml(&ASTROX_TOML.to_string()) {
+        config = toml;
     }
 
     config = collect_config_args(config, args);

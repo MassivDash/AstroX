@@ -11,6 +11,9 @@ use super::get_config::Config;
 /// --astro-port=4321
 /// Switch on / off the production build of the frontend during the production server start
 /// --prod-astro-build=true / false
+/// Set the public api url, this will be copied over to astro frontend and used for grabbing url to set api base
+/// During development set for default port
+/// --set-public-api=https://custom.api/api
 
 fn split_and_collect(arg: &str) -> String {
     let split: Vec<&str> = arg.split('=').collect();
@@ -48,6 +51,10 @@ pub fn collect_config_args(config: Config, args: &Vec<String>) -> Config {
 
         if arg.starts_with("--prod-astro-build=") {
             config.prod_astro_build = parse_to_bool(split_and_collect(arg).as_str());
+        }
+
+        if arg.starts_with("--public-api-url=") {
+            config.public_keys.public_api_url = split_and_collect(arg);
         }
     }
 
@@ -97,6 +104,7 @@ mod tests {
             "--port=8080".to_string(),
             "--astro-port=4321".to_string(),
             "--prod-astro-build=true".to_string(),
+            "--public-api-url=https://custom.api/api".to_string(),
         ];
 
         let expected_config = Config {
@@ -106,7 +114,7 @@ mod tests {
             astro_port: Some(4321),
             prod_astro_build: true,
             public_keys: {
-                let public_api_url = "http://localhost:8080/api".to_string();
+                let public_api_url = "https://custom.api/api".to_string();
                 PublicKeys { public_api_url }
             },
         };
