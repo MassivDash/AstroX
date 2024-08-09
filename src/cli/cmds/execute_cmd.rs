@@ -11,7 +11,7 @@ use crate::cli::{
 
 use super::{
     cmd_list::{check_for_cli_cmds, CliCmds},
-    interactive::start_interactive,
+    interactive::{start_interactive, InquireUserInput, RealCommandExecutor},
 };
 
 pub fn execute_cmd(args: &Vec<String>) {
@@ -41,7 +41,7 @@ pub fn execute_cmd(args: &Vec<String>) {
                     .expect("Failed to create Astrox.toml file");
                 std::process::exit(0);
             }
-            CliCmds::Interactive => start_interactive(),
+            CliCmds::Interactive => start_interactive(&InquireUserInput, &RealCommandExecutor),
             CliCmds::SystemCheck => {
                 run_system_checks("dev");
                 std::process::exit(0);
