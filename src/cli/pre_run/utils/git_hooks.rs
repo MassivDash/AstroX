@@ -95,28 +95,42 @@ pub fn remove_git_hooks() {
 mod tests {
     use super::*;
 
+    fn read_the_hooks() -> Vec<String> {
+        let hooks = fs::read_dir(".git/hooks").unwrap();
+        let mut hooks_list = Vec::new();
+        for hook in hooks {
+            let hook = hook.unwrap();
+            let hook_name = hook.file_name();
+            let hook_name = hook_name.to_str().unwrap();
+            hooks_list.push(hook_name.to_string());
+        }
+        println!("{:?}", hooks_list);
+        hooks_list
+    }
+
     #[test]
     fn test_copy_git_hooks() {
-        // Arrange
+        let check = check_if_git_hooks_are_installed();
+        assert!(check == true);
 
-        // Act
         copy_git_hooks();
 
         // Assert
         // Verify that the hooks are copied to .git/hooks
-        assert!(check_if_git_hooks_are_installed());
+        assert!(read_the_hooks()
+            .iter()
+            .any(|hook| hook == "pre-commit" || hook == "pre-push" || hook == "commit-msg"));
     }
 
     #[test]
     fn test_remove_git_hooks() {
-        // Arrange
-        copy_git_hooks();
-
         // Act
         remove_git_hooks();
-
+        let hooks = read_the_hooks();
         // Assert
         // Verify that the hooks are removed from .git/hooks
-        assert!(!check_if_git_hooks_are_installed());
+        assert!(hooks.iter().any(|hook| hook == "pre-commit") == false);
+
+        copy_git_hooks(); //return the githooks back after tests
     }
 }

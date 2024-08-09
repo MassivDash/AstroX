@@ -65,3 +65,14 @@ pub fn execute_cmd(args: &Vec<String>) {
         }
     }
 }
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_execute_cmd_system_check() {
+        let args = vec!["--system-check".to_string()];
+        execute_cmd(&args);
+        // Add assertions here to verify the expected behavior
+    }
+}

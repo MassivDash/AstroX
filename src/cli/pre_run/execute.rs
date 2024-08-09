@@ -7,3 +7,18 @@ pub fn execute(env: &str) {
 
     run_system_checks(env);
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_execute_with_installed_git_hooks() {
+        // Arrange
+        let env = "dev";
+        // Act
+        execute(env);
+        // Assert
+        // Add your assertions here to verify the expected behavior
+    }
+}
