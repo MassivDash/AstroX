@@ -1,0 +1,87 @@
+name: Coverage
+
+on: [pull_request, push]
+
+jobs:
+  test_rust:
+    runs-on: ubuntu-latest
+    env:
+      CARGO_TERM_COLOR: always
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Rust
+        run: rustup update stable
+      - name: Install cargo-llvm-cov
+        uses: taiki-e/install-action@cargo-llvm-cov
+      - name: Test cli
+        run: cargo llvm-cov --all-features --workspace --lcov --output-path lcovCli.info
+      - name: Upload cli coverage to codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: lcovCli.info
+          fail_ci_if_error: true
+      - name: Test Backend
+        run: cargo llvm-cov --all-features --workspace --lcov --output-path lcovBackend.info --manifest-path src/backend/Cargo.toml
+      - name: Upload Backend coverage to codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: lcovBackend.info
+          fail_ci_if_error: true
+  test_frontend:
+    runs-on: ubuntu-lates
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: "20"
+      - name: Install dependencies
+        run: |
+          cd src/frontend
+          npm install
+      - name: npm audit report
+        run: |
+          cd src/frontend 
+          npm audit --json | npx @netly/npm-audit-markdown --output npm.md
+      - name: "Test"
+        run: |
+          cd src/frontend 
+          npm run coverage
+      - name: Run project analyzer
+        run: npm i -g project-analyzer && projectAnalyzer -m -t
+      - name: "Report Coverage"
+        # Set if: always() to also generate the report if tests are failing
+        # Only works if you set `reportOnFailure: true` in your vite config as specified above
+        if: always()
+        uses: davelosert/vitest-coverage-report-action@v2
+        with:
+          json-summary-path: src/frontend/coverage/coverage-summary.json
+
+      - name: Post coverage summary
+        id: coverage_summary
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: src/frontend/coverage/cobertura-coverage.xml
+          badge: true
+          format: markdown
+          output: both
+
+      - name: Add Npm audit report PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: src/frontend/npm.md
+
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: code-coverage-results.md
+      - name: Add Project Analysis PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        if: github.event_name == 'pull_request'
+        with:
+          recreate: true
+          path: analysis.md

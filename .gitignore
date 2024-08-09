@@ -3,3 +3,8 @@
 /src/backend/target
 syncDevil.sh
 .env
+lcov.info
+*/coverage/*
+*/coverage
+coverage
+Astrox-test.toml
