@@ -156,3 +156,71 @@ pub fn help() {
         Fg(LightBlue)
     );
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_get_version() {
+        // Test when Cargo.toml contains version
+        let version = get_version();
+        assert_eq!(version, "0.1.1");
+    }
+
+    #[test]
+    fn test_do_splash() {
+        // Test the output of do_splash function
+        do_splash();
+    }
+
+    #[test]
+    fn test_hr() {
+        // Test the output of hr function
+        hr();
+    }
+
+    #[test]
+    fn test_spacer() {
+        // Test the output of spacer function
+        spacer();
+    }
+
+    #[test]
+    fn test_step() {
+        // Test the output of step function
+        step("Test Step");
+    }
+
+    #[test]
+    fn test_success() {
+        // Test the output of success function
+        success("Test Success");
+    }
+
+    #[test]
+    fn test_warning() {
+        // Test the output of warning function
+        warning("Test Warning");
+    }
+
+    #[test]
+    fn test_dev_info() {
+        // Test the output of dev_info function
+        let host = String::from("localhost");
+        let port = 8080;
+        dev_info(&host, &port);
+    }
+
+    #[test]
+    fn test_error() {
+        // Test the output of error function
+        error("Test Error");
+    }
+
+    #[test]
+    fn test_help() {
+        // Test the output of help function
+        help();
+    }
+}

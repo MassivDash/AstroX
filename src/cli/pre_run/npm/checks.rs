@@ -41,3 +41,18 @@ pub fn is_frontend_project_installed() -> bool {
     let installed = std::path::Path::new("./src/frontend/node_modules").exists();
     project && installed
 }
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_is_node_installed() {
+        // Test when node is installed and version is above required version
+        assert_eq!(is_node_installed(), true);
+    }
+
+    #[test]
+    fn test_is_frontend_project_installed() {
+        assert_eq!(is_frontend_project_installed(), true);
+    }
+}

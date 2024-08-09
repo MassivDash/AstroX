@@ -1,18 +1,22 @@
 use actix_files::{Files, NamedFile};
 use actix_rt::System;
 use actix_web::dev::{fn_service, ServiceRequest, ServiceResponse};
-use actix_web::{middleware, App, HttpServer};
+use actix_web::{middleware, web, App, HttpServer};
 
 mod api;
 mod args;
+mod auth;
 mod cors;
-
-use crate::args::collect_args::collect_args;
-use crate::cors::get_cors_options::get_cors_options;
+mod session;
 
 use crate::api::hello::get::json_response_get;
 use crate::api::hello::post::json_response;
 use crate::api::space_x::get::json_get_space_x;
+use crate::args::collect_args::collect_args;
+use crate::auth::auth_middleware::Authentication;
+use crate::auth::login::{login, login_form};
+use crate::cors::get_cors_options::get_cors_options;
+use crate::session::flash_messages::set_up_flash_messages;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -28,13 +32,10 @@ async fn main() -> std::io::Result<()> {
     let server = HttpServer::new(move || {
         let env = args.env.to_string();
         let cors = get_cors_options(env);
+        let auth_routes: Vec<String> = vec!["/auth/*".to_string()];
         App::new()
-            .wrap(middleware::Compress::default())
-            .wrap(middleware::Logger::default())
-            .wrap(cors)
-            .service(json_response)
-            .service(json_response_get)
-            .service(json_get_space_x)
+            .route("/login", web::get().to(login_form))
+            .route("/login", web::post().to(login))
             .service(
                 Files::new("/", "../frontend/dist/")
                     .prefer_utf8(true)
@@ -46,15 +47,24 @@ async fn main() -> std::io::Result<()> {
                         Ok(ServiceResponse::new(req, res))
                     })),
             )
+            .service(json_response)
+            .service(json_response_get)
+            .service(json_get_space_x)
+            .wrap(cors)
+            .wrap(Authentication {
+                routes: auth_routes,
+            })
+            .wrap(session::session_middleware::session_middleware())
+            .wrap(set_up_flash_messages())
+            .wrap(middleware::Compress::default())
+            .wrap(middleware::Logger::default())
     })
     .bind((host, port))?;
 
     let server = server.run();
 
     System::current().arbiter().spawn(async {
-        println!("----");
-        println!("HttpServer has started");
-        println!("----");
+        println!("Actix server has started 🚀");
     });
 
     server.await

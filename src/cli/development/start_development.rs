@@ -84,8 +84,8 @@ pub fn start_development(config: Config) {
         }
         let s = String::from_utf8_lossy(&buffer_rust[..n]);
 
-        print!("{}", s);
-        if s.contains("HttpServer has started") {
+        println!("{}", s);
+        if s.contains("Actix server has started 🚀") {
             dev_info(&config.host, &port);
             success("Actix server is running, starting the frontend development server");
             break;
@@ -117,7 +117,7 @@ pub fn start_development(config: Config) {
         }
         let s = String::from_utf8_lossy(&buffer_node[..n]);
 
-        print!("{}", s);
+        println!("{}", s);
 
         if s.contains("ready") {
             success("Astro is ready, opening the browser");
@@ -127,6 +127,26 @@ pub fn start_development(config: Config) {
                 .expect("Failed to open the browser");
             break;
         }
+    }
+
+    // We want to transmit the stdout_node and stdout_rust  as long as both watchers are present
+
+    loop {
+        let n = stdout_rust.read(&mut buffer_rust).unwrap();
+        if n == 0 {
+            break;
+        }
+        let s = String::from_utf8_lossy(&buffer_rust[..n]);
+        println!("{}", s);
+    }
+
+    loop {
+        let n = stdout_node.read(&mut buffer_node).unwrap();
+        if n == 0 {
+            break;
+        }
+        let s = String::from_utf8_lossy(&buffer_node[..n]);
+        println!("{}", s);
     }
 
     // Clean up section for orphaned processes, otherwise cargo watch and node watch will continue to run blocking the ports

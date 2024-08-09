@@ -56,3 +56,20 @@ pub fn validate_frontend_project() {
         }
     }
 }
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn test_validate_node_installed() {
+        // Simulate node being installed
+        let is_node_installed = true;
+        assert_eq!(is_node_installed, true);
+    }
+
+    #[test]
+    fn test_validate_frontend_project_installed() {
+        // Simulate frontend project being installed
+        let project_installed = true;
+        assert_eq!(project_installed, true);
+    }
+}

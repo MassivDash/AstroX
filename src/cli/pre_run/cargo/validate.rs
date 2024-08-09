@@ -97,3 +97,25 @@ pub fn validate_rustc_version() {
         }
     }
 }
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_validate_cargo_watch_installed() {
+        // Test when cargo-watch is installed
+        assert_eq!(is_cargo_watch_installed(), true);
+    }
+
+    #[test]
+    fn test_validate_commitlint_rs_installed() {
+        // Test when commitlint-rs is installed
+        assert_eq!(is_commitlint_rs_installed(), true);
+    }
+
+    #[test]
+    fn test_validate_rustc_version_higher() {
+        // Test when rustc version is higher than required
+        assert_eq!(is_rustc_higher_than_required(), true);
+    }
+}
