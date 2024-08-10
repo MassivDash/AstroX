@@ -1,4 +1,4 @@
 {
-  "extends": "astro/tsconfigs/strictest",
-  "root": true
+  "extends": "astro/tsconfigs/base",
+  "include": ["src/env.d.ts"]
 }
