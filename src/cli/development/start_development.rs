@@ -1,7 +1,7 @@
 use crate::cli::config::create_dotenv::create_dotenv_frontend;
 use crate::cli::config::get_config::Config;
 use crate::cli::pre_run::npm::checks::NPM;
-use crate::cli::utils::terminal::{dev_info, step, success, warning};
+use crate::cli::utils::terminal::{dev_info, do_front_log, do_server_log, step, success, warning};
 use ctrlc::set_handler;
 use std::io::Read;
 use std::process::Command;
@@ -84,7 +84,7 @@ pub fn start_development(config: Config) {
         }
         let s = String::from_utf8_lossy(&buffer_rust[..n]);
 
-        println!("{}", s);
+        do_server_log(&s);
         if s.contains("Actix server has started 🚀") {
             dev_info(&config.host, &port);
             success("Actix server is running, starting the frontend development server");
@@ -117,14 +117,25 @@ pub fn start_development(config: Config) {
         }
         let s = String::from_utf8_lossy(&buffer_node[..n]);
 
-        println!("{}", s);
+        do_front_log(&s);
 
         if s.contains("ready") {
             success("Astro is ready, opening the browser");
-            Command::new("open")
+
+            let browser = Command::new("open")
                 .arg(format!("http://localhost:{}", astro_port))
-                .spawn()
-                .expect("Failed to open the browser");
+                .spawn();
+
+            match browser {
+                Ok(_) => break,
+                Err(err) => {
+                    println!("Failed to execute command: {}", err);
+                    println!("Are You a Ci Secret Agent ?");
+
+                    // Handle the error here
+                }
+            }
+
             break;
         }
     }
@@ -137,7 +148,7 @@ pub fn start_development(config: Config) {
             break;
         }
         let s = String::from_utf8_lossy(&buffer_rust[..n]);
-        println!("{}", s);
+        do_server_log(&s);
     }
 
     loop {
@@ -146,7 +157,7 @@ pub fn start_development(config: Config) {
             break;
         }
         let s = String::from_utf8_lossy(&buffer_node[..n]);
-        println!("{}", s);
+        do_front_log(&s);
     }
 
     // Clean up section for orphaned processes, otherwise cargo watch and node watch will continue to run blocking the ports

@@ -1,18 +1,17 @@
-echo " "
-echo "Running commitlint..."
+echo -e "\e[41m\e[97mRunning commitlint...\e[0m"
 
 commit_message=$(cat "$1")
 
 echo "$commit_message" | commitlint
 
-
 # If the commit message does not match the conventional commit format, then exit with a non-zero status
 
 if [ $? -ne 0 ]; then
-    echo "Invalid commit message. Please use the conventional commit format, more info on https://www.conventionalcommits.org/en/v1.0.0/"
+    echo -e "\e[41m\e[97mInvalid commit message. Please use the conventional commit format, more info on https://www.conventionalcommits.org/en/v1.0.0/\e[0m"
     exit 1
 fi
 
-echo " "
+echo -e "\e[42m\e[97m"
 echo "----- Done -----"
 echo " "
+echo -e "\e[0m"

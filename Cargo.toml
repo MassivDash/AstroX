@@ -6,9 +6,9 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-"toml" = "0.8.10"
-termion = "*"
-ctrlc = "*"
-inquire = "0.7.0"
+"toml" = "0.8.19"
+ctrlc = "3.4.4"
+inquire = "0.7.5"
 serde = { version = "1.0", features = ["derive"] }
-semver = "1.0.22"
+semver = "1.0.23"
+crossterm = "0.28"

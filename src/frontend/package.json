@@ -9,6 +9,7 @@
     "preview": "astro preview",
     "astro": "astro",
     "test": "vitest run",
+    "coverage": "vitest run --coverage",
     "lint:all": "prettier --write  \"**/*.{js,jsx,ts,tsx,md,mdx,astro,svelte}\" && eslint --fix \"src/**/*.{js,ts,jsx,tsx,astro,svelte}\"",
     "lint:staged": "npm run lint:staged::prettier && npm run lint:staged::eslint",
     "lint:staged::prettier": "git diff --cached --name-only | sed 's/src\\/frontend\\///' | grep -E \"\\.(js|jsx|ts|tsx|md|mdx|astro|svelte)$\" | xargs -r prettier --write",
@@ -26,6 +27,7 @@
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^7.0.1",
     "@typescript-eslint/parser": "^7.0.1",
+    "@vitest/coverage-v8": "^2.0.5",
     "eslint": "^8.57.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-astro": "^0.31.4",
@@ -36,6 +38,6 @@
     "prettier-config-standard": "^7.0.0",
     "prettier-plugin-astro": "^0.13.0",
     "prettier-plugin-svelte": "^3.2.2",
-    "vitest": "^1.3.0"
+    "vitest": "^2.0.5"
   }
 }
