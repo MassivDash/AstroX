@@ -1,4 +1,6 @@
-use termion::color::{Fg, LightBlue, LightGreen, LightMagenta, LightRed, LightYellow, Reset};
+use crossterm::execute;
+use crossterm::style::{Color, Print, ResetColor, SetBackgroundColor, SetForegroundColor};
+use std::io::stdout;
 
 // Read the Cargo.toml file and get the version
 pub fn get_version() -> String {
@@ -15,146 +17,174 @@ pub fn get_version() -> String {
     version
 }
 
+pub fn do_server_log(string: &str) {
+    spacer();
+    execute!(
+        stdout(),
+        SetForegroundColor(Color::White),
+        SetBackgroundColor(Color::DarkRed),
+        Print("|   Actix   |"),
+        ResetColor,
+        Print(" "),
+        Print(string),
+    )
+    .unwrap();
+    spacer();
+}
+
+pub fn do_front_log(string: &str) {
+    spacer();
+    execute!(
+        stdout(),
+        SetForegroundColor(Color::White),
+        SetBackgroundColor(Color::DarkMagenta),
+        Print("|   Astro   |"),
+        ResetColor,
+        Print(" "),
+        Print(string),
+    )
+    .unwrap();
+    spacer();
+}
+
 pub fn do_splash() {
     spacer();
-    println!(
-        "{}
+    execute!(
+        stdout(),
+        SetForegroundColor(Color::Magenta),
+        Print(
+            "
   █████  ███████ ████████ ██████   ██████  ██   ██ 
   ██   ██ ██         ██    ██   ██ ██    ██  ██ ██  
   ███████ ███████    ██    ██████  ██    ██   ███   
   ██   ██      ██    ██    ██   ██ ██    ██  ██ ██  
   ██   ██ ███████    ██    ██   ██  ██████  ██   ██
-",
-        Fg(LightMagenta)
-    );
+"
+        ),
+        ResetColor
+    )
+    .unwrap();
     spacer();
-    println!(
-        "{} astro_x: version {} author: @spaceout.pl",
-        Fg(Reset),
-        get_version()
-    );
+    execute!(
+        stdout(),
+        Print(format!(
+            "{} astro_x: version {} author: @spaceout.pl",
+            ResetColor,
+            get_version()
+        )),
+        ResetColor
+    )
+    .unwrap();
+    spacer();
     hr();
+    spacer();
 }
 
 pub fn hr() {
-    println!("{}", Fg(LightMagenta));
-    println!(
-        "=============================================================================================================================================="
-    );
-    println!("{}", Fg(Reset));
+    execute!(
+        stdout(),
+        SetForegroundColor(Color::Magenta),
+        Print(
+            "=============================================================================================================================================="
+        ),
+        ResetColor
+    ).unwrap();
 }
 
 pub fn spacer() {
-    println!("{}", Fg(Reset));
-    println!("{}", Fg(Reset));
+    execute!(stdout(), ResetColor, Print("\n\n"), ResetColor).unwrap();
 }
 
 pub fn step(string: &str) {
-    println!("{}🏁 Action: {}", Fg(LightMagenta), string);
-    println!("{}", Fg(Reset));
+    execute!(
+        stdout(),
+        SetForegroundColor(Color::Magenta),
+        Print(format!("🏁 Action: {}\n", string)),
+        ResetColor
+    )
+    .unwrap();
 }
 
 pub fn success(string: &str) {
-    println!("{}✅ Success: {}", Fg(LightGreen), string);
-    println!("{}", Fg(Reset));
+    execute!(
+        stdout(),
+        SetForegroundColor(Color::Green),
+        Print(format!("✅ Success: {}\n", string)),
+        ResetColor
+    )
+    .unwrap();
 }
 
 pub fn warning(string: &str) {
-    println!("{}", Fg(LightYellow));
-    println!("☢️ Warning: {}", string);
-    println!("{}", Fg(Reset));
+    execute!(
+        stdout(),
+        SetForegroundColor(Color::Yellow),
+        Print(format!("☢️ Warning: {}\n", string)),
+        ResetColor
+    )
+    .unwrap();
 }
 
-// print
-// | Local http://localhost:8080
-
 pub fn dev_info(host: &String, port: &u16) {
-    println!("{}|", Fg(LightGreen));
-    println!(
-        "{}| Local development backend server running at:",
-        Fg(LightGreen)
-    );
-    println!("{}| http://{}:{}", Fg(LightGreen), host, port);
-    println!("{}|", Fg(LightGreen));
-    println!();
+    execute!(
+        stdout(),
+        SetForegroundColor(Color::Green),
+        Print("| Local development backend server running at:\n"),
+        Print(format!("| http://{}:{}\n", host, port)),
+        Print("|\n"),
+        ResetColor
+    )
+    .unwrap();
 }
 
 pub fn error(string: &str) {
-    println!("{}❗ Error: {}", Fg(LightRed), string);
-    println!("{}", Fg(Reset));
+    execute!(
+        stdout(),
+        SetForegroundColor(Color::Red),
+        Print(format!("❗ Error: {}\n", string)),
+        ResetColor
+    )
+    .unwrap();
 }
 
-/// List of config arguments
-/// Bind actix server to a host, used for development and production
-/// --host=127.0.0.1
-/// Bind actix server to a port, used for development and production
-/// --port=8080
-/// Set the environment
-/// --env=prod / dev
-/// Set the astro development port, in production actix server will serve the frontend build Files
-/// --astro-port=4321
-/// Switch on / off the production build of the frontend during the production server start
-/// --prod-astro-build=true / false
-
-/// List of commands
-/// --help
-/// --sync-git-hooks
-/// --create-toml
-/// --interactive
-/// --system-checks
-
 pub fn help() {
-    println!("{}v{} --- Astrox CLI", Fg(LightMagenta), get_version());
+    execute!(
+        stdout(),
+        SetForegroundColor(Color::Magenta),
+        Print(format!("v{} --- Astrox CLI\n", get_version())),
+        ResetColor
+    )
+    .unwrap();
     spacer();
-    println!("{}Command list:", Fg(LightBlue));
-    println!("{}--help [print this help ]", Fg(LightBlue));
-    println!(
-        "{}--sync-git-hooks [copy git_hooks folder contents to .git/hooks]",
-        Fg(LightBlue)
-    );
-
-    println!(
-        "{}--remove-git-hooks [remove hooks from .git/hooks folder]",
-        Fg(LightBlue)
-    );
-
-    println!(
-        "{}--build [build production bundle for frontend and backend]",
-        Fg(LightBlue)
-    );
-
-    println!(
-        "{}--serve [start the production server with the frontend build]",
-        Fg(LightBlue)
-    );
-
-    println!("{}--test [run the tests]", Fg(LightBlue));
-
-    println!(
-        "{}--create-toml [create a new Astrox.toml file]",
-        Fg(LightBlue)
-    );
-    println!(
-        "{}--interactive [start the interactive mode]",
-        Fg(LightBlue)
-    );
-    println!("{}--system-checks [run the system checks]", Fg(LightBlue));
-
+    execute!(
+        stdout(),
+        SetForegroundColor(Color::Blue),
+        Print("Command list:\n"),
+        Print("--help [print this help ]\n"),
+        Print("--sync-git-hooks [copy git_hooks folder contents to .git/hooks]\n"),
+        Print("--remove-git-hooks [remove hooks from .git/hooks folder]\n"),
+        Print("--build [build production bundle for frontend and backend]\n"),
+        Print("--serve [start the production server with the frontend build]\n"),
+        Print("--test [run the tests]\n"),
+        Print("--create-toml [create a new Astrox.toml file]\n"),
+        Print("--interactive [start the interactive mode]\n"),
+        Print("--system-checks [run the system checks]\n"),
+        ResetColor
+    )
+    .unwrap();
     spacer();
-
-    println!("{}Cli arguments:", Fg(LightBlue));
-    println!("{}--host=127.0.0.1 [ip address]", Fg(LightBlue));
-    println!("{}--port=8080 [actix port number]", Fg(LightBlue));
-    println!("{}--env=prod / dev [environment]", Fg(LightBlue));
-    println!(
-        "{}--astro-port=4321 [astro development port number]",
-        Fg(LightBlue)
-    );
-
-    println!(
-        "{}--prod-astro-build=true / false [Build astro during cli prod start]",
-        Fg(LightBlue)
-    );
+    execute!(
+        stdout(),
+        SetForegroundColor(Color::Blue),
+        Print("Cli arguments:\n"),
+        Print("--host=127.0.0.1 [ip address]\n"),
+        Print("--port=8080 [actix port number]\n"),
+        Print("--env=prod / dev [environment]\n"),
+        Print("--astro-port=4321 [astro development port number]\n"),
+        Print("--prod-astro-build=true / false [Build astro during cli prod start]\n"),
+        ResetColor
+    )
+    .unwrap();
 }
 
 #[cfg(test)]
