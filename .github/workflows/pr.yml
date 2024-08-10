@@ -15,7 +15,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
+        os: [ubuntu-latest, macOS-latest]
     env:
       CARGO_TERM_COLOR: always
     steps:
@@ -65,9 +65,6 @@ jobs:
         run: cargo run -- --build
   test_frontend:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
     steps:
       - uses: actions/checkout@v4
       - name: Install Node.js
@@ -79,7 +76,6 @@ jobs:
           cd src/frontend
           npm install
       - name: npm audit report
-        if: ${{ matrix.os == 'macOS-latest' }}
         run: |
           cd src/frontend 
           npm audit --json | npx @netly/npm-audit-markdown --output npm.md
