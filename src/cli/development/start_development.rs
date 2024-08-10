@@ -121,10 +121,21 @@ pub fn start_development(config: Config) {
 
         if s.contains("ready") {
             success("Astro is ready, opening the browser");
-            Command::new("open")
+
+            let browser = Command::new("open")
                 .arg(format!("http://localhost:{}", astro_port))
-                .spawn()
-                .expect("Failed to open the browser");
+                .spawn();
+
+            match browser {
+                Ok(_) => break,
+                Err(err) => {
+                    println!("Failed to execute command: {}", err);
+                    println!("Are You a Ci Secret Agent ?");
+
+                    // Handle the error here
+                }
+            }
+
             break;
         }
     }
