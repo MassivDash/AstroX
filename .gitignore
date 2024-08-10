@@ -4,7 +4,10 @@
 syncDevil.sh
 .env
 lcov.info
-*/coverage/*
-*/coverage
+src/frontend/coverage
+src/backend/coverage
 coverage
 Astrox-test.toml
+Cargo.lock
+src/backend/Cargo.lock
+
