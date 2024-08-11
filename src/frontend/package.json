@@ -12,8 +12,8 @@
     "coverage": "vitest run --coverage",
     "lint:all": "prettier --write  \"**/*.{js,jsx,ts,tsx,md,mdx,astro,svelte}\" && eslint --fix \"src/**/*.{js,ts,jsx,tsx,astro,svelte}\"",
     "lint:staged": "npm run lint:staged::prettier && npm run lint:staged::eslint",
-    "lint:staged::prettier": "git diff --cached --name-only | sed 's/src\\/frontend\\///' | grep -E \"\\.(js|jsx|ts|tsx|md|mdx|astro|svelte)$\" | xargs -r prettier --write",
-    "lint:staged::eslint": "git diff --cached --name-only | sed 's/src\\/frontend\\///' | grep -E \"\\.(js|ts|jsx|tsx|astro|svelte)$\" | xargs -r eslint --fix"
+    "lint:staged::prettier": "git diff --cached --name-only --diff-filter=ACM | sed 's/src\\/frontend\\///' | grep -E \"\\.(js|jsx|ts|tsx|md|mdx|astro|svelte)$\" | xargs -r prettier --write",
+    "lint:staged::eslint": "git diff --cached --name-only --diff-filter=ACM | sed 's/src\\/frontend\\///' | grep -E \"\\.(js|ts|jsx|tsx|astro|svelte)$\" | xargs -r eslint --fix"
   },
   "dependencies": {
     "@astrojs/check": "^0.9.2",

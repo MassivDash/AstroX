@@ -2,10 +2,7 @@ use actix_session::Session;
 use actix_web::HttpResponse;
 
 pub fn validate_session(session: &Session) -> Result<i64, HttpResponse> {
-    println!("session: {:?}", session.entries());
     let user_id: Option<i64> = session.get("user_id").unwrap_or(None);
-    println!("user_id: {:?}", user_id);
-
     match user_id {
         Some(id) => {
             // keep the user's session alive
@@ -13,5 +10,68 @@ pub fn validate_session(session: &Session) -> Result<i64, HttpResponse> {
             Ok(id)
         }
         None => Err(HttpResponse::Unauthorized().json("Unauthorized")),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+
+    use super::*;
+    use crate::session::flash_messages::set_up_flash_messages;
+    use crate::session::session_middleware::session_middleware;
+    use actix_session::Session;
+    use actix_web::{test, web, App, Responder};
+
+    async fn manual_error(session: Session) -> impl Responder {
+        let auth = validate_session(&session);
+
+        if auth.is_ok() {
+            HttpResponse::Ok().body("Hey there!")
+        } else {
+            HttpResponse::InternalServerError().json("Internal Server Error")
+        }
+    }
+
+    async fn manual_success(session: Session) -> impl Responder {
+        let _ = session.insert("user_id", 41);
+        let auth = validate_session(&session);
+
+        if auth.is_ok() {
+            HttpResponse::Ok().body("Hey there!")
+        } else {
+            HttpResponse::InternalServerError().json("Internal Server Error")
+        }
+    }
+
+    #[actix_rt::test]
+    async fn test_validate_session_error() {
+        let mut app = test::init_service(
+            App::new()
+                .route("/test", web::get().to(manual_error))
+                .wrap(set_up_flash_messages())
+                .wrap(session_middleware()),
+        )
+        .await;
+
+        let req = test::TestRequest::get().uri("/test").to_request();
+
+        let resp_m = test::call_service(&mut app, req).await;
+        assert!(resp_m.status().is_server_error())
+    }
+
+    #[test]
+    async fn test_validate_session() {
+        let mut app = test::init_service(
+            App::new()
+                .route("/test", web::get().to(manual_success))
+                .wrap(set_up_flash_messages())
+                .wrap(session_middleware()),
+        )
+        .await;
+
+        let req = test::TestRequest::get().uri("/test").to_request();
+
+        let resp_m = test::call_service(&mut app, req).await;
+        assert!(resp_m.status().is_success())
     }
 }

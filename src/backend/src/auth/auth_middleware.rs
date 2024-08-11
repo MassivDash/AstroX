@@ -63,6 +63,7 @@ where
 
     fn call(&self, req: ServiceRequest) -> Self::Future {
         let session: Session = req.get_session();
+        println!("{:?}", session.entries());
         let auth = validate_session(&session);
         let routes: Vec<String> = self.routes.iter().map(|s| s.to_string()).collect();
         println!(
@@ -136,10 +137,19 @@ fn match_glob_patterns(patterns: Vec<String>, path: &str) -> bool {
 
 #[cfg(test)]
 mod tests {
+    use std::env;
+
     use super::*;
+    use crate::auth::login::{login, FormData};
+    use crate::cors::get_cors_options::get_cors_options;
+    use crate::session::flash_messages::set_up_flash_messages;
+    use crate::session::session_middleware::session_middleware;
+    use actix_web::middleware::{NormalizePath, TrailingSlash};
+    use actix_web::web::Form;
+    use actix_web::{test, web, App, Responder};
 
     #[test]
-    fn test_match_glob_patterns() {
+    async fn test_match_glob_patterns() {
         // Test matching pattern
         let patterns = vec!["/auth/*".to_string(), "/posts/*".to_string()];
         assert_eq!(match_glob_patterns(patterns.clone(), "/auth/auth"), true);
@@ -170,5 +180,99 @@ mod tests {
         // Test invalid glob pattern
         let patterns = vec!["[".to_string(), "/posts/*".to_string()];
         assert!(std::panic::catch_unwind(|| match_glob_patterns(patterns, "/users/123")).is_err());
+    }
+
+    async fn test_route() -> impl Responder {
+        HttpResponse::Ok().body("Hey there!")
+    }
+
+    #[actix_rt::test]
+    async fn test_middleware_protected() {
+        let routes = vec!["/test/*".to_string()];
+
+        let mut app = test::init_service(
+            App::new()
+                .route("/test/test", web::get().to(test_route))
+                .wrap(set_up_flash_messages())
+                .wrap(session_middleware())
+                .wrap(Authentication { routes: routes }),
+        )
+        .await;
+
+        let req = test::TestRequest::get().uri("/test/test").to_request();
+        let resp = test::call_service(&mut app, req).await;
+        assert!(resp.status().is_client_error());
+    }
+
+    #[actix_rt::test]
+    async fn test_middleware_passthrough() {
+        let routes = vec!["/test/*".to_string()];
+
+        let mut app = test::init_service(
+            App::new()
+                .route("/notProtected", web::get().to(test_route))
+                .wrap(set_up_flash_messages())
+                .wrap(session_middleware())
+                .wrap(Authentication { routes: routes })
+                .wrap(NormalizePath::new(TrailingSlash::Trim)),
+        )
+        .await;
+
+        let req = test::TestRequest::get().uri("/notProtected").to_request();
+        let resp = test::call_service(&mut app, req).await;
+        assert!(resp.status().is_success());
+    }
+    #[actix_rt::test]
+    async fn test_middleware_success() {
+        let env = "prod".to_string();
+        let routes = vec!["/test/*".to_string()];
+        let cors = get_cors_options(env, String::from("https://localhost"));
+        let app = test::init_service(
+            App::new()
+                .route("/login", web::post().to(login))
+                .route("/test/test", web::get().to(test_route))
+                .wrap(cors)
+                .wrap(Authentication {
+                    routes: routes.clone(),
+                })
+                .wrap(set_up_flash_messages())
+                .wrap(session_middleware())
+                .wrap(NormalizePath::new(TrailingSlash::Trim)),
+        )
+        .await;
+
+        env::set_var("USERNAME", "test_user");
+        env::set_var("PASSWORD", "test_password");
+
+        let form_data = FormData {
+            username: String::from("test_user"),
+            password: String::from("test_password"),
+        };
+
+        let form = Form(form_data);
+
+        let req = test::TestRequest::post()
+            .set_form(form)
+            .uri("/login")
+            .to_request();
+
+        let resp = test::call_service(&app, req).await;
+        assert!(resp.status().is_redirection());
+
+        let session_cookie = resp
+            .response()
+            .cookies()
+            .find(|x| {
+                let name = x.name();
+                name == "astroX"
+            })
+            .unwrap();
+        let req2 = test::TestRequest::get()
+            .uri("/test/test")
+            .cookie(session_cookie)
+            .to_request();
+        let resp2 = test::call_service(&app, req2).await;
+        println!("{:?}", &resp2);
+        assert!(resp2.status().is_success())
     }
 }

@@ -6,10 +6,8 @@ import CliPage from '../pages/cli.astro'
 import ActixPage from '../pages/actix.astro'
 import ProtectedPage from '../pages/auth/protected.astro'
 import AstroPage from '../pages/astro.astro'
-import { getContainerRenderer } from '@astrojs/svelte'
 import ssr from '@astrojs/svelte/server.js'
 
-console.log(ssr)
 test('Index Page', async () => {
   const container = await AstroContainer.create()
   const result = await container.renderToString(IndexPage)
@@ -38,7 +36,8 @@ test('Astro Page', async () => {
   const container = await AstroContainer.create()
   container.addServerRenderer({
     name: '@astrojs/svelte',
-    renderer: ssr //wrong types, but this combo works
+    // @ts-expect-error wrong types, but this combo works
+    renderer: ssr
   })
   container.addClientRenderer({
     name: '@astrojs/svelte',

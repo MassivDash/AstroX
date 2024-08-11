@@ -64,3 +64,57 @@ pub fn session_middleware() -> SessionMiddleware<CookieSessionStore> {
         .cookie_same_site(SameSite::Lax)
         .build()
 }
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_user_authenticate_valid_credentials() {
+        dotenv().ok();
+        env::set_var("USERNAME", "test_user");
+        env::set_var("PASSWORD", "test_password");
+
+        let credentials = Credentials {
+            username: "test_user".to_string(),
+            password: "test_password".to_string(),
+        };
+
+        let result = User::authenticate(credentials);
+
+        assert!(result.is_ok());
+        let user = result.unwrap();
+        assert_eq!(user.id, 42);
+    }
+
+    #[test]
+    fn test_user_authenticate_invalid_username() {
+        dotenv().ok();
+        env::set_var("USERNAME", "test_user");
+        env::set_var("PASSWORD", "test_password");
+
+        let credentials = Credentials {
+            username: "wrong_user".to_string(),
+            password: "test_password".to_string(),
+        };
+
+        let result = User::authenticate(credentials);
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert_eq!(err.to_string(), "Invalid credentials.");
+    }
+
+    #[test]
+    fn test_user_authenticate_invalid_password() {
+        let credentials = Credentials {
+            username: "test_user".to_string(),
+            password: "wrong_password".to_string(),
+        };
+
+        let result = User::authenticate(credentials);
+
+        assert!(result.is_err());
+        let err = result.unwrap_err();
+        assert_eq!(err.to_string(), "Invalid credentials.");
+    }
+}

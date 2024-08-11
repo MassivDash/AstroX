@@ -1,3 +1,5 @@
+use std::env;
+
 use actix_files::{Files, NamedFile};
 use actix_rt::System;
 use actix_web::dev::{fn_service, ServiceRequest, ServiceResponse};
@@ -21,8 +23,7 @@ use crate::session::flash_messages::set_up_flash_messages;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    let args = collect_args();
-
+    let args = collect_args(env::args().collect());
     let host = args.host;
     let port = args.port.parse::<u16>().unwrap();
 
@@ -32,7 +33,7 @@ async fn main() -> std::io::Result<()> {
 
     let server = HttpServer::new(move || {
         let env = args.env.to_string();
-        let cors = get_cors_options(env);
+        let cors = get_cors_options(env, String::from("https://astrox.spaceout.pl"));
         let auth_routes: Vec<String> = vec!["/auth/*".to_string()];
         App::new()
             .route("/login", web::get().to(login_form))
