@@ -71,8 +71,8 @@ mod tests {
     #[test]
     fn test_user_authenticate_valid_credentials() {
         dotenv().ok();
-        env::set_var("USERNAME", "spaceghost");
-        env::set_var("PASSWORD", "1234");
+        env::set_var("USERNAME", "test_user");
+        env::set_var("PASSWORD", "test_password");
 
         let credentials = Credentials {
             username: "test_user".to_string(),
@@ -106,10 +106,6 @@ mod tests {
 
     #[test]
     fn test_user_authenticate_invalid_password() {
-        dotenv().ok();
-        env::set_var("USERNAME", "test_user");
-        env::set_var("PASSWORD", "test_password");
-
         let credentials = Credentials {
             username: "test_user".to_string(),
             password: "wrong_password".to_string(),
