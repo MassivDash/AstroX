@@ -1,5 +1,3 @@
-use std::env;
-
 /// Get the additional arguments from "cargo run"
 
 /// List of arguments
@@ -18,9 +16,7 @@ pub struct Args {
     pub env: String,
 }
 
-pub fn collect_args() -> Args {
-    let args: Vec<String> = env::args().collect();
-
+pub fn collect_args(args: Vec<String>) -> Args {
     let mut env = "dev";
     let mut host = "127.0.0.1";
     let mut port = 8080;
@@ -52,5 +48,33 @@ pub fn collect_args() -> Args {
         host: host.to_string(),
         port: port.to_string(),
         env: env.to_string(),
+    }
+}
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::env;
+
+    #[test]
+    fn test_collect_args_default() {
+        let args = collect_args(env::args().collect());
+
+        assert_eq!(args.host, "127.0.0.1");
+        assert_eq!(args.port, "8080");
+        assert_eq!(args.env, "dev");
+    }
+
+    #[test]
+    fn test_collect_prod_arg() {
+        let test_args = vec![
+            "--env=prod".to_string(),
+            "--port=4000".to_string(),
+            "--host=0.0.0.0".to_string(),
+        ];
+        let args = collect_args(test_args);
+
+        assert_eq!(args.host, "0.0.0.0");
+        assert_eq!(args.port, "4000");
+        assert_eq!(args.env, "prod");
     }
 }
