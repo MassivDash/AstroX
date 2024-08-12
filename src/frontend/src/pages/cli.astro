@@ -1,8 +1,164 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import Section from '../components/Section.astro'
 ---
 
-<Layout title='Cli'>
-  <h1>Runner</h1>
+<Layout title='AstroX Cli'>
+  <Section>
+    <h2>AstroX Cli</h2>
+  </Section>
+  <Section>
+    <h2>Full Developer Experience</h2>
+    <p>
+      The AstroX project provides a comprehensive developer experience that
+      covers the entire development workflow. It ensures a seamless and
+      efficient journey from project setup to building, testing, and serving the
+      project for release. This full developer experience includes:
+    </p>
+    <ul>
+      <li>
+        Interactive CLI with an intuitive and user-friendly command-line
+        interface, designed to optimize productivity and streamline the
+        development process.
+      </li>
+      <li>
+        Quick and easy installation process that takes care of system checks and
+        prerequisites, allowing developers to get started with AstroX
+        effortlessly.
+      </li>
+      <li>
+        Automatic port rotation for the frontend and backend during development,
+        ensuring a smooth and hassle-free experience while working on different
+        components of the project.
+      </li>
+      <li>
+        Integration with Git hooks, which enforce best practices for code
+        quality and maintain consistency throughout the project repository.
+      </li>
+      <li>
+        Effortless project management with functionalities to build packages,
+        serve the project for local development, and run tests to ensure code
+        integrity.
+      </li>
+      <li>
+        Support for executing the project with command-line arguments,
+        empowering developers to customize and fine-tune the project behavior to
+        their specific requirements.
+      </li>
+    </ul>
+
+    <h2>Professional Workflow</h2>
+    <p>
+      The AstroX project embraces a professional workflow, aligning with
+      industry-standard practices and enabling developers to deliver
+      high-quality software. It offers the following features to support a
+      professional development environment:
+    </p>
+    <ul>
+      <li>
+        Git hooks that improve code quality by enforcing commit message
+        standards through commitlint-rs and running tests and linters before
+        committing and pushing code.
+      </li>
+      <li>
+        Support for building production bundles for both the frontend and
+        backend, ensuring optimized and efficient code execution in a production
+        environment.
+      </li>
+      <li>
+        The ability to serve the bundled project, allowing developers to
+        simulate the production environment locally for thorough testing and
+        debugging.
+      </li>
+      <li>
+        Seamless integration with testing frameworks to execute comprehensive
+        tests and verify the correctness and reliability of the AstroX project.
+      </li>
+      <li>
+        The option to create a new configuration file (Astrox.toml) for easy
+        customization and project-specific settings.
+      </li>
+      <li>
+        An interactive mode that respects developer preferences and provides a
+        flexible and efficient way to navigate the CLI and execute actions.
+      </li>
+      <li>
+        Robust system checks to ensure that the AstroX project has all the
+        necessary dependencies in place for a smooth development experience.
+      </li>
+    </ul>
+  </Section>
+  <Section>
+    <h2>Git Hooks</h2>
+    <p>
+      The AstroX CLI includes pre-defined Git hooks that promote code quality
+      and enhance development workflows. These hooks provide:
+    </p>
+    <ul>
+      <li>Commit message validation with commitlint-rs</li>
+      <li>Pre-commit hook to test and lint staged files</li>
+      <li>Pre-push hook to run all tests</li>
+    </ul>
+
+    <h2>CLI Arguments</h2>
+    <p>
+      The AstroX CLI supports various command-line arguments to customize its
+      behavior and configuration:
+    </p>
+    <code>
+      Command list:<br />
+      --help [print this help]<br />
+      --sync-git-hooks [copy git_hooks folder contents to .git/hooks]<br />
+      --remove-git-hooks [remove hooks from .git/hooks folder]<br />
+      --build [build production bundle for frontend and backend]<br />
+      --serve [start the production server with the frontend build]<br />
+      --test [run the tests]<br />
+      --create-toml [create a new Astrox.toml file]<br />
+      --interactive [start the interactive mode]<br />
+      --system-checks [run the system checks] <br />
+      <br />
+      --- system args ---<br />
+      --host [set the host for the project]<br />
+      --port [set the port for the project]<br />
+      --env [set the environment for the project]<br />
+      --astro-port [set the port for the Astro server]<br />
+      --prod-astro-build [build the Astro project for production]
+    </code>
+  </Section>
 </Layout>
-```
+
+<style>
+  h2 {
+    color: #777;
+  }
+  ul {
+    list-style-type: disc;
+    margin-left: 30px;
+    margin-top: 10px;
+  }
+  p {
+    margin-top: 15px;
+    line-height: 1.5;
+  }
+
+  code {
+    display: block;
+    background: #24262e;
+    white-space: pre;
+    color: white;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: scroll;
+    max-width: 100%;
+    min-width: 100px;
+    padding: 20px;
+    border-radius: 5px;
+  }
+
+  .codeHolder {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    padding: 10px;
+    background-color: #f1f1f1;
+  }
+</style>
