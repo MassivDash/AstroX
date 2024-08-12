@@ -6,6 +6,8 @@ import CliPage from '../pages/cli.astro'
 import ActixPage from '../pages/actix.astro'
 import ProtectedPage from '../pages/auth/protected.astro'
 import AstroPage from '../pages/astro.astro'
+// @eslint-disable-next-line import/no-unresolved
+// @ts-expect-error wrong types, but this combo works
 import ssr from '@astrojs/svelte/server.js'
 
 test('Index Page', async () => {

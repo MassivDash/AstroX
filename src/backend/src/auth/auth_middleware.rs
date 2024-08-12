@@ -1,3 +1,24 @@
+/// This module contains the implementation of the `Authentication` middleware.
+///
+/// The `Authentication` middleware is responsible for authenticating incoming requests based on a set of routes.
+/// It checks if the requested path matches any of the specified routes and validates the session associated with the request.
+/// If the path matches and the session is valid, the request is passed to the underlying service.
+/// Otherwise, an unauthorized response is returned.
+///
+/// # Example
+///
+/// ```rust
+/// use actix_web::{web, App};
+/// use actix_session::CookieSession;
+/// use crate::auth::auth_middleware::Authentication;
+///
+/// let routes = vec!["/protected/*".to_string()];
+///
+/// let app = App::new()
+///     .wrap(CookieSession::signed(&[0; 32]).secure(false))
+///     .wrap(Authentication { routes })
+///     .service(web::resource("/protected/resource").to(handler));
+/// ```
 use actix_session::{Session, SessionExt};
 use pin_project::pin_project;
 use std::{

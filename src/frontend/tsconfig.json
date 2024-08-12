@@ -1,4 +1,3 @@
 {
-  "extends": "astro/tsconfigs/base",
-  "include": ["src/env.d.ts"]
+  "extends": "astro/tsconfigs/base"
 }
