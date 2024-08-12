@@ -1,6 +1,25 @@
 use actix_cors::Cors;
 use actix_web::http;
 
+/// Gets the CORS options based on the environment and allowed origin.
+///
+/// # Arguments
+///
+/// * `env` - A `String` representing the environment.
+/// * `allowed_origin` - A `String` representing the allowed origin.
+///
+/// # Returns
+///
+/// The `Cors` options based on the environment and allowed origin.
+///
+/// # Examples
+///
+/// ```
+/// let env = String::from("prod");
+/// let allowed_origin = String::from("https://astrox.spaceout.pl");
+/// let cors = get_cors_options(env, allowed_origin);
+/// ```
+
 pub fn get_cors_options(env: String, allowed_origin: String) -> Cors {
     if env == "prod" {
         Cors::default()

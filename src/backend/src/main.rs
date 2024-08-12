@@ -31,10 +31,14 @@ async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_web=info");
     env_logger::init();
 
+    // Set up the actix server
     let server = HttpServer::new(move || {
         let env = args.env.to_string();
-        let cors = get_cors_options(env, String::from("https://astrox.spaceout.pl"));
-        let auth_routes: Vec<String> = vec!["/auth/*".to_string()];
+        let cors = get_cors_options(env, String::from("https://astrox.spaceout.pl")); //Prod CORS URL address, for dev run the cors is set to *
+        let auth_routes: Vec<String> = vec!["/auth/*".to_string()]; // Routes that require authentication
+
+        // The services and wrappers are loaded from the last to first
+        // Ensure all the wrappers are after routes and handlers
         App::new()
             .route("/login", web::get().to(login_form))
             .route("/login", web::post().to(login))
