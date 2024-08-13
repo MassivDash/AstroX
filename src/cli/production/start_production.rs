@@ -7,8 +7,6 @@ use ctrlc::set_handler;
 use std::process::Command;
 use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
-use std::thread::sleep;
-use std::time::Duration;
 
 /// Start the production server
 /// The production server will start the actix backend server
@@ -54,25 +52,43 @@ pub fn start_production(config: Config) {
 
     step("Starting cargo backend production server");
 
-    let mut cargo_server = Command::new("cargo")
-        .current_dir("./src/backend")
-        .arg("run")
-        .arg("--release")
-        .arg("--")
-        .arg(format!("--host={}", config.host))
-        .arg(format!("--port={}", config.port.unwrap_or(8080)))
-        .arg(format!("--env={}", config.env))
-        .spawn()
-        .expect("Failed to start backend production server");
-
     while running.load(Ordering::SeqCst) {
-        sleep(Duration::from_millis(100));
-    }
-    step("Cleaning up orphaned processes");
+        let mut cargo_server = Command::new("cargo")
+            .current_dir("./src/backend")
+            .arg("run")
+            .arg("--release")
+            .arg("--")
+            .arg(format!("--host={}", config.host))
+            .arg(format!("--port={}", config.port.unwrap_or(8080)))
+            .arg(format!("--env={}", config.env))
+            .spawn()
+            .expect("Failed to start backend production server");
 
-    cargo_server
-        .kill()
-        .expect("Failed to kill cargo-watch process");
+        match cargo_server.wait() {
+            Ok(status) if status.success() => {
+                step("Backend production server exited successfully");
+                break;
+            }
+            Ok(status) => {
+                step(&format!(
+                    "Backend production server exited with status: {}",
+                    status
+                ));
+            }
+            Err(e) => {
+                step(&format!(
+                    "Failed to wait on backend production server: {}",
+                    e
+                ));
+            }
+        }
+
+        if running.load(Ordering::SeqCst) {
+            step("Restarting cargo backend production server");
+        }
+    }
+
+    step("Cleaning up orphaned processes");
 
     step("Exiting");
 
