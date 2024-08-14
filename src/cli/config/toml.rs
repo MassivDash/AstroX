@@ -31,6 +31,14 @@ pub fn read_toml(filename: &String) -> Result<Config, ()> {
 }
 
 pub fn create_toml_file(file_name: String) -> Result<Config, ()> {
+    // check if the toml.file exits abort if it does, panic and exit
+
+    if std::fs::metadata(&file_name).is_ok() {
+        error("Astrox.toml already exists");
+        spacer();
+        return Err(());
+    }
+
     let config = Config {
         host: "localhost".to_string(),
         port: Some(8080),
