@@ -10,6 +10,7 @@ pub enum CliCmds {
     Build,
     Test,
     Serve,
+    Coverage,
 }
 
 pub fn check_for_cli_cmds(args: &Vec<String>) -> CliCmds {
@@ -23,6 +24,7 @@ pub fn check_for_cli_cmds(args: &Vec<String>) -> CliCmds {
             s if s.starts_with("--remove-git-hooks") => return CliCmds::RemoveGitHooks,
             s if s.starts_with("--build") => return CliCmds::Build,
             s if s.starts_with("--test") => return CliCmds::Test,
+            s if s.starts_with("--coverage") => return CliCmds::Coverage,
             s if s.starts_with("--serve") => return CliCmds::Serve,
             _ => continue,
         }

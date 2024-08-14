@@ -5,7 +5,7 @@ use crate::cli::{
         utils::git_hooks::{copy_git_hooks, remove_git_hooks},
     },
     production::{build_production::execute_build, start_production::execute_serve},
-    tests::execute::execute_tests,
+    tests::execute::{execute_coverage, execute_tests},
     utils::terminal::{help, step},
 };
 
@@ -59,6 +59,11 @@ pub fn execute_cmd(args: &Vec<String>) {
             CliCmds::Serve => {
                 step("Serving the project");
                 execute_serve();
+                std::process::exit(0);
+            }
+            CliCmds::Coverage => {
+                step("Running rust the coverage");
+                execute_coverage();
                 std::process::exit(0);
             }
             CliCmds::Run => {}

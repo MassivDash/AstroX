@@ -87,12 +87,6 @@ where
         println!("{:?}", session.entries());
         let auth = validate_session(&session);
         let routes: Vec<String> = self.routes.iter().map(|s| s.to_string()).collect();
-        println!(
-            "{:?} {:?} {:?}",
-            match_glob_patterns(routes.clone(), req.path()),
-            req.path(),
-            routes.clone()
-        );
         if match_glob_patterns(routes, req.path()) {
             if auth.is_ok() {
                 Either::left(AuthenticationFuture {

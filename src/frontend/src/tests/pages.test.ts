@@ -25,7 +25,7 @@ test('404 Page', async () => {
 test('Cli Page', async () => {
   const container = await AstroContainer.create()
   const result = await container.renderToString(CliPage)
-  expect(result).toContain('Runner')
+  expect(result).toContain('AstroX Cli')
 })
 
 test('Actix Page', async () => {

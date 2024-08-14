@@ -37,7 +37,6 @@ pub fn get_config(args: &Vec<String>) -> Config {
     }
 
     config = collect_config_args(config, args);
-
     config
 }
 

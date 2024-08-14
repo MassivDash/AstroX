@@ -166,6 +166,7 @@ pub fn help() {
         Print("--build [build production bundle for frontend and backend]\n"),
         Print("--serve [start the production server with the frontend build]\n"),
         Print("--test [run the tests]\n"),
+        Print("--coverage [run the tests and generate coverage report]\n"),
         Print("--create-toml [create a new Astrox.toml file]\n"),
         Print("--interactive [start the interactive mode]\n"),
         Print("--system-checks [run the system checks]\n"),

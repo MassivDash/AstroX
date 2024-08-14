@@ -31,6 +31,7 @@ pub fn start_interactive(user_input: &dyn UserInput, command_executor: &dyn Comm
         "Build",
         "Serve",
         "Test",
+        "Coverage",
         "Create toml file",
         "Sync git hooks",
         "Remove git hooks",
@@ -48,6 +49,7 @@ pub fn start_interactive(user_input: &dyn UserInput, command_executor: &dyn Comm
         "Build" => "--build",
         "Serve" => "--serve",
         "Test" => "--test",
+        "Coverage" => "--coverage",
         _ => "--run",
     };
 

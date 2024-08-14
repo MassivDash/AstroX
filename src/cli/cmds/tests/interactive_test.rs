@@ -124,6 +124,17 @@ mod tests {
     }
 
     #[test]
+    fn test_start_interactive_coverage() {
+        let mock_input = MockUserInput::new(vec!["Coverage".to_string()]);
+        let mock_executor = MockCommandExecutor::new();
+        start_interactive(&mock_input, &mock_executor);
+
+        let executed_commands = mock_executor.executed_commands.borrow();
+        assert_eq!(executed_commands.len(), 1);
+        assert_eq!(executed_commands[0], "--coverage");
+    }
+
+    #[test]
     fn test_start_interactive_system_check() {
         let mock_input = MockUserInput::new(vec!["System check".to_string()]);
         let mock_executor = MockCommandExecutor::new();

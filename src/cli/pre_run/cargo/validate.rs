@@ -6,6 +6,8 @@ use crate::cli::utils::terminal::{error, spacer, step, success};
 use inquire::Confirm;
 use std::process::Command;
 
+use super::checks::is_llvm_cov_installed;
+
 pub fn validate_cargo_watch() {
     let is_cargo_watch_installed = is_cargo_watch_installed();
 
@@ -84,6 +86,45 @@ pub fn validate_commitlint_rs() {
     }
 }
 
+pub fn validate_llcov() {
+    let is_llvm_cov_installed = is_llvm_cov_installed();
+
+    match is_llvm_cov_installed {
+        true => success("llvm-cov is installed"),
+        false => {
+            error("llvm-cov is not installed");
+            spacer();
+            let ans = Confirm::new("Do you want to install llvm-cov for code coverage reporting ?")
+            .with_default(false)
+            .with_help_message("llvm-cov must be installed globally in order to produce rust coverage report, this is the recommended way to go")
+            .prompt();
+
+            match ans {
+                Ok(true) => {
+                    spacer();
+                    step("Installing llvm-cov ...");
+                    Command::new("cargo")
+                        .arg("install")
+                        .arg("llvm-cov")
+                        .spawn()
+                        .expect("Failed to install llvm-cov")
+                        .wait()
+                        .expect("Failed to install llvm-cov");
+                    spacer();
+                }
+                Ok(false) => {
+                    error("That's too bad, we have to quit now");
+                    panic!();
+                }
+                Err(_) => {
+                    error("Error with prompt, about to panic");
+                    panic!();
+                }
+            }
+        }
+    }
+}
+
 pub fn validate_rustc_version() {
     let is_rustc_higher_than_required = is_rustc_higher_than_required();
 
@@ -117,5 +158,11 @@ mod tests {
     fn test_validate_rustc_version_higher() {
         // Test when rustc version is higher than required
         assert_eq!(is_rustc_higher_than_required(), true);
+    }
+
+    #[test]
+    fn test_validate_llvm_cov_installed() {
+        // Test when llvm-cov is installed
+        assert_eq!(is_llvm_cov_installed(), true);
     }
 }
