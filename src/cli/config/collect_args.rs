@@ -1,5 +1,17 @@
-use super::get_config::Config;
-
+/// This module contains functions for collecting and parsing configuration arguments.
+///
+/// The `split_and_collect` function takes a string argument and splits it by the '=' character.
+/// It returns the second part of the split string as a `String`.
+///
+/// The `parse_to_bool` function takes a string argument and matches it against "true" and "false".
+/// It returns a boolean value based on the match.
+///
+/// The `collect_config_args` function takes a `Config` struct and a vector of string arguments.
+/// It iterates over the arguments and updates the corresponding fields in the `Config` struct based on the argument prefix.
+/// It uses the `split_and_collect` and `parse_to_bool` functions to extract and parse the values. It returns the updated `Config` struct.
+///
+/// The module also contains unit tests for the `split_and_collect`, `parse_to_bool`, and `collect_config_args` functions.
+///
 /// List of config arguments
 /// Bind actix server to a host, used for development and production
 /// --host=127.0.0.1
@@ -14,6 +26,7 @@ use super::get_config::Config;
 /// Set the public api url, this will be copied over to astro frontend and used for grabbing url to set api base
 /// During development this value is being copied into the frontend .env file for building the frontend
 /// --set-public-api=https://custom.api/api
+use super::get_config::Config;
 
 fn split_and_collect(arg: &str) -> String {
     let split: Vec<&str> = arg.split('=').collect();
