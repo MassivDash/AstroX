@@ -1,12 +1,12 @@
 # Astro X
 
-Rust is a programming language that offers many advantages for developing robust and scalable web applications. It has features such as memory safety, concurrency, and performance that make it suitable for building complex and high-demand systems. AstroX is a framework that leverages the power of RUST to create monolithic web applications that are easy to write, test, and deploy. Let me introduce you to the future of the web, AstroX and show how it can help you create modern web applications.
+Monolithic repo for developing full stack application, using rust and cargo tools as primary development environment.
 
+Frontend is a standalone astro.build application that will create the frontend bundle served by rust actix server.
 
 ## Rust + Astro web development boilerplate.
 
 To start developing with AstroX you will need rustc > 1.74 and node > 18.14. Clone the project and execute;
-
 
 ```
 cargo run
@@ -22,19 +22,19 @@ Rust written command line interface starts, serves and tests the astro x project
 
 #### Project Runner
 
-Handles installation and system checks, it will check the astroX system prerequisites and either help you install or provide you with necessary information  to start the project.
+Handles installation and system checks, it will check the astroX system prerequisites and either help you install or provide you with necessary information to start the project.
 
 - automatic development port rotation for frontend and backend
-- interactive mode, execute actions through cli gui  
+- interactive mode, execute actions through cli gui
 - git hooks integration
 - build the packages
-- serve the bundle
+- serve the bundle (with auto restart)
 - test the project
-- execute the project with cmd line arguments 
+- execute the project with cmd line arguments
 
 #### Git hooks
 
-Pre defined git hooks for quality code writing 
+Pre defined git hooks for quality code writing
 
 - commit msg via commitlint-rs
 - pre-commit (test and lint staged files)
@@ -79,12 +79,10 @@ Rust based server from Actix framework.
 
 https://astro.build/
 
-Astro is a frontend framework that focuses on mainly on delivering html first, the fastest and most versitle of the frameworks allows to incorporate any of the major UI frameworks such as React, Svelte, Vue, Solid.js and others ...
+Astro is a frontend framework that focuses on mainly on delivering html first, the fastest and most versatile of the frameworks allows to incorporate any of the major UI frameworks such as React, Svelte, Vue, Solid.js and others ...
 
 The boilerplate provides and example of the Astro 4.0 transition capabilities.
 
-
-### Demo 
+### Demo
 
 https://astrox.spaceout.pl
-

@@ -1,7 +1,9 @@
 use crate::cli::utils::terminal::{error, spacer, step, success};
 
 use super::{
-    cargo::validate::{validate_cargo_watch, validate_commitlint_rs, validate_rustc_version},
+    cargo::validate::{
+        validate_cargo_watch, validate_commitlint_rs, validate_llcov, validate_rustc_version,
+    },
     npm::validate::{validate_frontend_project, validate_node},
 };
 
@@ -20,6 +22,7 @@ pub fn run_system_checks(env: &str) {
             validate_commitlint_rs();
             validate_node();
             validate_frontend_project();
+            validate_llcov();
         }
         "prod" => {
             validate_rustc_version();

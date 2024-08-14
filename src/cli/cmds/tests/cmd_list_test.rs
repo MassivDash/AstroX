@@ -57,6 +57,12 @@ mod tests {
     }
 
     #[test]
+    fn test_check_for_cli_cmds_coverage() {
+        let args = vec!["--coverage".to_string()];
+        assert_eq!(check_for_cli_cmds(&args), CliCmds::Coverage);
+    }
+
+    #[test]
     fn test_check_for_cli_cmds_run() {
         let args = vec!["--invalid-arg".to_string()];
         assert_eq!(check_for_cli_cmds(&args), CliCmds::Run);

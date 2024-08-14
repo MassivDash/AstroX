@@ -28,6 +28,21 @@ pub fn is_commitlint_rs_installed() -> bool {
     output_str.contains("commitlint-rs")
 }
 
+/// Check if llvm-cov is installed
+/// llvm-cov is required to generate the coverage report
+/// llvm-cov is used in the coverage command
+
+pub fn is_llvm_cov_installed() -> bool {
+    let output = Command::new("cargo")
+        .arg("llvm-cov")
+        .arg("--version")
+        .output()
+        .expect("Failed to execute command");
+
+    let output_str = String::from_utf8_lossy(&output.stdout);
+    output_str.contains("cargo-llvm-cov")
+}
+
 pub const REQUIRED_VERSION: &str = "1.74.0";
 
 pub fn is_rustc_higher_than_required() -> bool {
