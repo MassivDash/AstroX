@@ -1,6 +1,32 @@
-# Astro X
+<h1 align="center">Astro X  </h1>
+<p>
+  <img alt="Version" src="https://img.shields.io/badge/version-0.1.1-blue.svg?cacheSeconds=2592000" />
+  <a href="https://github.com/MassivDash/astrox" target="_blank">
+    <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
+  </a>
+  <a href="#" target="_blank">
+    <img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg" />
+  </a>
+  <a href="https://twitter.com/SpaceoutPl" target="_blank">
+    <img alt="Twitter: SpaceoutPl" src="https://img.shields.io/twitter/follow/SpaceoutPl.svg?style=social" />
+  </a>
+</p>
 
-Monolithic repo for developing full stack application, using rust and cargo tools as primary development environment.
+![CodeQL](https://github.com/MassivDash/ado-npmrc-ts-action/actions/workflows/codeql-analysis.yml/badge.svg)![CI](https://github.com/MassivDash/astrox/actions/workflows/ci.yml/badge.svg)![Compliation](https://github.com/MassivDash/astrox/actions/workflows/release.yml/badge.svg)!
+
+**Platforms**
+
+![windows](https://img.shields.io/badge/Platform-Windows-blue)
+![linux](https://img.shields.io/badge/Platform-Linux-blue)
+![macOs](https://img.shields.io/badge/Platform-MacOs-blue)
+
+█████ ███████ ████████ ██████ ██████ ██ ██
+██ ██ ██ ██ ██ ██ ██ ██ ██ ██  
+ ███████ ███████ ██ ██████ ██ ██ ███  
+ ██ ██ ██ ██ ██ ██ ██ ██ ██ ██  
+ ██ ██ ███████ ██ ██ ██ ██████ ██ ██
+
+## Monolithic repo for developing full stack application, using rust and cargo tools as primary development environment.
 
 Frontend is a standalone astro.build application that will create the frontend bundle served by rust actix server.
 
