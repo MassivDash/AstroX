@@ -12,7 +12,7 @@ use super::get_config::Config;
 /// Switch on / off the production build of the frontend during the production server start
 /// --prod-astro-build=true / false
 /// Set the public api url, this will be copied over to astro frontend and used for grabbing url to set api base
-/// During development set for default port
+/// During development this value is being copied into the frontend .env file for building the frontend
 /// --set-public-api=https://custom.api/api
 
 fn split_and_collect(arg: &str) -> String {
