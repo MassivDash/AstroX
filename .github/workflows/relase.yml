@@ -62,8 +62,7 @@ jobs:
       - name: Run Project Build
         run: cargo run -- --build --prod-astro-build=true
       - name: Package Artifacts
-        - name: Package Artifacts
-          run: |
+        run: |
             zip -r artifacts.zip .
             mkdir -p artifacts
             mv artifacts.zip artifacts/
