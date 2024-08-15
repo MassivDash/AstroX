@@ -155,10 +155,10 @@ mod tests {
     use std::env;
 
     use super::*;
-    use crate::auth::login::{login, FormData};
     use crate::cors::get_cors_options::get_cors_options;
     use crate::session::flash_messages::set_up_flash_messages;
     use crate::session::session_middleware::session_middleware;
+    use crate::ssr_routes::post_login::{post_login, FormData};
     use actix_web::middleware::{NormalizePath, TrailingSlash};
     use actix_web::web::Form;
     use actix_web::{test, web, App, Responder};
@@ -244,7 +244,7 @@ mod tests {
         let cors = get_cors_options(env, String::from("https://localhost"));
         let app = test::init_service(
             App::new()
-                .route("/login", web::post().to(login))
+                .route("/login", web::post().to(post_login))
                 .route("/test/test", web::get().to(test_route))
                 .wrap(cors)
                 .wrap(Authentication {
