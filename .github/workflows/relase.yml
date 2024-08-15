@@ -62,9 +62,11 @@ jobs:
       - name: Run Project Build
         run: cargo run -- --build --prod-astro-build=true
       - name: Package Artifacts
-        run: |
-          mkdir -p artifacts
-          cp -r . artifacts/
+        - name: Package Artifacts
+          run: |
+            zip -r artifacts.zip .
+            mkdir -p artifacts
+            mv artifacts.zip artifacts/
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:

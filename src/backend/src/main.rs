@@ -11,15 +11,17 @@ mod args;
 mod auth;
 mod cors;
 mod session;
+mod ssr_routes;
 
 use crate::api::hello::get::json_response_get;
 use crate::api::hello::post::json_response;
 use crate::api::space_x::get::json_get_space_x;
 use crate::args::collect_args::collect_args;
 use crate::auth::auth_middleware::Authentication;
-use crate::auth::login::{login, login_form};
 use crate::cors::get_cors_options::get_cors_options;
 use crate::session::flash_messages::set_up_flash_messages;
+use crate::ssr_routes::login::login_form;
+use crate::ssr_routes::post_login::post_login;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -41,7 +43,7 @@ async fn main() -> std::io::Result<()> {
         // Ensure all the wrappers are after routes and handlers
         App::new()
             .route("/login", web::get().to(login_form))
-            .route("/login", web::post().to(login))
+            .route("/login", web::post().to(post_login))
             .service(json_response)
             .service(json_response_get)
             .service(json_get_space_x)
