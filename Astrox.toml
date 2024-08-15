@@ -5,4 +5,4 @@ astro_port = 5431
 prod_astro_build = true
 
 [public_keys]
-public_api_url = "https://localhost:8000/api"
+public_api_url = "http://localhost:8080/api"
