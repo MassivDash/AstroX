@@ -63,16 +63,21 @@ jobs:
         run: cargo run -- --build --prod-astro-build=true
       - name: Package Artifacts
         run: |
+      - name: Package Artifacts
+        run: |
           if [[ "$RUNNER_OS" == "Linux" ]]; then
-          zip -r artifacts_linux.zip .
-          mkdir -p artifacts
-          mv artifacts_linux.zip artifacts/
+            zip -r artifacts_linux.zip .
+            mkdir -p artifacts
+            mv artifacts_linux.zip artifacts/
           elif [[ "$RUNNER_OS" == "macOS" ]]; then
-          zip -r artifacts_mac.zip .
-          mkdir -p artifacts
-          mv artifacts_mac.zip artifacts/
+            zip -r artifacts_mac.zip .
+            mkdir -p artifacts
+            mv artifacts_mac.zip artifacts/
           elif [[ "$RUNNER_OS" == "Windows" ]]; then
-          Compress-Archive -Path . -DestinationPath artifacts\artifacts_windows.zip
+            Compress-Archive -Path . -DestinationPath artifacts\artifacts_windows.zip
+            mkdir artifacts
+            copy artifacts_windows.zip artifacts\
+          fi
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
