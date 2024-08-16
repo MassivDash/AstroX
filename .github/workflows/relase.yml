@@ -73,7 +73,6 @@ jobs:
             zip -r artifacts_macos.zip .
             mkdir -p artifacts
             mv artifacts_macos.zip artifacts/
-            - name: Package Artifacts (Linux)
       - name: Package Artifacts (Windows)
         if: matrix.os == 'window-latest'
         run: |
