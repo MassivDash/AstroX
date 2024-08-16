@@ -106,6 +106,8 @@ mod tests {
 
     #[test]
     fn test_user_authenticate_invalid_password() {
+        env::set_var("USERNAME", "test_user");
+        env::set_var("PASSWORD", "test_password");
         let credentials = Credentials {
             username: "test_user".to_string(),
             password: "wrong_password".to_string(),
