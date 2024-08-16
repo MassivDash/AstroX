@@ -61,23 +61,25 @@ jobs:
           title-prefix: "Backend"
       - name: Run Project Build
         run: cargo run -- --build --prod-astro-build=true
-      - name: Package Artifacts
+      - name: Package Artifacts (Linux)
+        if: matrix.os == 'linux-latest'
         run: |
-      - name: Package Artifacts
-        run: |
-          if [[ "$RUNNER_OS" == "Linux" ]]; then
             zip -r artifacts_linux.zip .
             mkdir -p artifacts
             mv artifacts_linux.zip artifacts/
-          elif [[ "$RUNNER_OS" == "macOS" ]]; then
-            zip -r artifacts_mac.zip .
+      - name: Package Artifacts (Mac)
+        if: matrix.os == 'macOs-latest'
+        run: |
+            zip -r artifacts_macos.zip .
             mkdir -p artifacts
-            mv artifacts_mac.zip artifacts/
-          elif [[ "$RUNNER_OS" == "Windows" ]]; then
+            mv artifacts_macos.zip artifacts/
+            - name: Package Artifacts (Linux)
+      - name: Package Artifacts (Windows)
+        if: matrix.os == 'window-latest'
+        run: |
             Compress-Archive -Path . -DestinationPath artifacts\artifacts_windows.zip
             mkdir artifacts
             copy artifacts_windows.zip artifacts\
-          fi
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
