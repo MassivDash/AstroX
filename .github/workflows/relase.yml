@@ -95,22 +95,14 @@ jobs:
         with:
           name: build-artifacts
           path: artifacts/
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Release
+        uses: softprops/action-gh-release@v2
         with:
-          tag_name: v0.1.1.${{github.run_number}}
-          release_name: Release ${{ github.ref }}
+          generate_release_notes: true
           draft: false
-          prerelease: false
-      - name: Upload Release Assets
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: artifacts/
-          asset_name: build-artifacts.zip
-          asset_content_type: application/zip
+          prerelase: false
+          tag_name: v0.1.1.${{github.run_number}}
+          files: |
+            artifacts/arifacts_macos.zip
+            artifacts/arifacts_windows.zip
+            artifacts/arifacts_linux.zip
