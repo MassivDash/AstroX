@@ -9,6 +9,7 @@ pub struct Config {
     pub port: Option<u16>,
     pub env: String,
     pub astro_port: Option<u16>,
+    pub cors_url: String,
     pub prod_astro_build: bool,
     pub public_keys: PublicKeys,
 }
@@ -21,12 +22,16 @@ pub struct PublicKeys {
 pub fn get_config(args: &Vec<String>) -> Config {
     // create default config
 
+    let astro_port = 5432;
+    let cors_url = format!("http://localhost:{}", astro_port);
+
     let mut config: Config = Config {
         host: "localhost".to_string(),
         port: Some(8080),
         env: "dev".to_string(),
-        astro_port: Some(5432),
         prod_astro_build: false,
+        astro_port: Some(astro_port),
+        cors_url,
         public_keys: PublicKeys {
             public_api_url: "http://localhost:8080/api".to_string(),
         },

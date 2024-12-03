@@ -39,11 +39,15 @@ pub fn create_toml_file(file_name: String) -> Result<Config, ()> {
         return Err(());
     }
 
+    let astro_port = 5431;
+    let cors_url = format!("http://localhost:{}", astro_port);
+
     let config = Config {
         host: "localhost".to_string(),
         port: Some(8080),
         env: "dev".to_string(),
-        astro_port: Some(5431),
+        astro_port: Some(astro_port),
+        cors_url,
         prod_astro_build: true,
         public_keys: {
             let public_api_url = "http://localhost:8080/api".to_string();
@@ -94,6 +98,7 @@ mod tests {
             port: Some(8080),
             env: "dev".to_string(),
             astro_port: Some(5431),
+            cors_url: "https://astrox.spaceout.pl".to_string(),
             prod_astro_build: true,
             public_keys: {
                 let public_api_url = "http://localhost:8080/api".to_string();
@@ -117,6 +122,7 @@ mod tests {
         assert!(config.env == expected_config.env);
         assert!(config.astro_port == expected_config.astro_port);
         assert!(config.prod_astro_build == expected_config.prod_astro_build);
+        assert!(config.cors_url == expected_config.cors_url);
 
         // delete file after test completion
         remove_file(&file_name)

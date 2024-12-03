@@ -105,6 +105,7 @@ mod tests {
             port: None,
             astro_port: None,
             prod_astro_build: false,
+            cors_url: "".to_string(),
             public_keys: {
                 let public_api_url = "http://localhost:8080/api".to_string();
                 PublicKeys { public_api_url }
@@ -115,6 +116,7 @@ mod tests {
             "--env=prod".to_string(),
             "--host=127.0.0.1".to_string(),
             "--port=8080".to_string(),
+            "--cors_url=http://localhost:8080".to_string(),
             "--astro-port=4321".to_string(),
             "--prod-astro-build=true".to_string(),
             "--public-api-url=https://custom.api/api".to_string(),
@@ -125,6 +127,7 @@ mod tests {
             host: "127.0.0.1".to_string(),
             port: Some(8080),
             astro_port: Some(4321),
+            cors_url: "http://localhost:8080".to_string(),
             prod_astro_build: true,
             public_keys: {
                 let public_api_url = "https://custom.api/api".to_string();

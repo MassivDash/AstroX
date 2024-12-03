@@ -1,8 +1,9 @@
 host = "localhost"
 port = 8080
-env = "dev"
+env = "prod"
 astro_port = 5431
 prod_astro_build = true
+cors_url = "https://astrox.spaceout.pl"
 
 [public_keys]
-public_api_url = "http://localhost:8080/api"
+public_api_url = "https://astrox.spaceout.pl/api"

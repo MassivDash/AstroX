@@ -28,6 +28,7 @@ async fn main() -> std::io::Result<()> {
     let args = collect_args(env::args().collect());
     let host = args.host;
     let port = args.port.parse::<u16>().unwrap();
+    let cors_url = args.cors_url;
 
     // configure logging
     std::env::set_var("RUST_LOG", "actix_web=info");
@@ -36,12 +37,13 @@ async fn main() -> std::io::Result<()> {
     // Set up the actix server
     let server = HttpServer::new(move || {
         let env = args.env.to_string();
-        let cors = get_cors_options(env, String::from("https://astrox.spaceout.pl")); //Prod CORS URL address, for dev run the cors is set to *
+        let cors = get_cors_options(env, cors_url.clone()); //Prod CORS URL address, for dev run the cors is set to *
         let auth_routes: Vec<String> = vec!["/auth/*".to_string()]; // Routes that require authentication
 
         // The services and wrappers are loaded from the last to first
         // Ensure all the wrappers are after routes and handlers
         App::new()
+            .wrap(cors)
             .route("/login", web::get().to(login_form))
             .route("/login", web::post().to(post_login))
             .service(json_response)
@@ -58,7 +60,6 @@ async fn main() -> std::io::Result<()> {
                         Ok(ServiceResponse::new(req, res))
                     })),
             )
-            .wrap(cors)
             .wrap(Authentication {
                 routes: auth_routes,
             })

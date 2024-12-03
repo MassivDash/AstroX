@@ -105,7 +105,7 @@ pub fn validate_llcov() {
                     step("Installing llvm-cov ...");
                     Command::new("cargo")
                         .arg("install")
-                        .arg("llvm-cov")
+                        .arg("cargo-llvm-cov")
                         .spawn()
                         .expect("Failed to install llvm-cov")
                         .wait()

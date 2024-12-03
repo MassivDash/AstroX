@@ -61,6 +61,7 @@ pub fn start_production(config: Config) {
             .arg(format!("--host={}", config.host))
             .arg(format!("--port={}", config.port.unwrap_or(8080)))
             .arg(format!("--env={}", config.env))
+            .arg(format!("--cors_url={}", config.cors_url))
             .spawn()
             .expect("Failed to start backend production server");
 
