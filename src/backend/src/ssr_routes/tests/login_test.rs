@@ -3,10 +3,7 @@ mod tests {
     use crate::session::session_middleware::session_middleware;
     use crate::ssr_routes::post_login::{post_login, FormData};
     use crate::{session::flash_messages::set_up_flash_messages, ssr_routes::login::login_form};
-    use actix_web::cookie::Key;
     use actix_web::{test, web, App};
-    use actix_web_flash_messages::storage::CookieMessageStore;
-    use actix_web_flash_messages::FlashMessagesFramework;
     use std::env;
     use web::Form;
 
@@ -86,14 +83,9 @@ mod tests {
 
     #[actix_rt::test]
     async fn test_post_login_unexpected_error() {
-        let secret_key =
-            Key::from(b"0123456789012345678901234567890123456789012345678901234567890123456789");
-
-        let message_store = CookieMessageStore::builder(secret_key.clone()).build();
-
         let app = test::init_service(
             App::new()
-                .wrap(FlashMessagesFramework::builder(message_store).build())
+                .wrap(set_up_flash_messages())
                 .wrap(session_middleware())
                 .route("/login", web::post().to(post_login)),
         )

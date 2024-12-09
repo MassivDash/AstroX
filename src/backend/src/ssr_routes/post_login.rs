@@ -28,9 +28,10 @@ pub async fn post_login(
         Ok(user) => {
             println!("User authenticated: {:?}", user);
             session.renew();
-            session
-                .insert("user_id", user.id)
-                .map_err(|e| login_redirect(LoginError::UnexpectedError(e.into())))?;
+            session.insert("user_id", user.id).map_err(|e| {
+                let error_message = format!("Failed to insert user_id into session: {}", e);
+                login_redirect(LoginError::UnexpectedError(anyhow::anyhow!(error_message)))
+            })?;
 
             Ok(HttpResponse::SeeOther()
                 .insert_header((LOCATION, "/auth/auth"))
