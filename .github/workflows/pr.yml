@@ -54,7 +54,7 @@ jobs:
 
       - name: Report code coverage
         if: matrix.os == 'macOS-latest'
-        uses: zgosalvez/github-actions-report-lcov@v3
+        uses: zgosalvez/github-actions-report-lcov@4.1.20
         with:
           coverage-files: lcovBackend.info
           artifact-name: code-coverage-backend-report

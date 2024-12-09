@@ -52,7 +52,7 @@ jobs:
         run: cargo llvm-cov --all-features --workspace --lcov --output-path lcovBackend.info --manifest-path src/backend/Cargo.toml
       - name: Report code coverage
         if: matrix.os == 'macOS-latest'
-        uses: zgosalvez/github-actions-report-lcov@v3
+        uses: zgosalvez/github-actions-report-lcov@4.1.20
         with:
           coverage-files: lcovBackend.info
           artifact-name: code-coverage-backend-report
@@ -64,21 +64,21 @@ jobs:
       - name: Package Artifacts (Linux)
         if: matrix.os == 'linux-latest'
         run: |
-            zip -r artifacts_linux.zip .
-            mkdir -p artifacts
-            mv artifacts_linux.zip artifacts/
+          zip -r artifacts_linux.zip .
+          mkdir -p artifacts
+          mv artifacts_linux.zip artifacts/
       - name: Package Artifacts (Mac)
         if: matrix.os == 'macOs-latest'
         run: |
-            zip -r artifacts_macos.zip .
-            mkdir -p artifacts
-            mv artifacts_macos.zip artifacts/
+          zip -r artifacts_macos.zip .
+          mkdir -p artifacts
+          mv artifacts_macos.zip artifacts/
       - name: Package Artifacts (Windows)
         if: matrix.os == 'window-latest'
         run: |
-            Compress-Archive -Path . -DestinationPath artifacts\artifacts_windows.zip
-            mkdir artifacts
-            copy artifacts_windows.zip artifacts\
+          Compress-Archive -Path . -DestinationPath artifacts\artifacts_windows.zip
+          mkdir artifacts
+          copy artifacts_windows.zip artifacts\
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
         with:
