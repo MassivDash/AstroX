@@ -3,7 +3,10 @@ mod tests {
     use crate::session::session_middleware::session_middleware;
     use crate::ssr_routes::post_login::{post_login, FormData};
     use crate::{session::flash_messages::set_up_flash_messages, ssr_routes::login::login_form};
+    use actix_web::cookie::Key;
     use actix_web::{test, web, App};
+    use actix_web_flash_messages::storage::CookieMessageStore;
+    use actix_web_flash_messages::FlashMessagesFramework;
     use std::env;
     use web::Form;
 
@@ -79,7 +82,34 @@ mod tests {
         let req2 = test::TestRequest::get().uri("/login").to_request();
         let resp2 = test::call_service(&app, req2).await;
         assert!(resp2.status().is_success());
+    }
 
-        //TODO test the flash messages somehow
+    #[actix_rt::test]
+    async fn test_post_login_unexpected_error() {
+        let secret_key =
+            Key::from(b"0123456789012345678901234567890123456789012345678901234567890123456789");
+
+        let message_store = CookieMessageStore::builder(secret_key.clone()).build();
+
+        let app = test::init_service(
+            App::new()
+                .wrap(FlashMessagesFramework::builder(message_store).build())
+                .wrap(session_middleware())
+                .route("/login", web::post().to(post_login)),
+        )
+        .await;
+
+        // Simulate an unexpected error by providing invalid session data
+        let form_data = FormData {
+            username: "test_user".to_string(),
+            password: "test_password".to_string(),
+        };
+
+        let req = test::TestRequest::post()
+            .set_form(&form_data)
+            .uri("/login")
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+        assert!(resp.status().is_redirection());
     }
 }
