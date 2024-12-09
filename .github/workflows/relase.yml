@@ -101,7 +101,7 @@ jobs:
           generate_release_notes: true
           draft: false
           prerelase: false
-          tag_name: v0.1.1.${{github.run_number}}
+          tag_name: v0.1.2.${{github.run_number}}
           files: |
             artifacts/arifacts_macos.zip
             artifacts/arifacts_windows.zip
