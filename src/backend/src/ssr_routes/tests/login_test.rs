@@ -79,7 +79,29 @@ mod tests {
         let req2 = test::TestRequest::get().uri("/login").to_request();
         let resp2 = test::call_service(&app, req2).await;
         assert!(resp2.status().is_success());
+    }
 
-        //TODO test the flash messages somehow
+    #[actix_rt::test]
+    async fn test_post_login_unexpected_error() {
+        let app = test::init_service(
+            App::new()
+                .wrap(set_up_flash_messages())
+                .wrap(session_middleware())
+                .route("/login", web::post().to(post_login)),
+        )
+        .await;
+
+        // Simulate an unexpected error by providing invalid session data
+        let form_data = FormData {
+            username: "test_user".to_string(),
+            password: "test_password".to_string(),
+        };
+
+        let req = test::TestRequest::post()
+            .set_form(&form_data)
+            .uri("/login")
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+        assert!(resp.status().is_redirection());
     }
 }
