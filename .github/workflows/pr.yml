@@ -38,11 +38,11 @@ jobs:
         run: |
           cd src/frontend
           npm install
-      - name: Test cli
-        run: cargo llvm-cov --all-features --workspace --lcov --output-path lcovCli.info
+      - name: Test Cli (Astro_X_Runner)
+        run: cargo llvm-cov --all-features --workspace --lcov --output-path lcovCli.info --manifest-path src/Cargo.toml
       - name: Report code coverage
         if: matrix.os == 'macOS-latest'
-        uses: dethereum/github-actions-report-lcov@v1.0.0
+        uses: zgosalvez/github-actions-report-lcov@4.1.20
         with:
           coverage-files: lcovCli.info
           artifact-name: code-coverage-cli-report
