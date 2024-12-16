@@ -42,7 +42,7 @@ jobs:
         run: cargo llvm-cov --all-features --workspace --lcov --output-path lcovCli.info --manifest-path Cargo.toml
       - name: Report code coverage
         if: matrix.os == 'macOS-latest'
-        uses: zgosalvez/github-actions-report-lcov@4.1.21
+        uses: zgosalvez/github-actions-report-lcov@v4.1.21
         with:
           coverage-files: lcovCli.info
           artifact-name: code-coverage-cli-report
@@ -54,7 +54,7 @@ jobs:
 
       - name: Report code coverage
         if: matrix.os == 'macOS-latest'
-        uses: zgosalvez/github-actions-report-lcov@4.1.21
+        uses: zgosalvez/github-actions-report-lcov@v4.1.21
         with:
           coverage-files: lcovBackend.info
           artifact-name: code-coverage-backend-report
