@@ -1,6 +1,6 @@
 host = "localhost"
 port = 8080
-env = "prod"
+env = "dev"
 astro_port = 5431
 prod_astro_build = true
 cors_url = "https://astrox.spaceout.pl"

@@ -1,5 +1,5 @@
 ---
-import { ViewTransitions } from 'astro:transitions'
+import { ClientRouter } from 'astro:transitions'
 import Navbar from '../components/navbar/Navbar.astro'
 import Footer from '../components/Footer.astro'
 
@@ -25,7 +25,7 @@ const { title } = Astro.props
       href='https://fonts.googleapis.com/css2?family=Pacifico&display=swap'
       rel='stylesheet'
     />
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <body>
     <Navbar transition:persist />
