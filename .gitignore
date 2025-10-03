@@ -11,4 +11,5 @@ Astrox-test.toml
 Cargo.lock
 src/backend/Cargo.lock
 analysis.md
+logs
 
