@@ -1,15 +1,14 @@
 use actix_session::Session;
-use actix_web::HttpResponse;
 
-pub fn validate_session(session: &Session) -> Result<i64, HttpResponse> {
+pub fn validate_session(session: &Session) -> anyhow::Result<()> {
     let user_id: Option<i64> = session.get("user_id").unwrap_or(None);
     match user_id {
-        Some(id) => {
+        Some(_id) => {
             // keep the user's session alive
             session.renew();
-            Ok(id)
+            Ok(())
         }
-        None => Err(HttpResponse::Unauthorized().json("Unauthorized")),
+        None => Err(anyhow::anyhow!("Not authenticated")),
     }
 }
 
@@ -20,6 +19,8 @@ mod tests {
     use crate::session::flash_messages::set_up_flash_messages;
     use crate::session::session_middleware::session_middleware;
     use actix_session::Session;
+    use actix_web::HttpResponse;
+
     use actix_web::{test, web, App, Responder};
 
     async fn manual_error(session: Session) -> impl Responder {
