@@ -12,7 +12,7 @@
 </h2> </div> </div>
 
 <p>
-  <img alt="Version" src="https://img.shields.io/badge/version-0.1.2-blue.svg?cacheSeconds=2592000" />
+  <img alt="Version" src="https://img.shields.io/badge/version-0.1.3-blue.svg?cacheSeconds=2592000" />
   <a href="https://github.com/MassivDash/astrox" target="_blank">
     <img alt="Documentation" src="https://img.shields.io/badge/documentation-yes-brightgreen.svg" />
   </a>
@@ -38,7 +38,7 @@ Frontend is a standalone astro.build application that will create the frontend b
 
 ## Rust + Astro web development boilerplate.
 
-To start developing with AstroX you will need rustc > 1.74 and node > 18.14. Clone the project and execute;
+To start developing with AstroX you will need rustc > 1.74 and node > 20.9.0 Clone the project and execute;
 
 ```
 cargo run
@@ -95,6 +95,7 @@ Cli arguments:
 --astro-port=4321 [astro development port number]
 --prod-astro-build=true / false [Build astro during cli prod start]
 --set-public-api=https://custom.api/api [cli to astro env creation, used for static server url call building]
+--cookie-domain=spaceout.pl [set domain for cookie enabled session]
 ```
 
 ### Actix backend
@@ -106,12 +107,21 @@ Rust based server from Actix framework.
 - serve static astro x files
 - 3rd api call example
 - logging
-- graphql [coming soon]
-- ssr [coming soon]
+- ssr login page with session
 
 ### Astro
 
 https://astro.build/
+
+**Dev Helpers**
+
+![eslint](https://img.shields.io/badge/ESLint-9.36.0-purple?logo=eslint)
+![prettier](https://img.shields.io/badge/Prettier-3.6.2-blueviolet?logo=prettier)
+![vitest](https://img.shields.io/badge/Vitest-3.2.4-yellowgreen?logo=vitest)
+![testing-library](https://img.shields.io/badge/Testing_Library-6.9.1-red?logo=testinglibrary)
+![typescript](https://img.shields.io/badge/TypeScript-5.9.3-3178c6?logo=typescript)
+![svelte](https://img.shields.io/badge/Svelte-5.39.8-orange?logo=svelte)
+![react](https://img.shields.io/badge/React-19.2.0-61dafb?logo=react)
 
 Astro is a frontend framework that focuses on mainly on delivering html first, the fastest and most versatile of the frameworks allows to incorporate any of the major UI frameworks such as React, Svelte, Vue, Solid.js and others ...
 
