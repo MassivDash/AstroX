@@ -1,7 +1,5 @@
 import { experimental_AstroContainer as AstroContainer } from 'astro/container'
 import { expect, test } from 'vitest'
-// @eslint-disable-next-line import/no-unresolved
-// @ts-expect-error wrong types, but this combo works
 import ssr from '@astrojs/svelte/server.js'
 
 import SpaceX from './spacex.svelte'
@@ -11,7 +9,6 @@ test('Svelte Island', async () => {
   const container = await AstroContainer.create()
   container.addServerRenderer({
     name: '@astrojs/svelte',
-    // @ts-expect-error wrong types, but this combo works
     renderer: ssr
   })
   container.addClientRenderer({

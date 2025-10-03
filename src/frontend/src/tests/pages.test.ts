@@ -6,10 +6,9 @@ import CliPage from '../pages/cli.astro'
 import ActixPage from '../pages/actix.astro'
 import ProtectedPage from '../pages/auth/protected.astro'
 import AstroPage from '../pages/astro.astro'
-// @eslint-disable-next-line import/no-unresolved
-
 import ssr from '@astrojs/svelte/server.js'
 import ssrReact from '@astrojs/react/server.js'
+
 test('Index Page', async () => {
   const container = await AstroContainer.create()
   const result = await container.renderToString(IndexPage)
