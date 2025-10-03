@@ -28,7 +28,7 @@ jobs:
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: "20"
+          node-version: "24"
       - name: Install Frontend dependencies
         run: |
           cd src/frontend
@@ -80,7 +80,7 @@ jobs:
           mkdir artifacts
           copy artifacts_windows.zip artifacts\
       - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: build-artifacts
           path: artifacts/
@@ -100,9 +100,8 @@ jobs:
         with:
           generate_release_notes: true
           draft: false
-          prerelase: false
           tag_name: v0.1.2.${{github.run_number}}
           files: |
-            artifacts/arifacts_macos.zip
-            artifacts/arifacts_windows.zip
-            artifacts/arifacts_linux.zip
+            artifacts/artifacts_macos.zip
+            artifacts/artifacts_windows.zip
+            artifacts/artifacts_linux.zip
