@@ -19,7 +19,6 @@ use actix_web::http;
 /// let allowed_origin = String::from("https://astrox.spaceout.pl");
 /// let cors = get_cors_options(env, allowed_origin);
 /// ```
-
 pub fn get_cors_options(env: String, allowed_origin: String) -> Cors {
     if env == "prod" {
         Cors::default()
