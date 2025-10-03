@@ -14,4 +14,3 @@ fi
 echo -e "\e[42m\e[97m"
 echo "----- Done -----"
 echo " "
-echo -e "\e[0m"

@@ -1,11 +1,11 @@
 // @ts-check
-import js from '@eslint/js';
-import typescript from '@typescript-eslint/eslint-plugin';
-import typescriptParser from '@typescript-eslint/parser';
-import astro from 'eslint-plugin-astro';
-import svelte from 'eslint-plugin-svelte';
-import svelteParser from 'svelte-eslint-parser';
-import astroParser from 'astro-eslint-parser';
+import js from '@eslint/js'
+import typescript from '@typescript-eslint/eslint-plugin'
+import typescriptParser from '@typescript-eslint/parser'
+import astro from 'eslint-plugin-astro'
+import svelte from 'eslint-plugin-svelte'
+import svelteParser from 'svelte-eslint-parser'
+import astroParser from 'astro-eslint-parser'
 
 export default [
   // Base ESLint recommended rules
@@ -120,11 +120,6 @@ export default [
 
   // Ignore patterns (replaces .eslintignore)
   {
-    ignores: [
-      'env.d.ts',
-      'dist/**',
-      'node_modules/**',
-      '.astro/**'
-    ]
+    ignores: ['env.d.ts', 'dist/**', 'node_modules/**', '.astro/**']
   }
-];
+]
