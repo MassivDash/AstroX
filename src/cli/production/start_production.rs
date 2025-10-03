@@ -11,7 +11,6 @@ use std::sync::Arc;
 /// Start the production server
 /// The production server will start the actix backend server
 /// The production server will also bundle the frontend
-
 pub fn start_production(config: Config) {
     // Bundle the frontend and wait for the process to finish
     // if the astro build is set to true
@@ -53,7 +52,8 @@ pub fn start_production(config: Config) {
     step("Starting cargo backend production server");
 
     while running.load(Ordering::SeqCst) {
-        let mut cargo_server = Command::new("cargo")
+        let mut cargo_command = Command::new("cargo");
+        cargo_command
             .current_dir("./src/backend")
             .arg("run")
             .arg("--release")
@@ -61,7 +61,14 @@ pub fn start_production(config: Config) {
             .arg(format!("--host={}", config.host))
             .arg(format!("--port={}", config.port.unwrap_or(8080)))
             .arg(format!("--env={}", config.env))
-            .arg(format!("--cors_url={}", config.cors_url))
+            .arg(format!("--cors_url={}", config.cors_url));
+
+        // Add cookie_domain argument if it exists
+        if let Some(ref domain) = config.cookie_domain {
+            cargo_command.arg(format!("--cookie_domain={}", domain));
+        }
+
+        let mut cargo_server = cargo_command
             .spawn()
             .expect("Failed to start backend production server");
 

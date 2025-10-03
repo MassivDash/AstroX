@@ -50,7 +50,7 @@ mod tests {
             App::new()
                 .route("/test", web::get().to(manual_error))
                 .wrap(set_up_flash_messages())
-                .wrap(session_middleware()),
+                .wrap(session_middleware(None)),
         )
         .await;
 
@@ -66,7 +66,7 @@ mod tests {
             App::new()
                 .route("/test", web::get().to(manual_success))
                 .wrap(set_up_flash_messages())
-                .wrap(session_middleware()),
+                .wrap(session_middleware(None)),
         )
         .await;
 

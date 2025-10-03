@@ -31,7 +31,6 @@ pub fn is_commitlint_rs_installed() -> bool {
 /// Check if llvm-cov is installed
 /// llvm-cov is required to generate the coverage report
 /// llvm-cov is used in the coverage command
-
 pub fn is_llvm_cov_installed() -> bool {
     let output = Command::new("cargo")
         .arg("llvm-cov")

@@ -84,7 +84,6 @@ where
 
     fn call(&self, req: ServiceRequest) -> Self::Future {
         let session: Session = req.get_session();
-        println!("{:?}", session.entries());
         let auth = validate_session(&session);
         let routes: Vec<String> = self.routes.iter().map(|s| s.to_string()).collect();
         if match_glob_patterns(routes, req.path()) {
@@ -209,7 +208,7 @@ mod tests {
             App::new()
                 .route("/test/test", web::get().to(test_route))
                 .wrap(set_up_flash_messages())
-                .wrap(session_middleware())
+                .wrap(session_middleware(None))
                 .wrap(Authentication { routes: routes }),
         )
         .await;
@@ -227,7 +226,7 @@ mod tests {
             App::new()
                 .route("/notProtected", web::get().to(test_route))
                 .wrap(set_up_flash_messages())
-                .wrap(session_middleware())
+                .wrap(session_middleware(None))
                 .wrap(Authentication { routes: routes })
                 .wrap(NormalizePath::new(TrailingSlash::Trim)),
         )
@@ -251,7 +250,7 @@ mod tests {
                     routes: routes.clone(),
                 })
                 .wrap(set_up_flash_messages())
-                .wrap(session_middleware())
+                .wrap(session_middleware(None))
                 .wrap(NormalizePath::new(TrailingSlash::Trim)),
         )
         .await;

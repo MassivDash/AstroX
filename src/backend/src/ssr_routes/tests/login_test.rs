@@ -29,7 +29,7 @@ mod tests {
             App::new()
                 .route("/login", web::post().to(post_login))
                 .wrap(set_up_flash_messages())
-                .wrap(session_middleware()),
+                .wrap(session_middleware(None)),
         )
         .await;
 
@@ -58,7 +58,7 @@ mod tests {
                 .route("/login", web::post().to(post_login))
                 .route("/login", web::get().to(login_form))
                 .wrap(set_up_flash_messages())
-                .wrap(session_middleware()),
+                .wrap(session_middleware(None)),
         )
         .await;
 
@@ -86,7 +86,7 @@ mod tests {
         let app = test::init_service(
             App::new()
                 .wrap(set_up_flash_messages())
-                .wrap(session_middleware())
+                .wrap(session_middleware(None))
                 .route("/login", web::post().to(post_login)),
         )
         .await;
