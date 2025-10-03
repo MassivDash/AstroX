@@ -7,7 +7,7 @@ import ActixPage from '../pages/actix.astro'
 import ProtectedPage from '../pages/auth/protected.astro'
 import AstroPage from '../pages/astro.astro'
 // @eslint-disable-next-line import/no-unresolved
-// @ts-expect-error wrong types, but this combo works
+
 import ssr from '@astrojs/svelte/server.js'
 import ssrReact from '@astrojs/react/server.js'
 test('Index Page', async () => {
@@ -38,7 +38,6 @@ test('Astro Page', async () => {
   const container = await AstroContainer.create()
   container.addServerRenderer({
     name: '@astrojs/svelte',
-    // @ts-expect-error wrong types, but this combo works
     renderer: ssr
   })
   container.addClientRenderer({

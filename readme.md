@@ -115,7 +115,7 @@ https://astro.build/
 
 Astro is a frontend framework that focuses on mainly on delivering html first, the fastest and most versatile of the frameworks allows to incorporate any of the major UI frameworks such as React, Svelte, Vue, Solid.js and others ...
 
-The boilerplate provides and example of the Astro 4.0 transition capabilities.
+The boilerplate provides and example of the Astro 5.0 transition capabilities.
 
 ## Project Structure
 
