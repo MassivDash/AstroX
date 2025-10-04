@@ -30,7 +30,7 @@ test('Cli Page', async () => {
 test('Actix Page', async () => {
   const container = await AstroContainer.create()
   const result = await container.renderToString(ActixPage)
-  expect(result).toContain('ActiX')
+  expect(result).toContain('What is Actix Web?')
 })
 
 test('Astro Page', async () => {
@@ -54,7 +54,7 @@ test('Astro Page', async () => {
   })
 
   const result = await container.renderToString(AstroPage)
-  expect(result).toContain('Astro framework frontend')
+  expect(result).toContain('What is Astro?')
 })
 
 test('Protected Page', async () => {
