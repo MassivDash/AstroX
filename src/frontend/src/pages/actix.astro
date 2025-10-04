@@ -1,7 +1,444 @@
 ---
 import Layout from '../layouts/Layout.astro'
+import Section from '../components/Section.astro'
+import ZoomImage from '../components/zoomImage/zoomImage.astro'
+import ActixImage from '../sections/imgs/actix.png'
 ---
 
-<Layout title='Welcome to Astro X'>
-  <main transition:animate='fade'>ActiX info</main>
+<Layout title='Actix Web Backend'>
+  <main transition:animate='fade'>
+    <div class='top-container'>
+      <ZoomImage
+        src={ActixImage}
+        alt='Actix web framework reference guide'
+        borderFlat='right'
+      />
+      <div class='actixInfo'>
+        <h2>What is Actix Web?</h2>
+        <h3>
+          🦀 Powerful, pragmatic, and extremely fast web framework for Rust
+        </h3>
+        <p>
+          <a href='https://actix.rs/' target='_blank'>Actix Web</a> is a modern Rust
+          web framework that delivers blazing fast performance with type safety and
+          a rich feature set. Built on Actix actor framework, it provides everything
+          you need for production-ready web applications.
+        </p>
+        <ul class='live type2'>
+          <li>
+            Type Safe - Forget stringly typed objects, from request to response
+            everything has types
+          </li>
+          <li>
+            Blazingly Fast - One of the fastest web frameworks according to
+            TechEmpower benchmarks
+          </li>
+          <li>
+            Feature Rich - HTTP/2, logging, middleware, sessions, WebSockets,
+            and more out of the box
+          </li>
+          <li>
+            Powerful Extractors - Extract data from HTTP requests with automatic
+            deserialization and validation
+          </li>
+          <li>
+            Flexible Responders - Return various types that implement the
+            Responder trait for consistent APIs
+          </li>
+          <li>
+            Easy Form Handling - Handle JSON and URL-encoded forms with
+            automatic parsing
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <Section>
+      <h2>🔧 AstroX Backend Features</h2>
+      <p>
+        Our Actix backend implementation includes production-ready features for
+        authentication, API endpoints, and session management.
+      </p>
+
+      <h3>🔐 Authentication & Sessions</h3>
+      <ul class='live type2'>
+        <li>
+          Cookie-based session management with configurable domain support for
+          subdomain sharing
+        </li>
+        <li>
+          Custom authentication middleware that protects routes using glob
+          patterns (e.g., <code>/auth/*</code>)
+        </li>
+        <li>
+          Session validation with automatic renewal to keep users logged in
+        </li>
+        <li>
+          Server-side rendered login form at <a href='/login' target='_blank'
+            ><code>/login</code></a
+          > with flash message support
+        </li>
+        <li>
+          Protected routes automatically redirect unauthorized users with proper
+          HTTP status codes
+        </li>
+      </ul>
+
+      <h3>🌐 API Endpoints</h3>
+      <ul class='live type2'>
+        <li>
+          <code>/api/hello</code> - Simple JSON response endpoint demonstrating GET
+          and POST handlers
+        </li>
+        <li>
+          <code>/api/space-x</code> - External API proxy that fetches SpaceX rocket
+          data from spacexdata.com
+        </li>
+        <li>
+          <code>/api/protected</code> - Session-protected endpoint that requires
+          authentication
+        </li>
+        <li>
+          All API endpoints return proper JSON responses with error handling
+        </li>
+        <li>
+          Comprehensive test coverage for all endpoints using actix-web test
+          utilities
+        </li>
+      </ul>
+
+      <h3>⚙️ Configuration & Middleware</h3>
+      <ul class='live type2'>
+        <li>
+          CORS configuration with environment-based settings - permissive in
+          dev, strict in production
+        </li>
+        <li>
+          Command-line arguments support for host, port, environment, CORS URL,
+          and cookie domain
+        </li>
+        <li>Compression middleware for optimal response sizes</li>
+        <li>Logger middleware with configurable log levels</li>
+        <li>URL normalization with trailing slash handling</li>
+        <li>Static file serving with custom 404 page for SPA routing</li>
+      </ul>
+
+      <h3>🧪 Testing & Quality</h3>
+      <ul class='live type2'>
+        <li>
+          Unit tests for all API endpoints, middleware, and authentication logic
+        </li>
+        <li>
+          Integration tests simulating full request/response cycles with
+          sessions
+        </li>
+        <li>
+          Test coverage for both authorized and unauthorized access scenarios
+        </li>
+        <li>Mock external API calls for reliable testing</li>
+      </ul>
+    </Section>
+
+    <Section>
+      <h2>📝 Code Examples</h2>
+
+      <h3>Protected API Endpoint</h3>
+      <p>
+        Example from <code>src/backend/src/api/protected/get.rs</code> - demonstrates
+        session validation:
+      </p>
+      <code class='code-block'>
+        <span class='macro'>#[get("/api/protected")]</span>
+        <span class='keyword'>pub async fn</span>
+        <span class='function'>protected_endpoint</span>(session: Session) -&gt; <span
+          class='keyword'>impl</span
+        > Responder &#123; &nbsp;&nbsp;<span class='keyword'>match</span>
+        <span class='function'>validate_session</span>(&amp;session) &#123;
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class='keyword'>Ok</span>(_) =&gt;
+        HttpResponse::Ok().json(...), &nbsp;&nbsp;&nbsp;&nbsp;<span
+          class='keyword'>Err</span
+        >(_) =&gt; HttpResponse::Unauthorized().json(...) &nbsp;&nbsp;&#125;
+        &#125;
+      </code>
+
+      <h3>Custom Authentication Middleware</h3>
+      <p>
+        From <code>src/backend/src/auth/auth_middleware.rs</code> - protects routes
+        using glob patterns:
+      </p>
+      <code class='code-block'>
+        <span class='keyword'>pub struct</span>
+        <span class='type'>Authentication</span> &#123; &nbsp;&nbsp;<span
+          class='keyword'>pub</span
+        > routes: Vec&lt;String&gt;, &#125;
+
+        <span class='comment'>// Usage in main.rs:</span>
+        <span class='keyword'>let</span> auth_routes = <span class='macro'
+          >vec!</span
+        >[<span class='string'>"/auth/*"</span>.to_string()];
+        App::new().wrap(Authentication &#123; routes: auth_routes &#125;)
+      </code>
+
+      <h3>External API Proxy</h3>
+      <p>
+        From <code>src/backend/src/api/space_x/get.rs</code> - proxies external API
+        requests:
+      </p>
+      <code class='code-block'>
+        <span class='macro'>#[get("/api/space-x")]</span>
+        <span class='keyword'>pub async fn</span>
+        <span class='function'>json_get_space_x</span>() -&gt;
+        Result&lt;HttpResponse, ActixError&gt; &#123; &nbsp;&nbsp;<span
+          class='keyword'>let</span
+        > response = <span class='function'>get</span>(<span class='string'
+          >"https://api.spacexdata.com/v3/rockets"</span
+        >).<span class='keyword'>await</span>; &nbsp;&nbsp;<span class='comment'
+          >// Handle response and return JSON</span
+        >
+        &#125;
+      </code>
+
+      <h3>CORS Configuration</h3>
+      <p>
+        From <code>src/backend/src/cors/get_cors_options.rs</code> - environment-based
+        CORS:
+      </p>
+      <code class='code-block'>
+        <span class='keyword'>pub fn</span>
+        <span class='function'>get_cors_options</span>(env: String,
+        allowed_origin: String) -&gt; Cors &#123; &nbsp;&nbsp;<span
+          class='keyword'>if</span
+        > env == <span class='string'>"prod"</span> &#123; &nbsp;&nbsp;&nbsp;&nbsp;Cors::default().allowed_origin(&amp;allowed_origin)
+        &nbsp;&nbsp;&#125; <span class='keyword'>else</span> &#123; &nbsp;&nbsp;&nbsp;&nbsp;Cors::default().allow_any_origin()
+        &nbsp;&nbsp;&#125; &#125;
+      </code>
+
+      <h3>Session Validation</h3>
+      <p>
+        From <code>src/backend/src/session/validate_session.rs</code> - checks user
+        authentication:
+      </p>
+      <code class='code-block'>
+        <span class='keyword'>pub fn</span>
+        <span class='function'>validate_session</span>(session: &amp;Session)
+        -&gt; anyhow::Result&lt;()&gt; &#123; &nbsp;&nbsp;<span class='keyword'
+          >let</span
+        > user_id: Option&lt;i64&gt; = session.get(<span class='string'
+          >"user_id"</span
+        >)?; &nbsp;&nbsp;<span class='keyword'>match</span> user_id &#123; &nbsp;&nbsp;&nbsp;&nbsp;<span
+          class='keyword'>Some</span
+        >(_) =&gt; &#123; session.renew(); <span class='keyword'>Ok</span>(())
+        &#125; &nbsp;&nbsp;&nbsp;&nbsp;<span class='keyword'>None</span> =&gt; <span
+          class='keyword'>Err</span
+        >(anyhow::anyhow!(<span class='string'>"Not authenticated"</span>))
+        &nbsp;&nbsp;&#125; &#125;
+      </code>
+    </Section>
+
+    <Section>
+      <h2>🚀 Getting Started</h2>
+      <p>
+        The Actix server starts automatically when you run the AstroX CLI. It
+        serves both API endpoints and the built frontend.
+      </p>
+      <ul class='live type2'>
+        <li>
+          Run <code>cargo run</code> to start the development server with default
+          settings
+        </li>
+        <li>
+          Access the API at <code>http://localhost:8080/api/*</code>
+        </li>
+        <li>
+          Visit <a href='/login' target='_blank'><code>/login</code></a> to test
+          the server-side rendered authentication
+        </li>
+        <li>
+          Configure via command-line args or <code>Astrox.toml</code> file
+        </li>
+        <li>
+          Run tests with <code>cargo test</code> for comprehensive coverage
+        </li>
+      </ul>
+    </Section>
+  </main>
 </Layout>
+
+<style>
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #100f0f;
+  }
+
+  h3 {
+    font-size: 1.8rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  p {
+    margin-top: 15px;
+    line-height: 1.5;
+    font-size: large;
+  }
+
+  code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9em;
+  }
+
+  .code-block {
+    display: block;
+    background: #1e1e1e;
+    white-space: pre;
+    color: #d4d4d4;
+    -webkit-overflow-scrolling: touch;
+    overflow-x: scroll;
+    max-width: 100%;
+    min-width: 100px;
+    padding: 20px;
+    border-radius: 5px;
+    margin: 15px 0;
+    font-size: 0.95em;
+    line-height: 1.5;
+
+    .keyword {
+      color: #569cd6;
+      font-weight: 500;
+    }
+
+    .function {
+      color: #dcdcaa;
+    }
+
+    .type {
+      color: #4ec9b0;
+    }
+
+    .string {
+      color: #ce9178;
+    }
+
+    .comment {
+      color: #6a9955;
+      font-style: italic;
+    }
+
+    .macro {
+      color: #c586c0;
+    }
+  }
+
+  .top-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 0 auto;
+    position: relative;
+    gap: 40px;
+
+    .actixInfo {
+      width: 100%;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    p {
+      font-size: 1.2rem;
+      line-height: 1.5;
+      padding-right: 20px;
+      color: #100f0f;
+    }
+
+    @media screen and (min-width: 768px) {
+      grid-template-columns: 1fr 1.5fr;
+    }
+  }
+
+  a {
+    color: #b12424;
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #8b1c1c;
+      text-decoration: underline;
+    }
+  }
+
+  /* Live animated bullet points */
+  .live {
+    overflow: hidden;
+
+    > li {
+      list-style: none;
+      position: relative;
+      padding: 0 0 0 2em;
+      margin: 0.5em 0;
+      transition: 0.12s;
+      font-size: 1.2em;
+
+      &::before {
+        position: absolute;
+        content: '\2022';
+        font-family: Arial;
+        color: #b8abab;
+        top: 0;
+        left: 0;
+        text-align: center;
+        font-size: 2em;
+        opacity: 0.5;
+        line-height: 0.75;
+        transition: 0.5s;
+      }
+
+      &:hover {
+        color: #b12424;
+        &::before {
+          transform: scale(2);
+          opacity: 1;
+          text-shadow: 0 0 4px;
+          transition: 0.1s;
+        }
+      }
+    }
+
+    &.type2 {
+      > li {
+        &::before {
+          content: '';
+          width: 10px;
+          height: 10px;
+          background: #473e3e;
+          border-radius: 3px;
+          line-height: 0;
+          top: 0.27em;
+          left: 5px;
+        }
+
+        &:hover::before {
+          transform: none;
+          border-radius: 5px;
+          width: 25px;
+          left: -10px;
+          background: #ba5353;
+        }
+      }
+    }
+  }
+
+  ol,
+  ul {
+    color: rgba(rgb(58, 49, 49), 0.5);
+    border-radius: 5px;
+
+    @media screen and (min-width: 768px) {
+      padding-right: 100px;
+    }
+  }
+</style>
