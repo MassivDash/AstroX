@@ -30,6 +30,7 @@ async fn main() -> std::io::Result<()> {
     let host = args.host;
     let port = args.port.parse::<u16>().unwrap();
     let cors_url = args.cors_url;
+    let cookie_domain = args.cookie_domain;
 
     // configure logging
     std::env::set_var("RUST_LOG", "actix_web=info");
@@ -65,7 +66,9 @@ async fn main() -> std::io::Result<()> {
             .wrap(Authentication {
                 routes: auth_routes,
             })
-            .wrap(session::session_middleware::session_middleware())
+            .wrap(session::session_middleware::session_middleware(
+                cookie_domain.clone(),
+            ))
             .wrap(set_up_flash_messages())
             .wrap(middleware::Compress::default())
             .wrap(middleware::Logger::default())

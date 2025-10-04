@@ -16,6 +16,7 @@ mod tests {
             config.public_keys.public_api_url,
             "http://localhost:8080/api"
         );
+        assert_eq!(config.cookie_domain, None); // Default is None for dev
     }
 
     #[test]
@@ -27,6 +28,7 @@ mod tests {
             "--astro-port=5431".to_string(),
             "--prod-astro-build=false".to_string(),
             "--public-api-url=https://api.example.com".to_string(),
+            "--cookie-domain=.example.com".to_string(),
         ];
         let config = get_config(&args);
 
@@ -36,6 +38,7 @@ mod tests {
         assert_eq!(config.astro_port, Some(5431));
         assert_eq!(config.prod_astro_build, false);
         assert_eq!(config.public_keys.public_api_url, "https://api.example.com");
+        assert_eq!(config.cookie_domain, Some(".example.com".to_string()));
     }
 
     #[test]
@@ -52,5 +55,14 @@ mod tests {
             config.public_keys.public_api_url,
             "http://localhost:8080/api"
         );
+        assert_eq!(config.cookie_domain, None); // Default is None
+    }
+
+    #[test]
+    fn test_get_config_with_cookie_domain() {
+        let args: Vec<String> = vec!["--cookie-domain=.mydomain.com".to_string()];
+        let config = get_config(&args);
+
+        assert_eq!(config.cookie_domain, Some(".mydomain.com".to_string()));
     }
 }

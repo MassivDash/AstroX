@@ -35,7 +35,7 @@ mod tests {
             App::new()
                 .service(protected_endpoint)
                 .wrap(set_up_flash_messages())
-                .wrap(session_middleware()),
+                .wrap(session_middleware(None)),
         )
         .await;
 
@@ -64,7 +64,7 @@ mod tests {
                 .route("/setup", web::get().to(setup_session))
                 .service(protected_endpoint)
                 .wrap(set_up_flash_messages())
-                .wrap(session_middleware()),
+                .wrap(session_middleware(None)),
         )
         .await;
 

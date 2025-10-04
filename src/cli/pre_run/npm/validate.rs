@@ -10,9 +10,9 @@ pub fn validate_node() {
     let is_node_installed = is_node_installed();
 
     match is_node_installed {
-        true => success("node is installed and its version is higher than 18.14.1"),
+        true => success("node is installed and its version is higher than 20.9.0"),
         false => {
-            error("node is not installed, or its version is below 18.14.1 please install it and try again. Panicking...");
+            error("node is not installed, or its version is below 20.9.0 please install it and try again. Panicking...");
             panic!()
         }
     }

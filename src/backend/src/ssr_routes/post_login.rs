@@ -30,7 +30,7 @@ pub async fn post_login(
             session.renew();
             match session.insert("user_id", user.id) {
                 Ok(_) => Ok(HttpResponse::SeeOther()
-                    .insert_header((LOCATION, "/auth/auth"))
+                    .insert_header((LOCATION, "/auth/protected"))
                     .finish()),
                 Err(e) => {
                     let error_message = format!("Failed to insert user_id into session: {}", e);

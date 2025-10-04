@@ -69,6 +69,15 @@ pub fn collect_config_args(config: Config, args: &Vec<String>) -> Config {
         if arg.starts_with("--public-api-url=") {
             config.public_keys.public_api_url = split_and_collect(arg);
         }
+
+        if arg.starts_with("--cookie-domain=") {
+            let domain = split_and_collect(arg);
+            config.cookie_domain = if domain.is_empty() {
+                None
+            } else {
+                Some(domain)
+            };
+        }
     }
 
     config
@@ -106,6 +115,7 @@ mod tests {
             astro_port: None,
             prod_astro_build: false,
             cors_url: "".to_string(),
+            cookie_domain: None,
             public_keys: {
                 let public_api_url = "http://localhost:8080/api".to_string();
                 PublicKeys { public_api_url }
@@ -129,6 +139,7 @@ mod tests {
             astro_port: Some(4321),
             cors_url: "http://localhost:8080".to_string(),
             prod_astro_build: true,
+            cookie_domain: None,
             public_keys: {
                 let public_api_url = "https://custom.api/api".to_string();
                 PublicKeys { public_api_url }

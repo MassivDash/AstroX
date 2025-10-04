@@ -54,10 +54,10 @@ impl User {
     }
 }
 
-pub fn session_middleware() -> SessionMiddleware<CookieSessionStore> {
+pub fn session_middleware(cookie_domain: Option<String>) -> SessionMiddleware<CookieSessionStore> {
     SessionMiddleware::builder(CookieSessionStore::default(), Key::from(&[0; 64]))
         .cookie_name("astroX".to_string())
-        .cookie_domain(Some("localhost".to_string()))
+        .cookie_domain(cookie_domain)
         .cookie_path("/".to_string())
         .cookie_secure(false)
         .cookie_http_only(false)

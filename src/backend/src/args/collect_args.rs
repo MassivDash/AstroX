@@ -10,14 +10,17 @@
 /// Set the environment
 /// --env=prod / dev
 ///
-///
 /// Set the cors origin
 /// --cors_url=astrox.spaceout.pl
+///
+/// Set the cookie domain
+/// --cookie_domain=spaceout.pl
 pub struct Args {
     pub host: String,
     pub port: String,
     pub env: String,
     pub cors_url: String,
+    pub cookie_domain: Option<String>,
 }
 
 pub fn collect_args(args: Vec<String>) -> Args {
@@ -25,6 +28,7 @@ pub fn collect_args(args: Vec<String>) -> Args {
     let mut host = "127.0.0.1";
     let mut port = 8080;
     let mut cors_url = "astrox.spaceout.pl";
+    let mut cookie_domain: Option<String> = None;
 
     for arg in &args {
         if arg.starts_with("--env=") {
@@ -54,6 +58,13 @@ pub fn collect_args(args: Vec<String>) -> Args {
                 cors_url = split[1];
             }
         }
+
+        if arg.starts_with("--cookie_domain=") {
+            let split: Vec<&str> = arg.split('=').collect();
+            if split.len() == 2 && !split[1].is_empty() {
+                cookie_domain = Some(split[1].to_string());
+            }
+        }
     }
 
     Args {
@@ -61,6 +72,7 @@ pub fn collect_args(args: Vec<String>) -> Args {
         port: port.to_string(),
         env: env.to_string(),
         cors_url: cors_url.to_string(),
+        cookie_domain,
     }
 }
 #[cfg(test)]

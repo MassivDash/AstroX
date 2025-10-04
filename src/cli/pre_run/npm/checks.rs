@@ -11,10 +11,10 @@ pub const NPM: &'static str = "npm.cmd";
 #[cfg(not(windows))]
 pub const NPM: &str = "npm";
 
-const REQUIRED_VERSION: &str = "18.14.1";
+const REQUIRED_VERSION: &str = "20.9.0";
 
 /// check if node is installed
-/// check if the node version is above 18.14.1
+/// check if the node version is above 20.9.0
 /// versions below will panic on astro commands
 pub fn is_node_installed() -> bool {
     let output = Command::new("node")

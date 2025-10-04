@@ -47,15 +47,14 @@
       const res = await axiosBackendInstance.get('space-x')
       const data = res.data
       return data
-    } catch (error) {
+    } catch (_error) {
       // implement error handling
-      // console.log(error)
+      // console.log(_error)
       return []
     }
   }
 
   let data: Rocket[] = []
-  let error: string | null = null
 
   onMount(async () => {
     const res = await getSpaceXRockets()

@@ -67,7 +67,13 @@ pub fn start_development(config: Config) {
         .arg("-w")
         .arg("./src")
         .arg("-x")
-        .arg(format!("run -- --host={} --port={}", config.host, port))
+        .arg({
+            let mut cmd = format!("run -- --host={} --port={}", config.host, port);
+            if let Some(ref domain) = config.cookie_domain {
+                cmd.push_str(&format!(" --cookie_domain={}", domain));
+            }
+            cmd
+        })
         .stdout(std::process::Stdio::piped())
         .spawn()
         .expect("Failed to start backend development server");
