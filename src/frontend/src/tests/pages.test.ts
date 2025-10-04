@@ -59,6 +59,14 @@ test('Astro Page', async () => {
 
 test('Protected Page', async () => {
   const container = await AstroContainer.create()
+  container.addServerRenderer({
+    name: '@astrojs/react',
+    renderer: ssrReact
+  })
+  container.addClientRenderer({
+    name: '@astrojs/react',
+    entrypoint: '@astrojs/react/client-v17.js'
+  })
   const result = await container.renderToString(ProtectedPage)
   expect(result).toContain('Protected')
 })

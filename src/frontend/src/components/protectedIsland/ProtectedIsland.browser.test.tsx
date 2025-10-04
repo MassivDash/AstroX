@@ -2,8 +2,10 @@
  * @vitest-environment jsdom
  */
 
+import { ProtectedIsland } from './protectedIsland.tsx'
 import { expect, test, vi } from 'vitest'
 import { render, screen, waitFor } from '@testing-library/react'
+import { axiosBackendInstance } from '@axios/axiosBackendInstance'
 
 vi.mock('@axios/axiosBackendInstance', () => ({
   axiosBackendInstance: {
@@ -12,9 +14,6 @@ vi.mock('@axios/axiosBackendInstance', () => ({
 }))
 
 test('ProtectedIsland - successful authentication', async () => {
-  const { axiosBackendInstance } = await import('@axios/axiosBackendInstance')
-  const { ProtectedIsland } = await import('./protectedIsland.tsx')
-
   vi.mocked(axiosBackendInstance.get).mockResolvedValueOnce({
     data: {
       message: 'Welcome! This is protected data.',
@@ -35,9 +34,6 @@ test('ProtectedIsland - successful authentication', async () => {
 })
 
 test('ProtectedIsland - unauthorized access', async () => {
-  const { axiosBackendInstance } = await import('@axios/axiosBackendInstance')
-  const { ProtectedIsland } = await import('./protectedIsland.tsx')
-
   vi.mocked(axiosBackendInstance.get).mockRejectedValueOnce({
     response: {
       data: {

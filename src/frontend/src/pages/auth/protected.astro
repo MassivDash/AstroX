@@ -1,28 +1,30 @@
 ---
 import Layout from '../../layouts/Layout.astro'
+import Section from '../../components/Section.astro'
 import { ProtectedIsland } from '../../components/protectedIsland/protectedIsland.tsx'
 ---
 
 <Layout title='Welcome to AstroX.'>
-  <h1>Protected Route</h1>
-  <p>
-    This page demonstrates a protected API endpoint that requires
-    authentication.
-  </p>
+  <div class='container'>
+    <Section>
+      <h1>Protected Route</h1>
+      <p>
+        This page demonstrates a protected API endpoint that requires
+        authentication.
+      </p>
 
-  <ProtectedIsland client:load />
-
-  <div
-    style='margin-top: 20px; padding: 15px; background: #f5f5f5; border-radius: 8px;'
-  >
-    <h3>ℹ️ How it works:</h3>
-    <ul>
-      <li>The React component above calls <code>/api/protected</code></li>
-      <li>If you're logged in, it will show the protected data</li>
-      <li>If you're not logged in, it will show an unauthorized error</li>
-      <li>
-        External tools like Postman without session cookies will be rejected
-      </li>
-    </ul>
+      <ProtectedIsland client:load />
+    </Section>
+    <Section>
+      <h3>ℹ️ How it works:</h3>
+      <ul>
+        <li>The React component above calls <code>/api/protected</code></li>
+        <li>If you're logged in, it will show the protected data</li>
+        <li>If you're not logged in, it will show an unauthorized error</li>
+        <li>
+          External tools like Postman without session cookies will be rejected
+        </li>
+      </ul>
+    </Section>
   </div>
 </Layout>
