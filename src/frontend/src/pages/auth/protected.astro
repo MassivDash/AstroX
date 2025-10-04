@@ -9,8 +9,16 @@ import { ProtectedIsland } from '../../components/protectedIsland/protectedIslan
     <Section>
       <h1>Protected Route</h1>
       <p>
-        This page demonstrates a protected API endpoint that requires
-        authentication.
+        This page is protected by actix middleware and will not be served if you
+        are not logged in.
+      </p>
+      <p>
+        ⚠️ In development mode, you can access this page without logging in,
+        because its served by the astro development server.
+      </p>
+      <p>
+        💡 For testing actix features use the backend localhost set by default
+        at port 8080.
       </p>
 
       <ProtectedIsland client:load />
@@ -22,7 +30,8 @@ import { ProtectedIsland } from '../../components/protectedIsland/protectedIslan
         <li>If you're logged in, it will show the protected data</li>
         <li>If you're not logged in, it will show an unauthorized error</li>
         <li>
-          External tools like Postman without session cookies will be rejected
+          External calls from tools like Postman or Curl without session cookies
+          will be rejected
         </li>
       </ul>
     </Section>
