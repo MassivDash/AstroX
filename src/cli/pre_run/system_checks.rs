@@ -10,7 +10,6 @@ use super::{
 /// Run system checks before starting the development or production server
 /// The system checks will check if the required tools are installed
 /// The system checks will also check if the required projects are installed
-
 pub fn run_system_checks(env: &str) {
     spacer();
     step("Running system checks ...");

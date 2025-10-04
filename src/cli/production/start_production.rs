@@ -11,7 +11,6 @@ use std::sync::Arc;
 /// Start the production server
 /// The production server will start the actix backend server
 /// The production server will also bundle the frontend
-
 pub fn start_production(config: Config) {
     // Bundle the frontend and wait for the process to finish
     // if the astro build is set to true

@@ -1,19 +1,18 @@
 /// Get the additional arguments from "cargo run"
-
+///
 /// List of arguments
 /// Bind actix server to a host, used for development and production
 /// --host=127.0.0.1
-
+///
 /// Bind actix server to a port, used for development and production
 /// --port=8080
-
+///
 /// Set the environment
 /// --env=prod / dev
 ///
-
+///
 /// Set the cors origin
 /// --cors_url=astrox.spaceout.pl
-
 pub struct Args {
     pub host: String,
     pub port: String,

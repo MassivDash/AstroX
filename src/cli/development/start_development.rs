@@ -14,7 +14,6 @@ use std::time::Duration;
 /// The development server will start the actix backend server and the astro frontend server
 /// The development server will also check if the port is available for the backend server, and loop until it finds the available port
 /// The development server will also clean up the orphaned processes, otherwise cargo watch and node watch will continue to run, blocking the ports.
-
 pub fn start_development(config: Config) {
     // Set the ctrl-c handler to exit the program and clean up orphaned processes
     let running = Arc::new(AtomicBool::new(true));

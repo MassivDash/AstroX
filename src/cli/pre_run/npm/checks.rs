@@ -35,7 +35,6 @@ pub fn is_node_installed() -> bool {
 
 /// Check if the frontend project is installed
 /// The frontend project is required to run the astro commands
-
 pub fn is_frontend_project_installed() -> bool {
     let project = std::path::Path::new("./src/frontend/package.json").exists();
     let installed = std::path::Path::new("./src/frontend/node_modules").exists();

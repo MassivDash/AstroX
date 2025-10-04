@@ -15,6 +15,7 @@ mod ssr_routes;
 
 use crate::api::hello::get::json_response_get;
 use crate::api::hello::post::json_response;
+use crate::api::protected::get::protected_endpoint;
 use crate::api::space_x::get::json_get_space_x;
 use crate::args::collect_args::collect_args;
 use crate::auth::auth_middleware::Authentication;
@@ -49,6 +50,7 @@ async fn main() -> std::io::Result<()> {
             .service(json_response)
             .service(json_response_get)
             .service(json_get_space_x)
+            .service(protected_endpoint)
             .service(
                 Files::new("/", "../frontend/dist/")
                     .prefer_utf8(true)

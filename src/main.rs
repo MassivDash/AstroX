@@ -9,7 +9,6 @@ use std::env;
 
 /// The main Astro X cli
 /// The cli is responsible for starting the development and production servers
-
 fn main() {
     // Print the splash screen
     do_splash();
