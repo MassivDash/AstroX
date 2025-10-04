@@ -101,6 +101,20 @@ import YoungG from '../sections/imgs/cli.png'
           <td>--env=prod/dev</td>
         </tr>
         <tr>
+          <td>--cors_url</td>
+          <td>domain.com</td>
+          <td>String</td>
+          <td>Set the CORS origin URL for the backend server</td>
+          <td>--cors_url=astrox.spaceout.pl</td>
+        </tr>
+        <tr>
+          <td>--cookie_domain</td>
+          <td>domain.com</td>
+          <td>String (Optional)</td>
+          <td>Set the cookie domain for session management</td>
+          <td>--cookie_domain=spaceout.pl</td>
+        </tr>
+        <tr>
           <td>--astro-port</td>
           <td>2343</td>
           <td>Number</td>
@@ -125,9 +139,10 @@ import YoungG from '../sections/imgs/cli.png'
     <h2>👊 Git Hooks</h2>
     <p>
       The AstroX CLI includes pre-defined Git hooks that promote code quality
-      and enhance development workflows. These hooks provide:
+      and enhance development workflows.
     </p>
-    <ul>
+    <p>These hooks provide:</p>
+    <ul class='live type2'>
       <li>
         Commit message validation with
         <a
@@ -152,14 +167,18 @@ import YoungG from '../sections/imgs/cli.png'
     <code>
       host = "localhost" <br />
       port = 8080 <br />
-      env = "dev" astro_port = 5431<br />
+      env = "dev" <br />
+      astro_port = 5431<br />
       prod_astro_build = true <br />
+      cors_url = "localhost" <br />
+      # cookie_domain = ".spaceout.pl" # Uncomment for production <br />
+      <br />
       [public_keys] <br />
-      public_api_url ="https://localhost:8000/api"</code
+      public_api_url ="http://localhost:8080/api"</code
     >
     <p>
-      [public keys] will be copied over to frontend env file, before the build,
-      for easy localhost / prod switchero
+      🤔 [public keys] will be copied over to frontend env file, before the
+      build, for easy localhost / prod switchero
     </p>
   </Section>
 </Layout>

@@ -2,20 +2,61 @@
 import Layout from '../layouts/Layout.astro'
 import SpaceX from '../components/spaceX/spacex.svelte'
 import Section from '../components/Section.astro'
-import AIcon from '../svgs/AstroIcon.astro'
+import ZoomImage from '../components/zoomImage/zoomImage.astro'
+import AstroImage from '../sections/imgs/astro2.jpeg'
 import { HelloWorld } from '@components/helloWorld/helloWorld.tsx'
 ---
 
 <Layout title='Welcome to Astro X'>
   <main transition:animate='fade'>
-    <div class='intro'>
-      <div class='icon'>
-        <AIcon width={55} height={55} />
-        <h1>Astro framework frontend</h1>
+    <div class='top-container'>
+      <ZoomImage
+        src={AstroImage}
+        alt='Astro framework reference guide'
+        borderFlat='right'
+      />
+      <div class='astroInfo'>
+        <h2>What is Astro?</h2>
+        <h3>
+          ⚡ JavaScript web framework optimized for fast, content-driven
+          websites
+        </h3>
+        <p>
+          <a href='https://astro.build/' target='_blank'>Astro</a> is a modern web
+          framework that delivers lightning-fast performance by rendering on the
+          server and sending zero JavaScript by default. It's designed to work seamlessly
+          with your content and favorite tools.
+        </p>
+        <ul class='live type2'>
+          <li>
+            Server-First rendering improves performance by sending lightweight
+            HTML with zero unnecessary JavaScript overhead
+          </li>
+          <li>
+            Content-Driven architecture works with data from your file system,
+            APIs, or any CMS
+          </li>
+          <li>
+            Astro Islands optimize page loads like no other framework - 63% of
+            real-world Astro sites pass Core Web Vitals
+          </li>
+          <li>
+            Zero Lock-in with support for React, Vue, Svelte, Preact, Solid, and
+            more UI frameworks
+          </li>
+          <li>
+            Built-in features including Content Collections, View Transitions,
+            optimized images, and file-based routing
+          </li>
+          <li>
+            Type-safe Actions let you write backend functions callable directly
+            from frontend code
+          </li>
+        </ul>
       </div>
-      <div class='text'></div>
     </div>
     <Section>
+      <h2>Client side examples, calling the actix backend for data</h2>
       <div class='container'>
         <div class='info'>
           <HelloWorld client:load />
@@ -29,6 +70,44 @@ import { HelloWorld } from '@components/helloWorld/helloWorld.tsx'
 </Layout>
 
 <style>
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    color: #100f0f;
+  }
+
+  p {
+    margin-top: 15px;
+    line-height: 1.5;
+    font-size: large;
+  }
+
+  .top-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    margin: 0 auto;
+    position: relative;
+    gap: 40px;
+
+    .astroInfo {
+      width: 100%;
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    p {
+      font-size: 1.2rem;
+      line-height: 1.5;
+      padding-right: 20px;
+      color: #100f0f;
+    }
+
+    @media screen and (min-width: 768px) {
+      grid-template-columns: 1fr 1.5fr;
+    }
+  }
+
   .container {
     display: flex;
     flex-wrap: 1;
@@ -82,5 +161,76 @@ import { HelloWorld } from '@components/helloWorld/helloWorld.tsx'
   .text {
     margin-top: 100px;
     margin-left: 50px;
+  }
+
+  /* Live animated bullet points */
+  .live {
+    overflow: hidden;
+
+    > li {
+      list-style: none;
+      position: relative;
+      padding: 0 0 0 2em;
+      margin: 0.5em 0;
+      transition: 0.12s;
+      font-size: 1.2em;
+
+      &::before {
+        position: absolute;
+        content: '\2022';
+        font-family: Arial;
+        color: #b8abab;
+        top: 0;
+        left: 0;
+        text-align: center;
+        font-size: 2em;
+        opacity: 0.5;
+        line-height: 0.75;
+        transition: 0.5s;
+      }
+
+      &:hover {
+        color: #b12424;
+        &::before {
+          transform: scale(2);
+          opacity: 1;
+          text-shadow: 0 0 4px;
+          transition: 0.1s;
+        }
+      }
+    }
+
+    &.type2 {
+      > li {
+        &::before {
+          content: '';
+          width: 10px;
+          height: 10px;
+          background: #473e3e;
+          border-radius: 3px;
+          line-height: 0;
+          top: 0.27em;
+          left: 5px;
+        }
+
+        &:hover::before {
+          transform: none;
+          border-radius: 5px;
+          width: 25px;
+          left: -10px;
+          background: #ba5353;
+        }
+      }
+    }
+  }
+
+  ol,
+  ul {
+    color: rgba(rgb(58, 49, 49), 0.5);
+    border-radius: 5px;
+
+    @media screen and (min-width: 768px) {
+      padding-right: 100px;
+    }
   }
 </style>
