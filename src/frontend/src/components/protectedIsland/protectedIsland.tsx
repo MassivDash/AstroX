@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { axiosBackendInstance } from '@axios/axiosBackendInstance'
 
 interface ProtectedData {
@@ -38,11 +38,15 @@ export const ProtectedIsland = () => {
       })
   }, [])
 
+  const borderColor = useMemo(() => {
+    return data ? '#4CAF50' : '#f44336'
+  }, [data])
+
   return (
     <div
       style={{
         padding: '20px',
-        border: '2px solid #4CAF50',
+        border: `2px solid ${borderColor}`,
         borderRadius: '8px',
         margin: '20px 0'
       }}
@@ -50,7 +54,7 @@ export const ProtectedIsland = () => {
       <h3>🔒 Protected React Island</h3>
       {loading && <p>Loading protected data...</p>}
       {data && (
-        <div style={{ color: '#4CAF50' }}>
+        <div style={{ color: borderColor }}>
           <p>
             <strong>Status:</strong> {data.status}
           </p>
@@ -60,7 +64,7 @@ export const ProtectedIsland = () => {
         </div>
       )}
       {error && (
-        <div style={{ color: '#f44336' }}>
+        <div style={{ color: borderColor }}>
           <p>
             <strong>Error:</strong> {error.error}
           </p>

@@ -10,7 +10,7 @@
   ],
   "prettier.documentSelectors": ["**/*.astro", "**/*.js", "**/*.jsx", "**/*.ts", "**/*.tsx", "**/*.css", "**/*.scss", "**/*.json", "**/*.md"],
   "[astro]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.defaultFormatter": "astro-build.astro-vscode",
     "editor.formatOnSave": true
   },
   "cSpell.words": [
