@@ -265,23 +265,24 @@ import ActixImage from '../sections/imgs/actix.png'
 </Layout>
 
 <style>
+  /* Mobile-first base styles */
   h2 {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
     color: #100f0f;
   }
 
   h3 {
-    font-size: 1.8rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
+    font-size: 1.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
     color: #333;
   }
 
   p {
     margin-top: 15px;
     line-height: 1.5;
-    font-size: large;
+    font-size: 1rem;
   }
 
   code {
@@ -289,7 +290,7 @@ import ActixImage from '../sections/imgs/actix.png'
     padding: 2px 6px;
     border-radius: 3px;
     font-family: 'Courier New', monospace;
-    font-size: 0.9em;
+    font-size: 0.85em;
   }
 
   .code-block {
@@ -301,11 +302,11 @@ import ActixImage from '../sections/imgs/actix.png'
     overflow-x: scroll;
     max-width: 100%;
     min-width: 100px;
-    padding: 20px;
+    padding: 15px;
     border-radius: 5px;
     margin: 15px 0;
-    font-size: 0.95em;
-    line-height: 1.5;
+    font-size: 0.85em;
+    line-height: 1.4;
 
     .keyword {
       color: #569cd6;
@@ -339,24 +340,21 @@ import ActixImage from '../sections/imgs/actix.png'
     grid-template-columns: 1fr;
     margin: 0 auto;
     position: relative;
-    gap: 40px;
+    gap: 20px;
+    padding: 1rem;
 
     .actixInfo {
       width: 100%;
-      padding: 10px;
+      padding: 0;
       display: flex;
       flex-direction: column;
     }
 
     p {
-      font-size: 1.2rem;
+      font-size: 1rem;
       line-height: 1.5;
-      padding-right: 20px;
+      padding-right: 0;
       color: #100f0f;
-    }
-
-    @media screen and (min-width: 768px) {
-      grid-template-columns: 1fr 1.5fr;
     }
   }
 
@@ -381,7 +379,7 @@ import ActixImage from '../sections/imgs/actix.png'
       padding: 0 0 0 2em;
       margin: 0.5em 0;
       transition: 0.12s;
-      font-size: 1.2em;
+      font-size: 1rem;
 
       &::before {
         position: absolute;
@@ -436,8 +434,55 @@ import ActixImage from '../sections/imgs/actix.png'
   ul {
     color: rgba(rgb(58, 49, 49), 0.5);
     border-radius: 5px;
+    padding-right: 0;
+  }
 
-    @media screen and (min-width: 768px) {
+  /* Tablet and desktop styles */
+  @media screen and (min-width: 768px) {
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+    }
+
+    h3 {
+      font-size: 1.8rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: large;
+    }
+
+    .code-block {
+      padding: 20px;
+      font-size: 0.95em;
+      line-height: 1.5;
+    }
+
+    .top-container {
+      grid-template-columns: 1fr 1.5fr;
+      gap: 40px;
+      padding: 0;
+
+      .actixInfo {
+        padding: 10px;
+      }
+
+      p {
+        font-size: 1.2rem;
+        padding-right: 20px;
+      }
+    }
+
+    .live {
+      > li {
+        font-size: 1.2em;
+      }
+    }
+
+    ol,
+    ul {
       padding-right: 100px;
     }
   }

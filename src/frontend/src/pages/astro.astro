@@ -70,16 +70,24 @@ import { HelloWorld } from '@components/helloWorld/helloWorld.tsx'
 </Layout>
 
 <style>
+  /* Mobile-first base styles */
   h2 {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
     color: #100f0f;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: #333;
   }
 
   p {
     margin-top: 15px;
     line-height: 1.5;
-    font-size: large;
+    font-size: 1rem;
   }
 
   .top-container {
@@ -87,31 +95,28 @@ import { HelloWorld } from '@components/helloWorld/helloWorld.tsx'
     grid-template-columns: 1fr;
     margin: 0 auto;
     position: relative;
-    gap: 40px;
+    gap: 20px;
+    padding: 1rem;
 
     .astroInfo {
       width: 100%;
-      padding: 10px;
+      padding: 0;
       display: flex;
       flex-direction: column;
     }
 
     p {
-      font-size: 1.2rem;
+      font-size: 1rem;
       line-height: 1.5;
-      padding-right: 20px;
+      padding-right: 0;
       color: #100f0f;
-    }
-
-    @media screen and (min-width: 768px) {
-      grid-template-columns: 1fr 1.5fr;
     }
   }
 
   .container {
     display: flex;
-    flex-wrap: 1;
-    flex-basis: auto;
+    flex-direction: column;
+    flex-wrap: wrap;
     width: 100%;
     gap: 10px;
   }
@@ -122,20 +127,20 @@ import { HelloWorld } from '@components/helloWorld/helloWorld.tsx'
 
   .intro {
     width: 100%;
-    height: 800px;
+    height: 400px;
     position: relative;
     display: flex;
     flex-direction: column;
     background-size: cover;
-    background-position: right;
+    background-position: center;
     background-image: url('/astroStation.jpeg');
-    background-size: 800px;
+    background-size: 400px;
     background-repeat: no-repeat;
     background-color: #fafaf8;
     background-blend-mode: saturation;
     background:
       linear-gradient(90deg, #fafaf8, #fafaf8),
-      url('/astroStation.jpeg') no-repeat right center / 600px;
+      url('/astroStation.jpeg') no-repeat center center / 300px;
   }
 
   .svelte-component {
@@ -159,8 +164,8 @@ import { HelloWorld } from '@components/helloWorld/helloWorld.tsx'
   }
 
   .text {
-    margin-top: 100px;
-    margin-left: 50px;
+    margin-top: 50px;
+    margin-left: 20px;
   }
 
   /* Live animated bullet points */
@@ -173,7 +178,7 @@ import { HelloWorld } from '@components/helloWorld/helloWorld.tsx'
       padding: 0 0 0 2em;
       margin: 0.5em 0;
       transition: 0.12s;
-      font-size: 1.2em;
+      font-size: 1rem;
 
       &::before {
         position: absolute;
@@ -228,8 +233,66 @@ import { HelloWorld } from '@components/helloWorld/helloWorld.tsx'
   ul {
     color: rgba(rgb(58, 49, 49), 0.5);
     border-radius: 5px;
+    padding-right: 0;
+  }
 
-    @media screen and (min-width: 768px) {
+  /* Tablet and desktop styles */
+  @media screen and (min-width: 768px) {
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+    }
+
+    h3 {
+      font-size: 1.8rem;
+      margin-top: 2rem;
+      margin-bottom: 1rem;
+    }
+
+    p {
+      font-size: large;
+    }
+
+    .top-container {
+      grid-template-columns: 1fr 1.5fr;
+      gap: 40px;
+      padding: 0;
+
+      .astroInfo {
+        padding: 10px;
+      }
+
+      p {
+        font-size: 1.2rem;
+        padding-right: 20px;
+      }
+    }
+
+    .container {
+      flex-direction: row;
+    }
+
+    .intro {
+      height: 800px;
+      background-size: 800px;
+      background:
+        linear-gradient(90deg, #fafaf8, #fafaf8),
+        url('/astroStation.jpeg') no-repeat right center / 600px;
+    }
+
+    .text {
+      margin-top: 100px;
+      margin-left: 50px;
+    }
+
+    .live {
+      > li {
+        font-size: 1.2em;
+      }
+    }
+
+    ol,
+    ul {
       padding-right: 100px;
     }
   }

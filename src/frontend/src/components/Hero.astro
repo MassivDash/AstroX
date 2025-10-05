@@ -9,10 +9,11 @@ import '@fontsource/pacifico'
 </section>
 
 <style>
+  /* Mobile-first base styles */
   section {
     width: 100%;
     height: 100%;
-    min-height: 700px;
+    min-height: 400px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -20,7 +21,7 @@ import '@fontsource/pacifico'
   }
 
   h1 {
-    font-size: 15rem;
+    font-size: 3.5rem;
     font-weight: 700;
     line-height: 1;
     width: 100%;
@@ -35,9 +36,9 @@ import '@fontsource/pacifico'
     display: flex;
     align-items: center;
     justify-content: center;
-    text-shadow: 9px 4px #00000017;
+    text-shadow: 4px 2px #00000017;
     span {
-      font-size: 4rem;
+      font-size: 1.5rem;
       font-family: Pacifico, cursive;
       color: #fff;
       line-height: 20px;
@@ -49,11 +50,26 @@ import '@fontsource/pacifico'
     width: 100%;
     height: 100%;
     display: flex;
-    justify-content: centert;
+    justify-content: center;
     align-items: center;
     background-blend-mode: saturation;
     background:
       linear-gradient(90deg, #ededed, #eeeeee, #f4f4f4, #fefefe),
       url('/hero.jpeg') no-repeat center right / contain;
+  }
+
+  /* Tablet and desktop styles */
+  @media screen and (min-width: 768px) {
+    section {
+      min-height: 700px;
+    }
+
+    h1 {
+      font-size: 15rem;
+      text-shadow: 9px 4px #00000017;
+      span {
+        font-size: 4rem;
+      }
+    }
   }
 </style>

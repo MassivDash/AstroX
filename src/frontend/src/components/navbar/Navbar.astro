@@ -12,50 +12,127 @@ import NavbarItem from './NavbarItem.astro'
     const homeLink = document.getElementById('homeIcon')
     const isHome = window.location.pathname === '/'
     isHome && homeLink?.classList.add('active')
+
+    // Hamburger menu functionality
+    const hamburger = document.getElementById('hamburger')
+    const mobileMenu = document.getElementById('mobile-menu')
+    const body = document.body
+
+    hamburger?.addEventListener('click', () => {
+      const isOpen = mobileMenu?.classList.toggle('open')
+      hamburger?.classList.toggle('open')
+      if (isOpen) {
+        body.style.overflow = 'hidden'
+      } else {
+        body.style.overflow = 'auto'
+      }
+    })
+
+    // Close menu when clicking a link
+    const menuLinks = mobileMenu?.querySelectorAll('a')
+    menuLinks?.forEach((link) => {
+      link.addEventListener('click', () => {
+        mobileMenu?.classList.remove('open')
+        hamburger?.classList.remove('open')
+        body.style.overflow = 'auto'
+      })
+    })
   })
 </script>
 
 <nav>
   <div class='nav'>
-    <ul>
-      <li>
-        <a id='home-link' href='/'>
-          <div class='logo'>
-            <p>astro <span id='homeIcon' class='navi-link'>X</span></p>
-          </div></a
+    <!-- Mobile hamburger button -->
+    <button id='hamburger' class='hamburger' aria-label='Toggle menu'>
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+
+    <!-- Desktop navigation -->
+    <div class='desktop-nav'>
+      <ul>
+        <li>
+          <a id='home-link' href='/'>
+            <div class='logo'>
+              <p>astro <span id='homeIcon' class='navi-link'>X</span></p>
+            </div>
+          </a>
+        </li>
+        <NavbarItem id='cli-link' href='/cli'>
+          <RustIcon height={30} width={30} />
+          <p>cli</p>
+        </NavbarItem>
+        <NavbarItem id='actix-link' href='/actix'>
+          <ActixIcon height={30} width={30} />
+          <p>actiX</p>
+        </NavbarItem>
+        <NavbarItem id='astro-link' href='/astro'>
+          <AstroIcon height={30} width={30} />
+          <p>astro</p>
+        </NavbarItem>
+      </ul>
+      <ul class='social-links'>
+        <NavbarItem
+          external
+          id='github-link'
+          href='https://github.com/MassivDash/AstroX'
         >
-      </li>
-      <NavbarItem id='cli-link' href='/cli'>
-        <RustIcon height={30} width={30} />
-        <p>cli</p>
-      </NavbarItem>
-      <NavbarItem id='actix-link' href='/actix'>
-        <ActixIcon height={30} width={30} />
-        <p>actiX</p>
-      </NavbarItem>
-      <NavbarItem id='astro-link' href='/astro'>
-        <AstroIcon height={30} width={30} />
-        <p>astro</p>
-      </NavbarItem>
-    </ul>
-    <ul class='social-links'>
-      <NavbarItem
-        external
-        id='github-link'
-        href='https://github.com/MassivDash/AstroX'
-      >
-        <GithubIcon height={28} width={28} />
-        <p>Repository</p>
-      </NavbarItem>
-      <NavbarItem external id='spaceout-link' href='https://spaceout.pl'>
-        <SpaceoutIcon height={35} width={35} />
-        <p>Spaceout</p>
-      </NavbarItem>
-    </ul>
+          <GithubIcon height={28} width={28} />
+          <p>Repository</p>
+        </NavbarItem>
+        <NavbarItem external id='spaceout-link' href='https://spaceout.pl'>
+          <SpaceoutIcon height={35} width={35} />
+          <p>Spaceout</p>
+        </NavbarItem>
+      </ul>
+    </div>
+
+    <!-- Mobile slide-out menu -->
+    <div id='mobile-menu' class='mobile-menu'>
+      <div class='mobile-logo'>
+        <a href='/'>
+          <p>astro <span class='mobile-x'>X</span></p>
+        </a>
+      </div>
+      <ul>
+        <li>
+          <a href='/cli'>
+            <RustIcon height={30} width={30} />
+            <p>cli</p>
+          </a>
+        </li>
+        <li>
+          <a href='/actix'>
+            <ActixIcon height={30} width={30} />
+            <p>actiX</p>
+          </a>
+        </li>
+        <li>
+          <a href='/astro'>
+            <AstroIcon height={30} width={30} />
+            <p>astro</p>
+          </a>
+        </li>
+        <li>
+          <a href='https://github.com/MassivDash/AstroX' target='_blank'>
+            <GithubIcon height={28} width={28} />
+            <p>Repository</p>
+          </a>
+        </li>
+        <li>
+          <a href='https://spaceout.pl' target='_blank'>
+            <SpaceoutIcon height={35} width={35} />
+            <p>Spaceout</p>
+          </a>
+        </li>
+      </ul>
+    </div>
   </div>
 </nav>
 
 <style>
+  /* Mobile-first base styles */
   nav {
     display: flex;
     justify-content: flex-start;
@@ -67,36 +144,165 @@ import NavbarItem from './NavbarItem.astro'
 
   .nav {
     display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    position: relative;
+  }
+
+  /* Hamburger menu button - mobile only */
+  .hamburger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    width: 2rem;
+    height: 2rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    z-index: 1001;
+  }
+
+  .hamburger span {
+    width: 2rem;
+    height: 0.25rem;
+    background: #333;
+    border-radius: 10px;
+    transition: all 0.3s linear;
+    position: relative;
+    transform-origin: 1px;
+  }
+
+  .hamburger.open span:nth-child(1) {
+    transform: rotate(45deg);
+  }
+
+  .hamburger.open span:nth-child(2) {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+
+  .hamburger.open span:nth-child(3) {
+    transform: rotate(-45deg);
+  }
+
+  /* Desktop navigation - hidden on mobile */
+  .desktop-nav {
+    display: none;
+  }
+
+  /* Mobile slide-out menu */
+  .mobile-menu {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 300px;
+    height: 100vh;
+    background: linear-gradient(180deg, #f6f6f6, #eeeeee, #f4f4f4);
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: right 0.3s ease-in-out;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+
+  .mobile-menu.open {
+    right: 0;
+  }
+
+  .mobile-logo {
+    padding: 2rem 2rem 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+  }
+
+  .mobile-logo a {
+    text-decoration: none;
+    display: flex;
     justify-content: center;
+  }
+
+  .mobile-logo p {
+    font-weight: 700;
+    font-size: 1.8rem;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0;
+  }
+
+  .mobile-x {
+    display: inline-flex;
+    width: 60px;
+    height: 60px;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe);
+    border-radius: 30px;
+    box-shadow: inset 0px 1px 2px 1px #1f1e1a69;
+    font-size: 2.2rem;
+    color: #8b8b8b;
+    font-weight: 700;
+  }
+
+  .mobile-menu ul {
+    list-style: none;
+    padding: 1rem 2rem 2rem;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .mobile-menu li {
     width: 100%;
   }
 
+  .mobile-menu ul a {
+    text-decoration: none;
+    color: #333;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 1.1rem;
+  }
+
+  .mobile-menu ul a:hover {
+    background: rgba(0, 0, 0, 0.05);
+    color: #b12424;
+  }
+
+  .mobile-menu ul p {
+    margin: 0;
+    font-weight: 600;
+    text-transform: lowercase;
+  }
+
+  a {
+    text-decoration: none;
+    color: #8b8b8b;
+  }
+
   .logo {
-    padding-left: 1rem;
     display: flex;
     align-items: center;
     justify-content: center;
   }
 
-  p {
+  .logo p {
     font-weight: 700;
     font-size: 2rem;
     color: #333;
     display: flex;
     align-items: center;
     gap: 20px;
-  }
-
-  ul {
-    display: flex;
-    list-style: none;
-    padding: 0 1rem;
-    align-items: center;
-    width: 100%;
-  }
-
-  .social-links {
-    justify-content: flex-end;
+    margin: 0;
   }
 
   span {
@@ -105,29 +311,6 @@ import NavbarItem from './NavbarItem.astro'
     color: #8b8b8b;
     line-height: 1.5;
     padding-bottom: 5px;
-  }
-
-  li {
-    margin: 0 1rem;
-
-    &:first-child {
-      margin-right: 30px;
-    }
-  }
-
-  a {
-    text-decoration: none;
-    color: #8b8b8b;
-    text-transform: lowercase;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-evenly;
-    font-size: smaller;
-    transition: all 0.7s ease-in-out;
-    &:hover {
-      color: #0a0909;
-    }
   }
 
   .navi-link {
@@ -141,7 +324,70 @@ import NavbarItem from './NavbarItem.astro'
     border-radius: 45px;
     box-shadow: inset 0px 1px 2px 1px #1f1e1a69;
     transition: all 0.7s cubic-bezier(0, 1.5, 1, 1.5);
-    p {
+  }
+
+  .active {
+    box-shadow: none;
+    color: #0a0909;
+    transform: scale(1);
+    filter: drop-shadow(1px 1px 1px rgba(30, 21, 21, 3.47));
+    background: linear-gradient(-90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe);
+    position: relative;
+    transitions: all 0.7s ease-in-out;
+
+    &:active {
+      box-shadow: inset 0px 1px 2px 3px #1f1e1a69;
+    }
+  }
+
+  /* Tablet and desktop styles */
+  @media screen and (min-width: 768px) {
+    .nav {
+      padding: 0;
+      justify-content: center;
+    }
+
+    /* Hide hamburger on desktop */
+    .hamburger {
+      display: none;
+    }
+
+    /* Show desktop navigation */
+    .desktop-nav {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
+
+    .desktop-nav ul {
+      display: flex;
+      list-style: none;
+      padding: 0 1rem;
+      align-items: center;
+    }
+
+    .desktop-nav li {
+      margin: 0 1rem;
+
+      &:first-child {
+        margin-right: 30px;
+      }
+    }
+
+    .desktop-nav .social-links {
+      justify-content: flex-end;
+    }
+
+    .logo {
+      padding-left: 1rem;
+    }
+
+    /* Hide mobile menu on desktop */
+    .mobile-menu {
+      display: none;
+    }
+
+    .navi-link p {
       position: absolute;
       margin: 10px auto;
       font-size: 0.6rem;
@@ -150,9 +396,10 @@ import NavbarItem from './NavbarItem.astro'
       transition: all 0.7s ease-in-out;
     }
 
-    &:hover {
+    .navi-link:hover {
       color: #0a0909;
       box-shadow: inset 0px 0px 0px 0px #1f1e1a69;
+
       p {
         display: block;
         opacity: 1;
@@ -168,26 +415,12 @@ import NavbarItem from './NavbarItem.astro'
         box-shadow: inset 0px 1px 2px 3px #1f1e1a69;
       }
     }
-  }
 
-  .active {
-    box-shadow: none;
-    color: #0a0909;
-    transform: scale(1);
-    filter: drop-shadow(1px 1px 1px rgba(30, 21, 21, 3.47));
-    background: linear-gradient(-90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe);
-    position: relative;
-    transitions: all 0.7s ease-in-out;
-
-    &:active {
-      box-shadow: inset 0px 1px 2px 3px #1f1e1a69;
-    }
-
-    p {
+    .active p {
       display: none;
     }
 
-    .logo > p {
+    .active .logo > p {
       color: #0a0909;
       display: flex;
       margin: auto;
@@ -196,7 +429,7 @@ import NavbarItem from './NavbarItem.astro'
       transition: all 0.7s ease-in-out;
     }
 
-    a {
+    .active a {
       color: #0a0909;
       transition: all 0.7s ease-in-out;
     }
