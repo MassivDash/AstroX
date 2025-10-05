@@ -6,181 +6,183 @@ import YoungG from '../sections/imgs/cli.png'
 ---
 
 <Layout title='AstroX Cli'>
-  <div class='container'>
-    <ZoomImage
-      src={YoungG}
-      alt='Astro X Cli reference guide'
-      borderFlat='right'
-    />
-    <div class='cliInfo'>
-      <h2>AstroX Cli</h2>
-      <h3>🦀 Project Runner written in rust for automatic boring tasks</h3>
+  <main transition:animate='fade'>
+    <div class='container'>
+      <ZoomImage
+        src={YoungG}
+        alt='Astro X Cli reference guide'
+        borderFlat='right'
+      />
+      <div class='cliInfo'>
+        <h2>AstroX Cli</h2>
+        <h3>🦀 Project Runner written in rust for automatic boring tasks</h3>
+        <p>
+          AstroX is a command-line interface (CLI) tool designed to streamline
+          the development process of AstroX projects. It provides a range of
+          features and functionalities to enhance productivity, automate
+          repetitive tasks, and enforce best practices for code quality.
+        </p>
+        <ul class='live type2'>
+          <li>
+            cargo run -- --interactive mode with oprions and promts, that lists
+            all the possible execution options
+          </li>
+          <li>
+            cargo run for quick and easy installation process that takes care of
+            system checks and prerequisites.
+          </li>
+          <li>
+            cargo run -- --test to run all the tests in the project with a
+            single cmd
+          </li>
+          <li>
+            cargo run -- --build to build the project for production with a
+            single cmd
+          </li>
+          <li>file and arg configartion</li>
+          <li>
+            actix rust server autorestart on production panic, code covearge for
+            rust and frontend, and many many more
+          </li>
+        </ul>
+      </div>
+    </div>
+    <Section>
+      <h2>CLI Arguments</h2>
       <p>
-        AstroX is a command-line interface (CLI) tool designed to streamline the
-        development process of AstroX projects. It provides a range of features
-        and functionalities to enhance productivity, automate repetitive tasks,
-        and enforce best practices for code quality.
+        The AstroX CLI supports various command-line arguments to customize its
+        behavior and configuration:
       </p>
+      <code>
+        Command list:<br />
+        --help [print this help]<br />
+        --sync-git-hooks [copy git_hooks folder contents to .git/hooks]<br />
+        --remove-git-hooks [remove hooks from .git/hooks folder]<br />
+        --build [build production bundle for frontend and backend]<br />
+        --serve [start the production server with the frontend build]<br />
+        --test [run the tests]<br />
+        --create-toml [create a new Astrox.toml file]<br />
+        --interactive [start the interactive mode]<br />
+        --system-checks [run the system checks] <br />
+        <br />
+      </code>
+    </Section>
+    <Section>
+      <h2>Cli run backend and frontend arguments</h2>
+      <table class='arguments-table'>
+        <thead>
+          <tr>
+            <th>Argument</th>
+            <th>Value</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Example</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>--host</td>
+            <td>localhost or ip address </td>
+            <td>String</td>
+            <td>Set the host for the project</td>
+            <td>--host=0.0.0.0</td>
+          </tr>
+          <tr>
+            <td>--port</td>
+            <td>5412</td>
+            <td>Number</td>
+            <td>Set the port for the project</td>
+            <td>--port=5412</td>
+          </tr>
+          <tr>
+            <td>--env</td>
+            <td>prod/dev</td>
+            <td>String</td>
+            <td>Set the environment for the project</td>
+            <td>--env=prod/dev</td>
+          </tr>
+          <tr>
+            <td>--cors_url</td>
+            <td>domain.com</td>
+            <td>String</td>
+            <td>Set the CORS origin URL for the backend server</td>
+            <td>--cors_url=astrox.spaceout.pl</td>
+          </tr>
+          <tr>
+            <td>--cookie_domain</td>
+            <td>domain.com</td>
+            <td>String (Optional)</td>
+            <td>Set the cookie domain for session management</td>
+            <td>--cookie_domain=spaceout.pl</td>
+          </tr>
+          <tr>
+            <td>--astro-port</td>
+            <td>2343</td>
+            <td>Number</td>
+            <td>Set the port for the Astro server</td>
+            <td>--astro-port=2343</td>
+          </tr>
+          <tr>
+            <td>--prod-astro-build</td>
+            <td>true/false</td>
+            <td>Boolean</td>
+            <td
+              >Build just the rust backend, switch the astro.build for
+              --env=prod --build
+            </td>
+            <td>--prod-astro-build=true/false</td>
+          </tr>
+        </tbody>
+      </table>
+    </Section>
+
+    <Section>
+      <h2>👊 Git Hooks</h2>
+      <p>
+        The AstroX CLI includes pre-defined Git hooks that promote code quality
+        and enhance development workflows.
+      </p>
+      <p>These hooks provide:</p>
       <ul class='live type2'>
         <li>
-          cargo run -- --interactive mode with oprions and promts, that lists
-          all the possible execution options
+          Commit message validation with
+          <a
+            target='_blank'
+            href='https://github.com/KeisukeYamashita/commitlint-rs'
+            >commitlint-rs</a
+          >
         </li>
         <li>
-          cargo run for quick and easy installation process that takes care of
-          system checks and prerequisites.
+          Pre-commit hook to test and lint staged files directly from git with 0
+          dependecies
         </li>
-        <li>
-          cargo run -- --test to run all the tests in the project with a single
-          cmd
-        </li>
-        <li>
-          cargo run -- --build to build the project for production with a single
-          cmd
-        </li>
-        <li>file and arg configartion</li>
-        <li>
-          actix rust server autorestart on production panic, code covearge for
-          rust and frontend, and many many more
-        </li>
+        <li>Pre-push hook to run all tests</li>
       </ul>
-    </div>
-  </div>
-  <Section>
-    <h2>CLI Arguments</h2>
-    <p>
-      The AstroX CLI supports various command-line arguments to customize its
-      behavior and configuration:
-    </p>
-    <code>
-      Command list:<br />
-      --help [print this help]<br />
-      --sync-git-hooks [copy git_hooks folder contents to .git/hooks]<br />
-      --remove-git-hooks [remove hooks from .git/hooks folder]<br />
-      --build [build production bundle for frontend and backend]<br />
-      --serve [start the production server with the frontend build]<br />
-      --test [run the tests]<br />
-      --create-toml [create a new Astrox.toml file]<br />
-      --interactive [start the interactive mode]<br />
-      --system-checks [run the system checks] <br />
-      <br />
-    </code>
-  </Section>
-  <Section>
-    <h2>Cli run backend and frontend arguments</h2>
-    <table class='arguments-table'>
-      <thead>
-        <tr>
-          <th>Argument</th>
-          <th>Value</th>
-          <th>Type</th>
-          <th>Description</th>
-          <th>Example</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>--host</td>
-          <td>localhost or ip address </td>
-          <td>String</td>
-          <td>Set the host for the project</td>
-          <td>--host=0.0.0.0</td>
-        </tr>
-        <tr>
-          <td>--port</td>
-          <td>5412</td>
-          <td>Number</td>
-          <td>Set the port for the project</td>
-          <td>--port=5412</td>
-        </tr>
-        <tr>
-          <td>--env</td>
-          <td>prod/dev</td>
-          <td>String</td>
-          <td>Set the environment for the project</td>
-          <td>--env=prod/dev</td>
-        </tr>
-        <tr>
-          <td>--cors_url</td>
-          <td>domain.com</td>
-          <td>String</td>
-          <td>Set the CORS origin URL for the backend server</td>
-          <td>--cors_url=astrox.spaceout.pl</td>
-        </tr>
-        <tr>
-          <td>--cookie_domain</td>
-          <td>domain.com</td>
-          <td>String (Optional)</td>
-          <td>Set the cookie domain for session management</td>
-          <td>--cookie_domain=spaceout.pl</td>
-        </tr>
-        <tr>
-          <td>--astro-port</td>
-          <td>2343</td>
-          <td>Number</td>
-          <td>Set the port for the Astro server</td>
-          <td>--astro-port=2343</td>
-        </tr>
-        <tr>
-          <td>--prod-astro-build</td>
-          <td>true/false</td>
-          <td>Boolean</td>
-          <td
-            >Build just the rust backend, switch the astro.build for --env=prod
-            --build
-          </td>
-          <td>--prod-astro-build=true/false</td>
-        </tr>
-      </tbody>
-    </table>
-  </Section>
-
-  <Section>
-    <h2>👊 Git Hooks</h2>
-    <p>
-      The AstroX CLI includes pre-defined Git hooks that promote code quality
-      and enhance development workflows.
-    </p>
-    <p>These hooks provide:</p>
-    <ul class='live type2'>
-      <li>
-        Commit message validation with
-        <a
-          target='_blank'
-          href='https://github.com/KeisukeYamashita/commitlint-rs'
-          >commitlint-rs</a
-        >
-      </li>
-      <li>
-        Pre-commit hook to test and lint staged files directly from git with 0
-        dependecies
-      </li>
-      <li>Pre-push hook to run all tests</li>
-    </ul>
-  </Section>
-  <Section>
-    <h2>📁 Astrox.toml file</h2>
-    <p>
-      With Astrox.toml file you can configure both frontend and backend variable
-      in one place.
-    </p>
-    <code>
-      host = "localhost" <br />
-      port = 8080 <br />
-      env = "dev" <br />
-      astro_port = 5431<br />
-      prod_astro_build = true <br />
-      cors_url = "localhost" <br />
-      # cookie_domain = ".spaceout.pl" # Uncomment for production <br />
-      <br />
-      [public_keys] <br />
-      public_api_url ="http://localhost:8080/api"</code
-    >
-    <p>
-      🤔 [public keys] will be copied over to frontend env file, before the
-      build, for easy localhost / prod switchero
-    </p>
-  </Section>
+    </Section>
+    <Section>
+      <h2>📁 Astrox.toml file</h2>
+      <p>
+        With Astrox.toml file you can configure both frontend and backend
+        variable in one place.
+      </p>
+      <code>
+        host = "localhost" <br />
+        port = 8080 <br />
+        env = "dev" <br />
+        astro_port = 5431<br />
+        prod_astro_build = true <br />
+        cors_url = "localhost" <br />
+        # cookie_domain = ".spaceout.pl" # Uncomment for production <br />
+        <br />
+        [public_keys] <br />
+        public_api_url ="http://localhost:8080/api"</code
+      >
+      <p>
+        🤔 [public keys] will be copied over to frontend env file, before the
+        build, for easy localhost / prod switchero
+      </p>
+    </Section>
+  </main>
 </Layout>
 
 <style>

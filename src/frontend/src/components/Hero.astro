@@ -28,7 +28,7 @@ import '@fontsource/pacifico'
     height: 100%;
     background:
       linear-gradient(90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe),
-      url('/hero.jpeg') no-repeat center right / contain;
+      url('/hero.jpeg') no-repeat center right / cover;
     -webkit-background-clip: text;
     background-blend-mode: hue;
     color: transparent;
@@ -55,7 +55,7 @@ import '@fontsource/pacifico'
     background-blend-mode: saturation;
     background:
       linear-gradient(90deg, #ededed, #eeeeee, #f4f4f4, #fefefe),
-      url('/hero.jpeg') no-repeat center right / contain;
+      url('/hero.jpeg') no-repeat center right / cover;
   }
 
   /* Tablet and desktop styles */
@@ -65,11 +65,22 @@ import '@fontsource/pacifico'
     }
 
     h1 {
-      font-size: 15rem;
+      font-size: 13rem;
       text-shadow: 9px 4px #00000017;
+      background:
+        linear-gradient(90deg, #f6f6f6, #eeeeee, #f4f4f4, #fefefe),
+        url('/hero.jpeg') no-repeat center right / contain;
+      -webkit-background-clip: text;
+      background-blend-mode: hue;
       span {
         font-size: 4rem;
       }
+    }
+
+    .absolute {
+      background:
+        linear-gradient(90deg, #ededed, #eeeeee, #f4f4f4, #fefefe),
+        url('/hero.jpeg') no-repeat center right / contain;
     }
   }
 </style>
