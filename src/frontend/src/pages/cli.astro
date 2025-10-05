@@ -101,6 +101,20 @@ import YoungG from '../sections/imgs/cli.png'
           <td>--env=prod/dev</td>
         </tr>
         <tr>
+          <td>--cors_url</td>
+          <td>domain.com</td>
+          <td>String</td>
+          <td>Set the CORS origin URL for the backend server</td>
+          <td>--cors_url=astrox.spaceout.pl</td>
+        </tr>
+        <tr>
+          <td>--cookie_domain</td>
+          <td>domain.com</td>
+          <td>String (Optional)</td>
+          <td>Set the cookie domain for session management</td>
+          <td>--cookie_domain=spaceout.pl</td>
+        </tr>
+        <tr>
           <td>--astro-port</td>
           <td>2343</td>
           <td>Number</td>
@@ -125,8 +139,9 @@ import YoungG from '../sections/imgs/cli.png'
     <h2>👊 Git Hooks</h2>
     <p>
       The AstroX CLI includes pre-defined Git hooks that promote code quality
-      and enhance development workflows. These hooks provide:
+      and enhance development workflows.
     </p>
+    <p>These hooks provide:</p>
     <ul>
       <li>
         Commit message validation with
