@@ -37,16 +37,16 @@ import ZoomImage from '../../components/zoomImage/zoomImage.astro'
   </div>
 
   <style>
+    /* Mobile-first base styles */
     .grid {
       display: grid;
       justify-content: center;
       flex-wrap: wrap;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr;
       min-height: 100vh;
-      align-items: flex-start;
+      align-items: center;
       gap: 2rem;
-      padding-top: 150px;
-      padding-bottom: 150px;
+      padding: 2rem 1rem;
       background: linear-gradient(88deg, #efefef, #e7e7e7);
     }
 
@@ -54,14 +54,32 @@ import ZoomImage from '../../components/zoomImage/zoomImage.astro'
       display: flex;
       width: 100%;
       flex-direction: column;
-      align-items: flex-end;
+      align-items: center;
     }
 
     .align-left {
       display: flex;
       width: 100%;
       flex-direction: column;
-      align-items: flex-start;
+      align-items: center;
+    }
+
+    /* Tablet and desktop styles */
+    @media screen and (min-width: 1024px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+        align-items: flex-start;
+        padding-top: 150px;
+        padding-bottom: 150px;
+      }
+
+      .align-right {
+        align-items: flex-end;
+      }
+
+      .align-left {
+        align-items: flex-start;
+      }
     }
   </style>
 </div>

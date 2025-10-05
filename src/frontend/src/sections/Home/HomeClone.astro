@@ -39,24 +39,48 @@ import ZoomImage from '../../components/zoomImage/zoomImage.astro'
 </div>
 
 <style>
+  /* Mobile-first base styles */
   h2 {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
+    font-size: 1.75rem;
+    margin-bottom: 1rem;
     font-family: 'Pacifico', cursive;
   }
 
   .clone-container {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 70px 70px 0 0px;
-    gap: 50px;
+    grid-template-columns: 1fr;
+    padding: 2rem 1rem;
+    gap: 2rem;
     background: linear-gradient(88deg, #efefef, #e7e7e7);
+    overflow-x: hidden;
+  }
+
+  .clone-instructions {
+    order: 2;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  .get-started {
+    order: 1;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   .prereqs {
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     margin-top: 1rem;
-    text-align: right;
+    text-align: left;
+    word-wrap: break-word;
+  }
+
+  pre {
+    margin: 0.5rem 0;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
   }
 
   pre code {
@@ -65,18 +89,26 @@ import ZoomImage from '../../components/zoomImage/zoomImage.astro'
     white-space: pre;
     color: white;
     -webkit-overflow-scrolling: touch;
-    overflow-x: scroll;
+    overflow-x: auto;
     max-width: 100%;
-    min-width: 100px;
-    padding: 0;
+    width: 100%;
+    padding: 1rem;
     border-radius: 5px;
+    font-size: 0.875rem;
+    box-sizing: border-box;
   }
 
   .get-started {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    align-items: flex-end;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .get-started > * {
+    max-width: 100%;
+    width: 100%;
   }
 
   .overflow {
@@ -85,15 +117,13 @@ import ZoomImage from '../../components/zoomImage/zoomImage.astro'
     justify-content: center;
     align-items: stretch;
     width: 100%;
+    max-width: 100%;
     height: 100%;
-    border-radius: 25px;
+    border-radius: 15px;
     box-shadow:
       0 2.8px 2.2px rgba(0, 0, 0, 0.034),
       0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-      0 12.5px 10px rgba(0, 0, 0, 0.06),
-      0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-      0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-      0 100px 80px rgba(0, 0, 0, 0.12);
+      0 12.5px 10px rgba(0, 0, 0, 0.06);
   }
 
   .right {
@@ -104,8 +134,68 @@ import ZoomImage from '../../components/zoomImage/zoomImage.astro'
   img {
     width: 100%;
     height: 100%;
+    max-width: 100%;
     transition: transform 2.5s;
-    &:hover {
+  }
+
+  /* Tablet and desktop styles */
+  @media screen and (min-width: 1024px) {
+    h2 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .clone-container {
+      grid-template-columns: 1fr 1fr;
+      padding: 70px 70px 0 0px;
+      gap: 50px;
+      overflow-x: visible;
+    }
+
+    .clone-instructions {
+      order: 0;
+      max-width: none;
+      overflow-x: visible;
+    }
+
+    .get-started {
+      order: 0;
+      align-items: flex-end;
+      max-width: none;
+      overflow-x: visible;
+    }
+
+    .get-started > * {
+      max-width: none;
+      width: auto;
+    }
+
+    .prereqs {
+      font-size: 0.8rem;
+      text-align: right;
+    }
+
+    pre {
+      overflow-x: visible;
+    }
+
+    pre code {
+      padding: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .overflow {
+      border-radius: 25px;
+      box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+        0 12.5px 10px rgba(0, 0, 0, 0.06),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+        0 100px 80px rgba(0, 0, 0, 0.12);
+    }
+
+    img:hover {
       transform: scale3d(1.5, 1.5, 1.6);
       transition: transform 7.5s;
     }

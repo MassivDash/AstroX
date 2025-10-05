@@ -19,38 +19,78 @@ import Rust from '../../svgs/RustIcon.astro'
 </section>
 
 <style>
+  /* Mobile-first base styles */
   .icons {
     display: flex;
-    gap: 4rem;
+    flex-direction: column;
+    gap: 1.5rem;
     width: 100%;
     justify-content: center;
-    font-size: x-large;
+    font-size: large;
     align-items: center;
+    padding: 0 1rem;
   }
 
   .box {
-    min-height: 200px;
+    min-height: auto;
     background-color: #23262d;
-    border-radius: 25px;
-    padding: 2rem;
-    width: 400px;
+    border-radius: 15px;
+    padding: 1.5rem;
+    width: 100%;
+    max-width: 400px;
     color: #eaeaea;
     box-shadow:
       0 2.8px 2.2px rgba(0, 0, 0, 0.034),
       0 6.7px 5.3px rgba(0, 0, 0, 0.048),
-      0 12.5px 10px rgba(0, 0, 0, 0.06),
-      0 22.3px 17.9px rgba(0, 0, 0, 0.072),
-      0 41.8px 33.4px rgba(0, 0, 0, 0.086),
-      0 100px 80px rgba(0, 0, 0, 0.12);
+      0 12.5px 10px rgba(0, 0, 0, 0.06);
+  }
+
+  .box h2 {
+    font-size: 1.25rem;
+    line-height: 1.4;
   }
 
   .secondary {
     display: flex;
-    min-height: 400px;
+    min-height: auto;
     justify-content: center;
     align-items: center;
-    gap: 2rem;
-    padding: 2rem;
+    gap: 1rem;
+    padding: 2rem 1rem;
     background: linear-gradient(92deg, #ededede0, #eaeaea, #ebebeb, #e6e6e6);
+  }
+
+  /* Tablet and desktop styles */
+  @media screen and (min-width: 1024px) {
+    .icons {
+      flex-direction: row;
+      gap: 4rem;
+      font-size: x-large;
+      padding: 0;
+    }
+
+    .box {
+      min-height: 200px;
+      border-radius: 25px;
+      padding: 2rem;
+      width: 400px;
+      box-shadow:
+        0 2.8px 2.2px rgba(0, 0, 0, 0.034),
+        0 6.7px 5.3px rgba(0, 0, 0, 0.048),
+        0 12.5px 10px rgba(0, 0, 0, 0.06),
+        0 22.3px 17.9px rgba(0, 0, 0, 0.072),
+        0 41.8px 33.4px rgba(0, 0, 0, 0.086),
+        0 100px 80px rgba(0, 0, 0, 0.12);
+    }
+
+    .box h2 {
+      font-size: 2rem;
+    }
+
+    .secondary {
+      min-height: 400px;
+      gap: 2rem;
+      padding: 2rem;
+    }
   }
 </style>

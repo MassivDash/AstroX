@@ -100,7 +100,7 @@ jobs:
         with:
           generate_release_notes: true
           draft: false
-          tag_name: v0.1.2.${{github.run_number}}
+          tag_name: v0.1.3.${{github.run_number}}
           files: |
             artifacts/artifacts_macos.zip
             artifacts/artifacts_windows.zip
