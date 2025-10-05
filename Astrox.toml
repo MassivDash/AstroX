@@ -1,7 +1,7 @@
-host = "https://astrox.spaceout.pl"
-port = "0.0.0.0"
+host = "0.0.0.0"
+port = 51780
 env = "prod"
-astro_port = 51780
+astro_port = 5342
 prod_astro_build = true
 cors_url = "astrox.spaceout.pl"
 cookie_domain = "astrox.spaceout.pl"  # Uncomment for production to enable subdomain cookie sharing
