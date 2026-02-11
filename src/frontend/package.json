@@ -23,7 +23,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "astro": "^5.14.4",
-    "axios": "^1.12.2",
+    "axios": "^1.13.5",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "svelte": "^5.39.8",
