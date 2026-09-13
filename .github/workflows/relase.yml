@@ -14,9 +14,21 @@ jobs:
     env:
       CARGO_TERM_COLOR: always
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install Rust
         run: rustup update stable
+      - name: Install protoc (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
+      - name: Install protoc (macOS)
+        if: matrix.os == 'macOS-latest'
+        run: brew install protobuf
+      - name: Install protoc (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          choco install protoc -y
       - name: Install rust dependencies
         run: |
           cargo install cargo-watch
@@ -26,7 +38,7 @@ jobs:
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@cargo-llvm-cov
       - name: Install Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v5
         with:
           node-version: "24"
       - name: Install Frontend dependencies
@@ -38,10 +50,20 @@ jobs:
           cd src/frontend 
           npm run coverage
       - name: Test cli
+        if: matrix.os == 'macOS-latest'
         run: cargo llvm-cov --all-features --workspace --lcov --output-path lcovCli.info --manifest-path Cargo.toml
+      - name: Test cli (Ubuntu/Windows)
+        if: matrix.os != 'macOS-latest'
+        run: cargo test --all-features --workspace --manifest-path Cargo.toml
       - name: Report code coverage
         if: matrix.os == 'macOS-latest'
-        uses: zgosalvez/github-actions-report-lcov@v4.1.21
+        # continue-on-error: cargo llvm-cov doesn't emit branch coverage on
+        # stable Rust, so this lcov file has zero branch coverpoints. The
+        # runner's Homebrew lcov (2.x) now hard-errors on that combination
+        # instead of warning. This step is reporting/PR-comment only; the
+        # actual test run already passed in the step above.
+        continue-on-error: true
+        uses: zgosalvez/github-actions-report-lcov@v7.1.0
         with:
           coverage-files: lcovCli.info
           artifact-name: code-coverage-cli-report
@@ -49,10 +71,16 @@ jobs:
           update-comment: true
           title-prefix: "CLI"
       - name: Test Backend
+        if: matrix.os == 'macOS-latest'
         run: cargo llvm-cov --all-features --workspace --lcov --output-path lcovBackend.info --manifest-path src/backend/Cargo.toml
+      - name: Test Backend (Ubuntu/Windows)
+        if: matrix.os != 'macOS-latest'
+        run: cargo test --all-features --workspace --manifest-path src/backend/Cargo.toml
       - name: Report code coverage
         if: matrix.os == 'macOS-latest'
-        uses: zgosalvez/github-actions-report-lcov@v4.1.21
+        # See continue-on-error note on the CLI coverage step above.
+        continue-on-error: true
+        uses: zgosalvez/github-actions-report-lcov@v7.1.0
         with:
           coverage-files: lcovBackend.info
           artifact-name: code-coverage-backend-report
@@ -62,42 +90,45 @@ jobs:
       - name: Run Project Build
         run: cargo run -- --build --prod-astro-build=true
       - name: Package Artifacts (Linux)
-        if: matrix.os == 'linux-latest'
+        if: matrix.os == 'ubuntu-latest'
         run: |
           zip -r artifacts_linux.zip .
           mkdir -p artifacts
           mv artifacts_linux.zip artifacts/
       - name: Package Artifacts (Mac)
-        if: matrix.os == 'macOs-latest'
+        if: matrix.os == 'macOS-latest'
         run: |
           zip -r artifacts_macos.zip .
           mkdir -p artifacts
           mv artifacts_macos.zip artifacts/
       - name: Package Artifacts (Windows)
-        if: matrix.os == 'window-latest'
+        if: matrix.os == 'windows-latest'
         run: |
-          Compress-Archive -Path . -DestinationPath artifacts\artifacts_windows.zip
           mkdir artifacts
-          copy artifacts_windows.zip artifacts\
+          Compress-Archive -Path . -DestinationPath artifacts\artifacts_windows.zip
       - name: Upload Artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: build-artifacts
+          name: build-artifacts-${{ matrix.os }}
           path: artifacts/
 
   release:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Download Artifacts
         uses: actions/download-artifact@v4.1.7
         with:
-          name: build-artifacts
+          pattern: build-artifacts-*
           path: artifacts/
+          merge-multiple: true
       - name: Release
         uses: softprops/action-gh-release@v2
         with:
+          token: ${{ secrets.GITHUB_TOKEN }}
           generate_release_notes: true
           draft: false
           tag_name: v0.1.3.${{github.run_number}}

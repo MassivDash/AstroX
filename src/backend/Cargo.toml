@@ -11,7 +11,8 @@ actix-rt = "2"
 actix-files = "0.6.6"
 actix-cors = "0.7.0"
 actix-utils = "3.0.1"
-futures-util = "0.3.30"
+actix-ws = "0.3.0"
+futures-util = "0.3.31"
 actix-web-flash-messages = { version = "0.4", features = ["cookies"] }
 actix-session = { version = "0.10.0", features = ["cookie-session"] }
 serde = { version = "1.0", features = ["derive"] }
@@ -20,7 +21,8 @@ reqwest = { version = "0.12", features = ["json"] }
 env_logger = "0.11.5"
 anyhow = "1.0"
 dotenv = "0.15.0"
-thiserror = "1.0.63"
+thiserror = "2.0.17"
 pin-project = "1.1.5"
 futures = "0.3.30"
 globset = "0.4.14"
+tokio = { version = "1", features = ["net", "time", "rt", "macros", "process"] }

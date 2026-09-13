@@ -17,6 +17,6 @@
       "@layouts/*": ["src/layouts/*"],
       "@axios/*": ["src/axiosInstance/*"]
     },
-    "types": ["vitest/jsdom"]
+    "types": ["vitest/jsdom", "vitest/config"]
   }
 }

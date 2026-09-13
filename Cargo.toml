@@ -12,3 +12,4 @@ inquire = "0.9.1"
 serde = { version = "1.0", features = ["derive"] }
 semver = "1.0.23"
 crossterm = "0.29"
+html-to-markdown-rs = "2.13.0"

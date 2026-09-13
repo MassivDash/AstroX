@@ -6,9 +6,8 @@ concurrency:
   cancel-in-progress: true
 permissions:
   # Required to checkout the code
-  contents:
-    read
-    # Required to put a comment into the pull-request
+  contents: read
+  # Required to put a comment into the pull-request
   pull-requests: write
 jobs:
   test_rust:
@@ -19,9 +18,21 @@ jobs:
     env:
       CARGO_TERM_COLOR: always
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install Rust
         run: rustup update stable
+      - name: Install protoc (Ubuntu)
+        if: matrix.os == 'ubuntu-latest'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y protobuf-compiler
+      - name: Install protoc (macOS)
+        if: matrix.os == 'macOS-latest'
+        run: brew install protobuf
+      - name: Install protoc (Windows)
+        if: matrix.os == 'windows-latest'
+        run: |
+          choco install protoc -y
       - name: Install rust dependencies
         run: |
           cargo install cargo-watch
@@ -31,18 +42,28 @@ jobs:
       - name: Install cargo-llvm-cov
         uses: taiki-e/install-action@cargo-llvm-cov
       - name: Install Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v5
         with:
-          node-version: "20"
+          node-version: "24"
       - name: Install Frontend dependencies
         run: |
           cd src/frontend
           npm install
       - name: Test Cli (Astro_X_Runner)
+        if: matrix.os == 'macOS-latest'
         run: cargo llvm-cov --all-features --workspace --lcov --output-path lcovCli.info --manifest-path Cargo.toml
+      - name: Test Cli (Astro_X_Runner) (Ubuntu/Windows)
+        if: matrix.os != 'macOS-latest'
+        run: cargo test --all-features --workspace --manifest-path Cargo.toml
       - name: Report code coverage
         if: matrix.os == 'macOS-latest'
-        uses: zgosalvez/github-actions-report-lcov@v4.1.21
+        # continue-on-error: cargo llvm-cov doesn't emit branch coverage on
+        # stable Rust, so this lcov file has zero branch coverpoints. The
+        # runner's Homebrew lcov (2.x) now hard-errors on that combination
+        # instead of warning. This step is reporting/PR-comment only; the
+        # actual test run already passed in the step above.
+        continue-on-error: true
+        uses: zgosalvez/github-actions-report-lcov@v7.1.0
         with:
           coverage-files: lcovCli.info
           artifact-name: code-coverage-cli-report
@@ -50,11 +71,17 @@ jobs:
           update-comment: true
           title-prefix: "CLI"
       - name: Test Backend
+        if: matrix.os == 'macOS-latest'
         run: cargo llvm-cov --all-features --workspace --lcov --output-path lcovBackend.info --manifest-path src/backend/Cargo.toml
+      - name: Test Backend (Ubuntu/Windows)
+        if: matrix.os != 'macOS-latest'
+        run: cargo test --all-features --workspace --manifest-path src/backend/Cargo.toml
 
       - name: Report code coverage
         if: matrix.os == 'macOS-latest'
-        uses: zgosalvez/github-actions-report-lcov@v4.1.21
+        # See continue-on-error note on the CLI coverage step above.
+        continue-on-error: true
+        uses: zgosalvez/github-actions-report-lcov@v7.1.0
         with:
           coverage-files: lcovBackend.info
           artifact-name: code-coverage-backend-report
@@ -66,9 +93,9 @@ jobs:
   test_frontend:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Install Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v5
         with:
           node-version: "24"
       - name: Install dependencies
@@ -79,6 +106,10 @@ jobs:
         run: |
           cd src/frontend 
           npm audit --json | npx @netly/npm-audit-markdown --output npm.md
+      - name: "Build"
+        run: |
+          cd src/frontend
+          npm run build
       - name: "Test"
         run: |
           cd src/frontend 

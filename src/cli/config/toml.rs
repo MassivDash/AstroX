@@ -31,8 +31,6 @@ pub fn read_toml(filename: &String) -> Result<Config, ()> {
 }
 
 pub fn create_toml_file(file_name: String) -> Result<Config, ()> {
-    // check if the toml.file exits abort if it does, panic and exit
-
     if std::fs::metadata(&file_name).is_ok() {
         error("Astrox.toml already exists");
         spacer();
@@ -49,7 +47,7 @@ pub fn create_toml_file(file_name: String) -> Result<Config, ()> {
         astro_port: Some(astro_port),
         cors_url,
         prod_astro_build: true,
-        cookie_domain: None, // Set to None for dev environment by default
+        cookie_domain: None,
         public_keys: {
             let public_api_url = "http://localhost:8080/api".to_string();
             PublicKeys { public_api_url }
@@ -93,7 +91,6 @@ mod tests {
 
     #[test]
     fn test_read_toml_success() {
-        // Arrange
         let expected_config = Config {
             host: "127.0.0.1".to_string(),
             port: Some(8080),
@@ -113,10 +110,8 @@ mod tests {
         let toml_str = toml::to_string(&expected_config).unwrap();
         std::fs::write(&file_name, toml_str).unwrap();
 
-        // Act
         let result = read_toml(&file_name);
 
-        // Assert
         assert!(result.is_ok());
         let config = result.unwrap();
         assert!(config.host == expected_config.host);
@@ -126,7 +121,6 @@ mod tests {
         assert!(config.prod_astro_build == expected_config.prod_astro_build);
         assert!(config.cors_url == expected_config.cors_url);
 
-        // delete file after test completion
         remove_file(&file_name)
     }
 
@@ -135,15 +129,16 @@ mod tests {
         let file_name: String = "Astrox-not.toml".to_string();
         let result = read_toml(&file_name);
 
-        // Assert
         assert!(result.is_err());
     }
 
     #[test]
     fn test_read_toml_parse_error() {
         let file_name: String = "Astrox-error.toml".to_string();
-        std::fs::write("Astrox-test.toml", "invalid toml").unwrap();
+        std::fs::write(&file_name, "this is = not = valid toml").unwrap();
+
         let result = read_toml(&file_name);
+
         assert!(result.is_err());
         remove_file(&file_name);
     }
@@ -153,6 +148,37 @@ mod tests {
         let file_name: String = "Astrox-test-write.toml".to_string();
         let result = create_toml_file(file_name.clone());
         assert!(result.is_ok());
+
+        let written = read_toml(&file_name);
+        assert!(written.is_ok());
+        assert_eq!(written.unwrap(), result.unwrap());
+
         remove_file(&file_name);
+    }
+
+    #[test]
+    fn test_create_toml_file_refuses_to_overwrite() {
+        let file_name: String = "Astrox-test-existing.toml".to_string();
+        std::fs::write(&file_name, "host = \"do-not-touch\"").unwrap();
+
+        let result = create_toml_file(file_name.clone());
+
+        assert!(result.is_err());
+        assert_eq!(
+            std::fs::read_to_string(&file_name).unwrap(),
+            "host = \"do-not-touch\""
+        );
+
+        remove_file(&file_name);
+    }
+
+    #[test]
+    fn test_create_toml_file_reports_a_write_failure() {
+        let file_name: String = "Astrox-no-such-folder/Astrox.toml".to_string();
+
+        let result = create_toml_file(file_name.clone());
+
+        assert!(result.is_err());
+        assert!(!std::path::Path::new(&file_name).exists());
     }
 }

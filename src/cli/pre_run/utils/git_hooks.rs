@@ -52,8 +52,13 @@ pub fn copy_git_hooks() {
 
 // Try and find match between git_hooks and .git/hooks
 pub fn check_if_git_hooks_are_installed() -> bool {
-    // Get the list of hooks from the .git/hooks folder
-    let hooks = fs::read_dir(".git/hooks");
+    hooks_are_installed_in(".git/hooks")
+}
+
+/// A hooks folder counts as installed when it exists and is not empty.
+pub fn hooks_are_installed_in(hooks_dir: &str) -> bool {
+    // Get the list of hooks from the hooks folder
+    let hooks = fs::read_dir(hooks_dir);
     if hooks.is_err() {
         return false;
     }
@@ -108,7 +113,7 @@ mod tests {
     }
 
     #[test]
-    fn test_copy_git_hooks() {
+    fn test_git_hooks_copy_and_remove() {
         let check = check_if_git_hooks_are_installed();
         assert!(check == true);
 
@@ -119,10 +124,7 @@ mod tests {
         assert!(read_the_hooks()
             .iter()
             .any(|hook| hook == "pre-commit" || hook == "pre-push" || hook == "commit-msg"));
-    }
 
-    #[test]
-    fn test_remove_git_hooks() {
         // Act
         remove_git_hooks();
         let hooks = read_the_hooks();
@@ -131,5 +133,28 @@ mod tests {
         assert!(hooks.iter().any(|hook| hook == "pre-commit") == false);
 
         copy_git_hooks(); //return the githooks back after tests
+    }
+
+    #[test]
+    fn test_hooks_are_not_installed_when_the_folder_is_missing() {
+        assert_eq!(hooks_are_installed_in("no-such-folder/hooks"), false);
+    }
+
+    #[test]
+    fn test_hooks_are_not_installed_when_the_folder_is_empty() {
+        let empty_dir = std::env::temp_dir().join("astrox-test-empty-hooks");
+        let empty_dir = empty_dir.to_str().unwrap();
+
+        // Start from a clean, empty folder
+        let _ = fs::remove_dir_all(empty_dir);
+        fs::create_dir_all(empty_dir).unwrap();
+
+        assert_eq!(hooks_are_installed_in(empty_dir), false);
+
+        // A folder with a file in it counts as installed
+        fs::write(format!("{}/pre-commit", empty_dir), "#!/bin/sh\n").unwrap();
+        assert_eq!(hooks_are_installed_in(empty_dir), true);
+
+        fs::remove_dir_all(empty_dir).unwrap();
     }
 }
