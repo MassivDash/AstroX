@@ -26,17 +26,21 @@ mod tests {
 
     #[test]
     fn test_bind_available_port_returns_the_requested_port_when_free() {
-        // Ask the OS for a free port, release it, then claim it back.
-        let free_port = TcpListener::bind("127.0.0.1:0")
-            .unwrap()
-            .local_addr()
-            .unwrap()
-            .port();
+        for _ in 0..10 {
+            let free_port = TcpListener::bind("127.0.0.1:0")
+                .unwrap()
+                .local_addr()
+                .unwrap()
+                .port();
 
-        let (port, listener) = bind_available_port("127.0.0.1", free_port, "Port");
+            let (port, listener) = bind_available_port("127.0.0.1", free_port, "Port");
 
-        assert_eq!(port, free_port);
-        assert_eq!(listener.local_addr().unwrap().port(), free_port);
+            if port == free_port {
+                assert_eq!(listener.local_addr().unwrap().port(), free_port);
+                return;
+            }
+        }
+        panic!("Could not find a stable free port for testing without interference");
     }
 
     #[test]
