@@ -113,7 +113,7 @@ mod tests {
     }
 
     #[test]
-    fn test_copy_git_hooks() {
+    fn test_git_hooks_copy_and_remove() {
         let check = check_if_git_hooks_are_installed();
         assert!(check == true);
 
@@ -124,10 +124,7 @@ mod tests {
         assert!(read_the_hooks()
             .iter()
             .any(|hook| hook == "pre-commit" || hook == "pre-push" || hook == "commit-msg"));
-    }
 
-    #[test]
-    fn test_remove_git_hooks() {
         // Act
         remove_git_hooks();
         let hooks = read_the_hooks();

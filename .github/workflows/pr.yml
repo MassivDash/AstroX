@@ -48,7 +48,7 @@ jobs:
       - name: Install Frontend dependencies
         run: |
           cd src/frontend
-          npm install --legacy-peer-deps
+          npm install
       - name: Test Cli (Astro_X_Runner)
         if: matrix.os == 'macOS-latest'
         run: cargo llvm-cov --all-features --workspace --lcov --output-path lcovCli.info --manifest-path Cargo.toml
@@ -101,7 +101,7 @@ jobs:
       - name: Install dependencies
         run: |
           cd src/frontend
-          npm install --legacy-peer-deps
+          npm install
       - name: npm audit report
         run: |
           cd src/frontend 
