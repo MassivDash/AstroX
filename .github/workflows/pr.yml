@@ -106,6 +106,10 @@ jobs:
         run: |
           cd src/frontend 
           npm audit --json | npx @netly/npm-audit-markdown --output npm.md
+      - name: "Build"
+        run: |
+          cd src/frontend
+          npm run build
       - name: "Test"
         run: |
           cd src/frontend 
