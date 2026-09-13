@@ -1,9 +1,9 @@
+/// <reference types="vitest/config" />
 import { getViteConfig } from 'astro/config'
 import { svelteTesting } from '@testing-library/svelte/vite'
 import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default getViteConfig({
-  //@ts-ignore
   test: {
     projects: [
       {
