@@ -24,7 +24,9 @@
   </a>
 </p>
 
-![CodeQL](https://github.com/MassivDash/ado-npmrc-ts-action/actions/workflows/codeql-analysis.yml/badge.svg)![CI](https://github.com/MassivDash/astrox/actions/workflows/ci.yml/badge.svg)![Compliation](https://github.com/MassivDash/astrox/actions/workflows/release.yml/badge.svg)!
+[![CodeQL](https://github.com/MassivDash/AstroX/actions/workflows/codeql-analysis.yml/badge.svg?branch=main)](https://github.com/MassivDash/AstroX/actions/workflows/codeql-analysis.yml)
+[![Release](https://github.com/MassivDash/AstroX/actions/workflows/relase.yml/badge.svg?branch=main)](https://github.com/MassivDash/AstroX/actions/workflows/relase.yml)
+
 
 **Platforms**
 
