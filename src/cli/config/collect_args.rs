@@ -1,31 +1,3 @@
-/// This module contains functions for collecting and parsing configuration arguments.
-///
-/// The `split_and_collect` function takes a string argument and splits it by the '=' character.
-/// It returns the second part of the split string as a `String`.
-///
-/// The `parse_to_bool` function takes a string argument and matches it against "true" and "false".
-/// It returns a boolean value based on the match.
-///
-/// The `collect_config_args` function takes a `Config` struct and a vector of string arguments.
-/// It iterates over the arguments and updates the corresponding fields in the `Config` struct based on the argument prefix.
-/// It uses the `split_and_collect` and `parse_to_bool` functions to extract and parse the values. It returns the updated `Config` struct.
-///
-/// The module also contains unit tests for the `split_and_collect`, `parse_to_bool`, and `collect_config_args` functions.
-///
-/// List of config arguments
-/// Bind actix server to a host, used for development and production
-/// --host=127.0.0.1
-/// Bind actix server to a port, used for development and production
-/// --port=8080
-/// Set the environment
-/// --env=prod / dev
-/// Set the astro development port, in production actix server will serve the frontend build Files
-/// --astro-port=4321
-/// Switch on / off the production build of the frontend during the production server start
-/// --prod-astro-build=true / false
-/// Set the public api url, this will be copied over to astro frontend and used for grabbing url to set api base
-/// During development this value is being copied into the frontend .env file for building the frontend
-/// --set-public-api=https://custom.api/api
 use super::get_config::Config;
 
 fn split_and_collect(arg: &str) -> String {
@@ -77,6 +49,10 @@ pub fn collect_config_args(config: Config, args: &Vec<String>) -> Config {
             } else {
                 Some(domain)
             };
+        }
+
+        if arg.starts_with("--cors-url=") || arg.starts_with("--cors_url=") {
+            config.cors_url = split_and_collect(arg);
         }
     }
 
@@ -147,5 +123,42 @@ mod tests {
         };
 
         assert_eq!(collect_config_args(config, &args), expected_config);
+    }
+
+    fn empty_config() -> Config {
+        Config {
+            env: "".to_string(),
+            host: "".to_string(),
+            port: None,
+            astro_port: None,
+            prod_astro_build: false,
+            cors_url: "".to_string(),
+            cookie_domain: Some("stays-unless-overwritten".to_string()),
+            public_keys: PublicKeys {
+                public_api_url: "".to_string(),
+            },
+        }
+    }
+
+    #[test]
+    fn test_empty_optional_arguments_are_dropped() {
+        let args = vec!["--cookie-domain=".to_string()];
+
+        let config = collect_config_args(empty_config(), &args);
+
+        assert_eq!(config.cookie_domain, None);
+    }
+
+    #[test]
+    fn test_unparsable_ports_are_handled() {
+        let args = vec![
+            "--port=not-a-port".to_string(),
+            "--astro-port=not-a-port".to_string(),
+        ];
+
+        let config = collect_config_args(empty_config(), &args);
+
+        assert_eq!(config.port, Some(0));
+        assert_eq!(config.astro_port, Some(0));
     }
 }

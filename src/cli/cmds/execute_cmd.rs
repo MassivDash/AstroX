@@ -14,70 +14,136 @@ use super::{
     interactive::{start_interactive, InquireUserInput, RealCommandExecutor},
 };
 
-pub fn execute_cmd(args: &Vec<String>) {
-    let cmd = check_for_cli_cmds(args);
-    if cmd != CliCmds::Run {
-        match cmd {
-            CliCmds::Help => {
-                help();
-                std::process::exit(0);
-            }
-            CliCmds::SyncGitHooks => {
-                // Copy the git hooks to the .git/hooks folder
-                // Enjoy pre-commit, pre-push and commit-msg hooks that will help you to maintain the code quality
-                step("Syncing the git hooks");
-                copy_git_hooks();
-                std::process::exit(0);
-            }
-            CliCmds::RemoveGitHooks => {
-                // Remove the git hooks from the .git/hooks folder
-                // This will remove the pre-commit, pre-push and commit-msg hooks
-                step("Removing the git hooks");
-                remove_git_hooks();
-                std::process::exit(0);
-            }
-            CliCmds::CreateToml => {
-                create_toml_file(ASTROX_TOML.to_string())
-                    .expect("Failed to create Astrox.toml file");
-                std::process::exit(0);
-            }
-            CliCmds::Interactive => start_interactive(&InquireUserInput, &RealCommandExecutor),
-            CliCmds::SystemCheck => {
-                run_system_checks("dev");
-                std::process::exit(0);
-            }
-            CliCmds::Build => {
-                step("Building the project");
-                execute_build();
-                std::process::exit(0);
-            }
-            CliCmds::Test => {
-                step("Testing the project");
-                execute_tests();
-                std::process::exit(0);
-            }
-            CliCmds::Serve => {
-                step("Serving the project");
-                execute_serve();
-                std::process::exit(0);
-            }
-            CliCmds::Coverage => {
-                step("Running rust the coverage");
-                execute_coverage();
-                std::process::exit(0);
-            }
-            CliCmds::Run => {}
+/// Everything a cli command can do, so the command dispatch can be exercised
+/// without running the real commands.
+pub trait CmdActions {
+    fn help(&self);
+    fn sync_git_hooks(&self);
+    fn remove_git_hooks(&self);
+    fn create_toml(&self);
+    fn interactive(&self);
+    fn system_check(&self);
+    fn build(&self);
+    fn test(&self);
+    fn serve(&self);
+    fn coverage(&self);
+}
+
+pub struct RealCmdActions;
+
+impl CmdActions for RealCmdActions {
+    fn help(&self) {
+        help();
+    }
+
+    fn sync_git_hooks(&self) {
+        // Copy the git hooks to the .git/hooks folder
+        // Enjoy pre-commit, pre-push and commit-msg hooks that will help you to maintain the code quality
+        step("Syncing the git hooks");
+        copy_git_hooks();
+    }
+
+    fn remove_git_hooks(&self) {
+        // Remove the git hooks from the .git/hooks folder
+        // This will remove the pre-commit, pre-push and commit-msg hooks
+        step("Removing the git hooks");
+        remove_git_hooks();
+    }
+
+    fn create_toml(&self) {
+        create_toml_file(ASTROX_TOML.to_string()).expect("Failed to create Astrox.toml file");
+    }
+
+    fn interactive(&self) {
+        start_interactive(&InquireUserInput, &RealCommandExecutor);
+    }
+
+    fn system_check(&self) {
+        run_system_checks("dev");
+    }
+
+    fn build(&self) {
+        step("Building the project");
+        execute_build();
+    }
+
+    fn test(&self) {
+        step("Testing the project");
+        execute_tests();
+    }
+
+    fn serve(&self) {
+        step("Serving the project");
+        execute_serve();
+    }
+
+    fn coverage(&self) {
+        step("Running rust the coverage");
+        execute_coverage();
+    }
+}
+
+/// What the cli should do once the command has been handled.
+#[derive(Debug, PartialEq, Eq)]
+pub enum CmdOutcome {
+    /// The command is done, the cli exits.
+    Exit,
+    /// The cli carries on and starts a server.
+    Continue,
+}
+
+/// Run the action behind `cmd` and report whether the cli is done.
+/// `Run` and `Interactive` are the only commands that let the cli carry on.
+pub fn dispatch_cmd(cmd: CliCmds, actions: &dyn CmdActions) -> CmdOutcome {
+    match cmd {
+        CliCmds::Run => CmdOutcome::Continue,
+        CliCmds::Interactive => {
+            actions.interactive();
+            CmdOutcome::Continue
+        }
+        CliCmds::Help => {
+            actions.help();
+            CmdOutcome::Exit
+        }
+        CliCmds::SyncGitHooks => {
+            actions.sync_git_hooks();
+            CmdOutcome::Exit
+        }
+        CliCmds::RemoveGitHooks => {
+            actions.remove_git_hooks();
+            CmdOutcome::Exit
+        }
+        CliCmds::CreateToml => {
+            actions.create_toml();
+            CmdOutcome::Exit
+        }
+        CliCmds::SystemCheck => {
+            actions.system_check();
+            CmdOutcome::Exit
+        }
+        CliCmds::Build => {
+            actions.build();
+            CmdOutcome::Exit
+        }
+        CliCmds::Test => {
+            actions.test();
+            CmdOutcome::Exit
+        }
+        CliCmds::Serve => {
+            actions.serve();
+            CmdOutcome::Exit
+        }
+        CliCmds::Coverage => {
+            actions.coverage();
+            CmdOutcome::Exit
         }
     }
 }
-#[cfg(test)]
-mod tests {
-    use super::*;
 
-    #[test]
-    fn test_execute_cmd_system_check() {
-        let args = vec!["--system-check".to_string()];
-        execute_cmd(&args);
-        // Add assertions here to verify the expected behavior
+pub fn execute_cmd(args: &Vec<String>) {
+    let cmd = check_for_cli_cmds(args);
+
+    if dispatch_cmd(cmd, &RealCmdActions) == CmdOutcome::Exit {
+        std::process::exit(0);
     }
 }

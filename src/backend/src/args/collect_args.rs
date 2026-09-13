@@ -48,7 +48,9 @@ pub fn collect_args(args: Vec<String>) -> Args {
         if arg.starts_with("--port=") {
             let split: Vec<&str> = arg.split('=').collect();
             if split.len() == 2 {
-                port = split[1].parse::<u16>().unwrap();
+                if let Ok(p) = split[1].parse::<u16>() {
+                    port = p;
+                }
             }
         }
 
@@ -75,6 +77,7 @@ pub fn collect_args(args: Vec<String>) -> Args {
         cookie_domain,
     }
 }
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -103,5 +106,33 @@ mod tests {
         assert_eq!(args.port, "4000");
         assert_eq!(args.env, "prod");
         assert_eq!(args.cors_url, "spaceout.pl");
+    }
+
+    #[test]
+    fn test_values_containing_extra_equals_are_ignored() {
+        let args = collect_args(vec!["--host=a=b".to_string()]);
+
+        assert_eq!(args.host, "127.0.0.1");
+    }
+
+    #[test]
+    fn test_last_occurrence_of_a_flag_wins() {
+        let args = collect_args(vec!["--port=4000".to_string(), "--port=5000".to_string()]);
+
+        assert_eq!(args.port, "5000");
+    }
+
+    #[test]
+    fn test_unrelated_args_do_not_change_defaults() {
+        let args = collect_args(vec![
+            "target/debug/backend".to_string(),
+            "--nonsense".to_string(),
+            "host=1.2.3.4".to_string(),
+        ]);
+
+        assert_eq!(args.host, "127.0.0.1");
+        assert_eq!(args.port, "8080");
+        assert_eq!(args.env, "dev");
+        assert_eq!(args.cors_url, "astrox.spaceout.pl");
     }
 }

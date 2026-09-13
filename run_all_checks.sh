@@ -3,7 +3,7 @@ set -e
 echo '🧪 running cli cargo test...'
 cargo test
 
-echo '🧹running cli runner cargo fmt...'
+echo '🧹 running cli runner cargo fmt...'
 cargo fmt 
 
 echo '🔍 running cli cargo clippy...'
@@ -17,7 +17,6 @@ cargo fmt --manifest-path src/backend/Cargo.toml
 
 echo '🔍 running backend cargo clippy...'
 cargo clippy --manifest-path src/backend/Cargo.toml -- -D warnings
-
 
 echo '🧹 running frontend project lint...'
 npm run lint:all --prefix src/frontend/
