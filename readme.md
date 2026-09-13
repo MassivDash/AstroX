@@ -41,6 +41,11 @@ cargo run
 
 That's all you need to get started, the interactive cli will guide you through installation process.
 
+
+### Demo
+
+https://astrox.spaceout.pl
+
 ## Features
 
 ### CLI
@@ -295,6 +300,3 @@ AstroX
 └─ readme.md
 ```
 
-### Demo
-
-https://astrox.spaceout.pl
