@@ -8,5 +8,6 @@ test('Navbar', async () => {
 
   expect(result).toContain('astro')
   expect(result).toContain('X')
-  expect(result).toContain('Actix')
+  expect(result).toContain('actiX')
+  expect(result).toContain('href="/actix"')
 })
