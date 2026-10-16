@@ -1,13 +1,14 @@
 import { getViteConfig } from 'astro/config'
 import { svelteTesting } from '@testing-library/svelte/vite'
-import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default getViteConfig({
-  plugins: [tsconfigPaths()],
+  resolve: {
+    tsconfigPaths: true
+  },
   test: {
     projects: [
       {
-        plugins: [svelteTesting(), tsconfigPaths()],
+        plugins: [svelteTesting()],
         extends: true,
         test: {
           setupFiles: './setup.vitest.ts',
@@ -18,7 +19,6 @@ export default getViteConfig({
       },
       {
         extends: true,
-        plugins: [tsconfigPaths()],
         test: {
           name: 'Astro ssr',
           include: ['**/!(*.browser).test.{ts,js,tsx,jsx,astro}'],
