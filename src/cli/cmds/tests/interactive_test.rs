@@ -144,4 +144,15 @@ mod tests {
         assert_eq!(executed_commands.len(), 1);
         assert_eq!(executed_commands[0], "--system-check");
     }
+
+    #[test]
+    fn test_start_interactive_unknown_selection_falls_back_to_run() {
+        let mock_input = MockUserInput::new(vec!["Something else".to_string()]);
+        let mock_executor = MockCommandExecutor::new();
+        start_interactive(&mock_input, &mock_executor);
+
+        let executed_commands = mock_executor.executed_commands.borrow();
+        assert_eq!(executed_commands.len(), 1);
+        assert_eq!(executed_commands[0], "--run");
+    }
 }

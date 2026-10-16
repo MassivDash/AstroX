@@ -134,5 +134,27 @@ mod tests {
         assert_eq!(args.port, "8080");
         assert_eq!(args.env, "dev");
         assert_eq!(args.cors_url, "astrox.spaceout.pl");
+        assert_eq!(args.cookie_domain, None);
+    }
+
+    #[test]
+    fn test_cookie_domain_is_collected() {
+        let args = collect_args(vec!["--cookie_domain=spaceout.pl".to_string()]);
+
+        assert_eq!(args.cookie_domain, Some("spaceout.pl".to_string()));
+    }
+
+    #[test]
+    fn test_empty_cookie_domain_is_ignored() {
+        let args = collect_args(vec!["--cookie_domain=".to_string()]);
+
+        assert_eq!(args.cookie_domain, None);
+    }
+
+    #[test]
+    fn test_invalid_port_keeps_the_default() {
+        let args = collect_args(vec!["--port=not_a_port".to_string()]);
+
+        assert_eq!(args.port, "8080");
     }
 }

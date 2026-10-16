@@ -40,40 +40,95 @@ fn sample_rockets() -> Vec<Rocket> {
     }]
 }
 
-#[get("/api/space-x")]
-pub async fn json_get_space_x() -> Result<HttpResponse, ActixError> {
-    let client = reqwest::Client::builder().user_agent("AstroX/1.0").build();
+const SPACE_X_ROCKETS_URL: &str = "https://api.spacexdata.com/v3/rockets";
 
-    let response = match client {
-        Ok(c) => c.get("https://api.spacexdata.com/v3/rockets").send().await,
-        Err(_) => return Ok(HttpResponse::Ok().json(sample_rockets())),
+/// Fetch the rockets from `url`, falling back to the sample rockets on any failure.
+async fn fetch_rockets(url: &str) -> Vec<Rocket> {
+    let client = match reqwest::Client::builder().user_agent("AstroX/1.0").build() {
+        Ok(c) => c,
+        Err(_) => return sample_rockets(),
     };
 
-    match response {
-        Ok(resp) if resp.status().is_success() => match resp.json::<Vec<Rocket>>().await {
-            Ok(rockets) => Ok(HttpResponse::Ok().json(rockets)),
-            Err(_) => Ok(HttpResponse::Ok().json(sample_rockets())),
-        },
-        _ => Ok(HttpResponse::Ok().json(sample_rockets())),
+    match client.get(url).send().await {
+        Ok(resp) if resp.status().is_success() => resp
+            .json::<Vec<Rocket>>()
+            .await
+            .unwrap_or_else(|_| sample_rockets()),
+        _ => sample_rockets(),
     }
+}
+
+#[get("/api/space-x")]
+pub async fn json_get_space_x() -> Result<HttpResponse, ActixError> {
+    Ok(HttpResponse::Ok().json(fetch_rockets(SPACE_X_ROCKETS_URL).await))
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use actix_web::{test, App};
+    use std::io::{Read, Write};
+    use std::net::TcpListener;
+
+    /// Serve a single raw HTTP response on a random local port and return its url.
+    fn serve_once(status_line: &str, body: &str) -> String {
+        let listener = TcpListener::bind("127.0.0.1:0").unwrap();
+        let url = format!("http://{}", listener.local_addr().unwrap());
+        let response = format!(
+            "HTTP/1.1 {status_line}\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n{body}",
+            body.len()
+        );
+
+        std::thread::spawn(move || {
+            let (mut stream, _) = listener.accept().unwrap();
+            let mut buf = [0; 1024];
+            let _ = stream.read(&mut buf);
+            stream.write_all(response.as_bytes()).unwrap();
+        });
+
+        url
+    }
 
     #[actix_rt::test]
-    async fn test_json_get_space_x() {
-        let mut app = test::init_service(App::new().service(json_get_space_x)).await;
+    async fn test_fetch_rockets_returns_the_api_rockets() {
+        let mut rocket = sample_rockets().remove(0);
+        rocket.id = 7;
+        let body = serde_json::to_string(&vec![rocket]).unwrap();
+        let url = serve_once("200 OK", &body);
 
-        let req = test::TestRequest::get().uri("/api/space-x").to_request();
-        let resp = test::call_service(&mut app, req).await;
+        let rockets = fetch_rockets(&url).await;
 
-        assert!(resp.status().is_success());
+        assert_eq!(rockets.len(), 1);
+        assert_eq!(rockets[0].id, 7);
+    }
 
-        let body = test::read_body(resp).await;
-        let rockets: Vec<Rocket> = serde_json::from_slice(&body).unwrap();
+    #[actix_rt::test]
+    async fn test_fetch_rockets_falls_back_on_invalid_json() {
+        let url = serve_once("200 OK", "not json");
+
+        let rockets = fetch_rockets(&url).await;
+
+        assert_eq!(rockets[0].id, 1);
+    }
+
+    #[actix_rt::test]
+    async fn test_fetch_rockets_falls_back_on_http_error() {
+        let url = serve_once("500 Internal Server Error", "[]");
+
+        let rockets = fetch_rockets(&url).await;
+
+        assert_eq!(rockets[0].id, 1);
+    }
+
+    #[actix_rt::test]
+    async fn test_fetch_rockets_falls_back_when_unreachable() {
+        // Bind then drop to get a port nothing is listening on
+        let port = TcpListener::bind("127.0.0.1:0")
+            .unwrap()
+            .local_addr()
+            .unwrap()
+            .port();
+
+        let rockets = fetch_rockets(&format!("http://127.0.0.1:{port}")).await;
 
         assert_eq!(rockets[0].id, 1);
     }

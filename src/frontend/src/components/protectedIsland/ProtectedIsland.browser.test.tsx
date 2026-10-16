@@ -59,3 +59,16 @@ test('ProtectedIsland - unauthorized access', async () => {
     ).toBeTruthy()
   })
 })
+
+test('ProtectedIsland - network error without a response', async () => {
+  vi.mocked(axiosBackendInstance.get).mockRejectedValueOnce(
+    new Error('connect ECONNREFUSED')
+  )
+
+  render(<ProtectedIsland />)
+
+  await waitFor(() => {
+    expect(screen.getByText('Network Error')).toBeTruthy()
+    expect(screen.getByText('Failed to fetch protected data')).toBeTruthy()
+  })
+})

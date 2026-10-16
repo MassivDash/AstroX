@@ -28,7 +28,8 @@ export default getViteConfig({
     ],
     globals: true,
     coverage: {
-      include: ['.astro', '.ts', '.tsx', '.svelte'],
+      include: ['src/**/*.{ts,tsx,svelte}'],
+      exclude: ['**/*.test.*', '**/*.d.ts'],
       provider: 'v8',
       reporter: ['text', 'json-summary', 'json', 'cobertura']
     }

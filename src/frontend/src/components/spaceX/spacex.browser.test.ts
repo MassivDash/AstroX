@@ -39,3 +39,18 @@ test('fetches and displays SpaceX data', async () => {
     expect(screen.getByText('Falcon 1')).toBeTruthy()
   })
 })
+
+test('renders no rockets when the request fails', async () => {
+  const { axiosBackendInstance } = await import('@axios/axiosBackendInstance')
+  vi.mocked(axiosBackendInstance.get).mockClear()
+  vi.mocked(axiosBackendInstance.get).mockRejectedValueOnce(
+    new Error('Network Error')
+  )
+
+  const { container } = render(SpaceX)
+
+  await waitFor(() => {
+    expect(axiosBackendInstance.get).toHaveBeenCalledWith('space-x')
+  })
+  expect(container.querySelectorAll('li')).toHaveLength(0)
+})

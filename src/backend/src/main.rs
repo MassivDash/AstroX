@@ -24,6 +24,27 @@ use crate::session::flash_messages::set_up_flash_messages;
 use crate::ssr_routes::login::login_form;
 use crate::ssr_routes::post_login::post_login;
 
+/// Register every route and the static frontend files.
+fn configure_routes(cfg: &mut web::ServiceConfig) {
+    cfg.route("/login", web::get().to(login_form))
+        .route("/login", web::post().to(post_login))
+        .service(json_response)
+        .service(json_response_get)
+        .service(json_get_space_x)
+        .service(protected_endpoint)
+        .service(
+            Files::new("/", "../frontend/dist/")
+                .prefer_utf8(true)
+                .index_file("index.html")
+                .default_handler(fn_service(|req: ServiceRequest| async {
+                    let (req, _) = req.into_parts();
+                    let file = NamedFile::open_async("../frontend/dist/404.html").await?;
+                    let res = file.into_response(&req);
+                    Ok(ServiceResponse::new(req, res))
+                })),
+        );
+}
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     let args = collect_args(env::args().collect());
@@ -46,23 +67,7 @@ async fn main() -> std::io::Result<()> {
         // Ensure all the wrappers are after routes and handlers
         App::new()
             .wrap(cors)
-            .route("/login", web::get().to(login_form))
-            .route("/login", web::post().to(post_login))
-            .service(json_response)
-            .service(json_response_get)
-            .service(json_get_space_x)
-            .service(protected_endpoint)
-            .service(
-                Files::new("/", "../frontend/dist/")
-                    .prefer_utf8(true)
-                    .index_file("index.html")
-                    .default_handler(fn_service(|req: ServiceRequest| async {
-                        let (req, _) = req.into_parts();
-                        let file = NamedFile::open_async("../frontend/dist/404.html").await?;
-                        let res = file.into_response(&req);
-                        Ok(ServiceResponse::new(req, res))
-                    })),
-            )
+            .configure(configure_routes)
             .wrap(Authentication {
                 routes: auth_routes,
             })
@@ -83,4 +88,55 @@ async fn main() -> std::io::Result<()> {
     });
 
     server.await
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use actix_web::test;
+
+    macro_rules! init_app {
+        () => {
+            test::init_service(
+                App::new()
+                    .configure(configure_routes)
+                    .wrap(session::session_middleware::session_middleware(None))
+                    .wrap(set_up_flash_messages()),
+            )
+            .await
+        };
+    }
+
+    #[actix_rt::test]
+    async fn test_hello_routes_are_registered() {
+        let app = init_app!();
+
+        let get = test::TestRequest::get().uri("/api/hello").to_request();
+        assert!(test::call_service(&app, get).await.status().is_success());
+
+        let post = test::TestRequest::post().uri("/api/hello").to_request();
+        assert!(test::call_service(&app, post).await.status().is_success());
+    }
+
+    #[actix_rt::test]
+    async fn test_login_form_route_is_registered() {
+        let app = init_app!();
+
+        let req = test::TestRequest::get().uri("/login").to_request();
+        let body = test::call_and_read_body(&app, req).await;
+
+        assert!(String::from_utf8(body.to_vec())
+            .unwrap()
+            .contains(r#"<form action="/login" method="post">"#));
+    }
+
+    #[actix_rt::test]
+    async fn test_protected_route_rejects_anonymous_users() {
+        let app = init_app!();
+
+        let req = test::TestRequest::get().uri("/api/protected").to_request();
+        let resp = test::call_service(&app, req).await;
+
+        assert!(resp.status().is_client_error());
+    }
 }

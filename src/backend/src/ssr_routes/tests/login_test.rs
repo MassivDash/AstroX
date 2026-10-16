@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use crate::session::session_middleware::session_middleware;
-    use crate::ssr_routes::post_login::{post_login, FormData};
+    use crate::ssr_routes::post_login::{post_login, FormData, LoginError};
     use crate::{session::flash_messages::set_up_flash_messages, ssr_routes::login::login_form};
     use actix_web::{test, web, App};
     use std::env;
@@ -103,5 +103,58 @@ mod tests {
             .to_request();
         let resp = test::call_service(&app, req).await;
         assert!(resp.status().is_redirection());
+    }
+
+    #[actix_rt::test]
+    async fn test_failed_login_shows_the_flash_error_on_the_form() {
+        env::set_var("USERNAME", "test_user");
+        env::set_var("PASSWORD", "test_password");
+
+        let app = test::init_service(
+            App::new()
+                .route("/login", web::post().to(post_login))
+                .route("/login", web::get().to(login_form))
+                .wrap(set_up_flash_messages())
+                .wrap(session_middleware(None)),
+        )
+        .await;
+
+        let req = test::TestRequest::post()
+            .set_form(FormData {
+                username: "intruder".to_string(),
+                password: "wrong".to_string(),
+            })
+            .uri("/login")
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+        assert!(resp.status().is_redirection());
+
+        // Carry the flash cookie over to the redirect target, like a browser would
+        let mut follow_up = test::TestRequest::get().uri("/login");
+        for cookie in resp.response().cookies() {
+            follow_up = follow_up.cookie(cookie.into_owned());
+        }
+        let body = test::call_and_read_body(&app, follow_up.to_request()).await;
+        let html = String::from_utf8(body.to_vec()).unwrap();
+
+        assert!(html.contains("<p><i>Authentication failed</i></p>"));
+    }
+
+    #[actix_rt::test]
+    async fn test_login_error_debug_lists_the_cause_chain() {
+        let error = LoginError::AuthError(anyhow::anyhow!("bad password"));
+
+        let debug = format!("{:?}", error);
+
+        assert!(debug.starts_with("Authentication failed\n"));
+        assert!(debug.contains("Caused by:\n\tbad password"));
+    }
+
+    #[actix_rt::test]
+    async fn test_unexpected_login_error_message() {
+        let error = LoginError::from(anyhow::anyhow!("session store down"));
+
+        assert_eq!(error.to_string(), "Something went wrong");
+        assert!(format!("{:?}", error).contains("Caused by:\n\tsession store down"));
     }
 }
