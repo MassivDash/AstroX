@@ -289,4 +289,26 @@ mod tests {
         println!("{:?}", &resp2);
         assert!(resp2.status().is_success())
     }
+
+    async fn failing_route() -> Result<HttpResponse, Error> {
+        Err(actix_web::error::ErrorBadRequest("downstream error"))
+    }
+
+    #[actix_rt::test]
+    async fn test_middleware_propagates_downstream_errors() {
+        let app = test::init_service(
+            App::new()
+                .route("/public-fail", web::get().to(failing_route))
+                .wrap(set_up_flash_messages())
+                .wrap(session_middleware(None))
+                .wrap(Authentication {
+                    routes: vec!["/test/*".to_string()],
+                }),
+        )
+        .await;
+
+        let req = test::TestRequest::get().uri("/public-fail").to_request();
+        let resp = test::call_service(&app, req).await;
+        assert_eq!(resp.status(), StatusCode::BAD_REQUEST);
+    }
 }

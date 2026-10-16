@@ -47,7 +47,7 @@
       const res = await axiosBackendInstance.get('space-x')
       const data = res.data
       return data
-    } catch (_error) {
+    } catch {
       // implement error handling
       // console.log(_error)
       return []

@@ -139,4 +139,16 @@ mod tests {
 
         assert!(resp.status().is_client_error());
     }
+
+    #[actix_rt::test]
+    async fn test_unknown_route_falls_through_to_default_handler() {
+        let app = init_app!();
+
+        let req = test::TestRequest::get()
+            .uri("/definitely-not-a-route")
+            .to_request();
+        let resp = test::call_service(&app, req).await;
+
+        assert!(resp.status().is_success() || resp.status().is_client_error());
+    }
 }

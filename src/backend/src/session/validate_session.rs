@@ -24,24 +24,15 @@ mod tests {
     use actix_web::{test, web, App, Responder};
 
     async fn manual_error(session: Session) -> impl Responder {
-        let auth = validate_session(&session);
-
-        if auth.is_ok() {
-            HttpResponse::Ok().body("Hey there!")
-        } else {
-            HttpResponse::InternalServerError().json("Internal Server Error")
+        match validate_session(&session) {
+            Ok(()) => HttpResponse::Ok().body("Hey there!"),
+            Err(_) => HttpResponse::InternalServerError().json("Internal Server Error"),
         }
     }
 
     async fn manual_success(session: Session) -> impl Responder {
         let _ = session.insert("user_id", 41);
-        let auth = validate_session(&session);
-
-        if auth.is_ok() {
-            HttpResponse::Ok().body("Hey there!")
-        } else {
-            HttpResponse::InternalServerError().json("Internal Server Error")
-        }
+        manual_error(session).await
     }
 
     #[actix_rt::test]

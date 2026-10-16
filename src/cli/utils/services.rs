@@ -50,4 +50,17 @@ mod tests {
         let mut children: Vec<&mut Child> = vec![];
         terminate_services(&mut children, "target/debug/backend");
     }
+
+    #[cfg(unix)]
+    #[test]
+    fn test_terminate_services_reaps_a_spawned_child() {
+        use std::os::unix::process::CommandExt;
+        let mut child = Command::new("sleep")
+            .arg("60")
+            .process_group(0)
+            .spawn()
+            .unwrap();
+        terminate_services(&mut [&mut child], "nonexistent- astrox-test-binary");
+        assert!(child.try_wait().unwrap().is_some());
+    }
 }

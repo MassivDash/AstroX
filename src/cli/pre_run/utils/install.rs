@@ -253,4 +253,16 @@ mod tests {
         assert!(ValidationOutcome::PromptFailed.is_fatal());
         assert!(ValidationOutcome::Unsatisfiable.is_fatal());
     }
+
+    #[cfg(unix)]
+    #[test]
+    fn test_real_installer_runs_command_and_honors_dir() {
+        let cmd = InstallCommand {
+            program: "true",
+            args: &[],
+            dir: Some("."),
+            failure_message: "true should succeed",
+        };
+        RealInstaller.install(&cmd);
+    }
 }

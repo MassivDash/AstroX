@@ -1,6 +1,8 @@
 #[cfg(test)]
 mod tests {
-    use crate::cli::config::get_config::{get_config, get_config_from, get_prod_config};
+    use crate::cli::config::get_config::{
+        get_config, get_config_from, get_prod_config, get_prod_config_from,
+    };
 
     fn write_fixture_toml(name: &str) -> String {
         let path = std::env::temp_dir()
@@ -131,5 +133,14 @@ public_api_url = "http://10.0.0.1:9090/api"
         assert_eq!(config.env, "prod");
         assert!(config.port.is_some());
         assert!(!config.host.is_empty());
+    }
+
+    #[test]
+    fn test_get_prod_config_falls_back_to_defaults_when_toml_is_missing() {
+        let config = get_prod_config_from("Astrox-does-not-exist.toml");
+
+        assert_eq!(config.env, "prod");
+        assert_eq!(config.host, "localhost");
+        assert_eq!(config.port, Some(8080));
     }
 }

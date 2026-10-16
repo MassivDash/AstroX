@@ -19,10 +19,13 @@ import ActixImage from '../sections/imgs/actix.png'
           🦀 Powerful, pragmatic, and extremely fast web framework for Rust
         </h3>
         <p>
-          <a href='https://actix.rs/' target='_blank'>Actix Web</a> is a modern Rust
-          web framework that delivers blazing fast performance with type safety and
-          a rich feature set. Built on Actix actor framework, it provides everything
-          you need for production-ready web applications.
+          <a href='https://actix.rs/' target='_blank'>
+            Actix Web
+          </a>{' '}
+          is a modern Rust web framework that delivers blazing fast performance
+          with type safety and a rich feature set. Built on Actix actor
+          framework, it provides everything you need for production-ready web
+          applications.
         </p>
         <ul class='live type2'>
           <li>
@@ -74,9 +77,11 @@ import ActixImage from '../sections/imgs/actix.png'
           Session validation with automatic renewal to keep users logged in
         </li>
         <li>
-          Server-side rendered login form at <a href='/login' target='_blank'
-            ><code>/login</code></a
-          > with flash message support
+          Server-side rendered login form at{' '}
+          <a href='/login' target='_blank'>
+            <code>/login</code>
+          </a>{' '}
+          with flash message support
         </li>
         <li>
           Protected routes automatically redirect unauthorized users with proper
@@ -87,15 +92,16 @@ import ActixImage from '../sections/imgs/actix.png'
       <h3>🌐 API Endpoints</h3>
       <ul class='live type2'>
         <li>
-          <code>/api/hello</code> - Simple JSON response endpoint demonstrating GET
-          and POST handlers
+          <code>/api/hello</code> - Simple JSON response endpoint demonstrating
+          GET and POST handlers
         </li>
         <li>
-          <code>/api/space-x</code> - External API proxy that fetches SpaceX rocket
-          data from spacexdata.com
+          <code>/api/space-x</code> - External API proxy that fetches SpaceX
+          rocket data from spacexdata.com
         </li>
         <li>
-          <code>/api/protected</code> - Session-protected endpoint that requires authentication
+          <code>/api/protected</code> - Session-protected endpoint that requires
+          authentication
         </li>
         <li>
           All API endpoints return proper JSON responses with error handling
@@ -143,94 +149,91 @@ import ActixImage from '../sections/imgs/actix.png'
 
       <h3>Protected API Endpoint</h3>
       <p>
-        Example from <code>src/backend/src/api/protected/get.rs</code> - demonstrates
-        session validation:
+        Example from <code>src/backend/src/api/protected/get.rs</code> -
+        demonstrates session validation:
       </p>
       <code class='code-block'>
         <span class='macro'>#[get("/api/protected")]</span>
         <span class='keyword'>pub async fn</span>
-        <span class='function'>protected_endpoint</span>(session: Session) -&gt; <span
-          class='keyword'>impl</span
-        > Responder &#123; &nbsp;&nbsp;<span class='keyword'>match</span>
+        <span class='function'>protected_endpoint</span>(session: Session) -&gt;{' '}
+        <span class='keyword'>impl</span> Responder &#123; &nbsp;&nbsp;
+        <span class='keyword'>match</span>
         <span class='function'>validate_session</span>(&amp;session) &#123;
         &nbsp;&nbsp;&nbsp;&nbsp;<span class='keyword'>Ok</span>(_) =&gt;
-        HttpResponse::Ok().json(...), &nbsp;&nbsp;&nbsp;&nbsp;<span
-          class='keyword'>Err</span
-        >(_) =&gt; HttpResponse::Unauthorized().json(...) &nbsp;&nbsp;&#125;
-        &#125;
+        HttpResponse::Ok().json(...), &nbsp;&nbsp;&nbsp;&nbsp;
+        <span class='keyword'>Err</span>(_) =&gt;
+        HttpResponse::Unauthorized().json(...) &nbsp;&nbsp;&#125; &#125;
       </code>
 
       <h3>Custom Authentication Middleware</h3>
       <p>
-        From <code>src/backend/src/auth/auth_middleware.rs</code> - protects routes
-        using glob patterns:
+        From <code>src/backend/src/auth/auth_middleware.rs</code> - protects
+        routes using glob patterns:
       </p>
       <code class='code-block'>
         <span class='keyword'>pub struct</span>
-        <span class='type'>Authentication</span> &#123; &nbsp;&nbsp;<span
-          class='keyword'>pub</span
-        > routes: Vec&lt;String&gt;, &#125;
-
+        <span class='type'>Authentication</span> &#123; &nbsp;&nbsp;
+        <span class='keyword'>pub</span> routes: Vec&lt;String&gt;, &#125;
         <span class='comment'>// Usage in main.rs:</span>
-        <span class='keyword'>let</span> auth_routes = <span class='macro'
-          >vec!</span
-        >[<span class='string'>"/auth/*"</span>.to_string()];
-        App::new().wrap(Authentication &#123; routes: auth_routes &#125;)
+        <span class='keyword'>let</span> auth_routes ={' '}
+        <span class='macro'>vec!</span>[<span class='string'>"/auth/*"</span>
+        .to_string()]; App::new().wrap(Authentication &#123; routes: auth_routes
+        &#125;)
       </code>
 
       <h3>External API Proxy</h3>
       <p>
-        From <code>src/backend/src/api/space_x/get.rs</code> - proxies external API
-        requests:
+        From <code>src/backend/src/api/space_x/get.rs</code> - proxies external
+        API requests:
       </p>
       <code class='code-block'>
         <span class='macro'>#[get("/api/space-x")]</span>
         <span class='keyword'>pub async fn</span>
         <span class='function'>json_get_space_x</span>() -&gt;
-        Result&lt;HttpResponse, ActixError&gt; &#123; &nbsp;&nbsp;<span
-          class='keyword'>let</span
-        > response = <span class='function'>get</span>(<span class='string'
-          >"https://api.spacexdata.com/v3/rockets"</span
-        >).<span class='keyword'>await</span>; &nbsp;&nbsp;<span class='comment'
-          >// Handle response and return JSON</span
-        >
+        Result&lt;HttpResponse, ActixError&gt; &#123; &nbsp;&nbsp;
+        <span class='keyword'>let</span> response ={' '}
+        <span class='function'>get</span>(
+        <span class='string'>"https://api.spacexdata.com/v3/rockets"</span>).
+        <span class='keyword'>await</span>; &nbsp;&nbsp;
+        <span class='comment'>// Handle response and return JSON</span>
         &#125;
       </code>
 
       <h3>CORS Configuration</h3>
       <p>
-        From <code>src/backend/src/cors/get_cors_options.rs</code> - environment-based
-        CORS:
+        From <code>src/backend/src/cors/get_cors_options.rs</code> -
+        environment-based CORS:
       </p>
       <code class='code-block'>
         <span class='keyword'>pub fn</span>
         <span class='function'>get_cors_options</span>(env: String,
-        allowed_origin: String) -&gt; Cors &#123; &nbsp;&nbsp;<span
-          class='keyword'>if</span
-        > env == <span class='string'>"prod"</span> &#123; &nbsp;&nbsp;&nbsp;&nbsp;Cors::default().allowed_origin(&amp;allowed_origin)
-        &nbsp;&nbsp;&#125; <span class='keyword'>else</span> &#123; &nbsp;&nbsp;&nbsp;&nbsp;Cors::default().allow_any_origin()
+        allowed_origin: String) -&gt; Cors &#123; &nbsp;&nbsp;
+        <span class='keyword'>if</span> env =={' '}
+        <span class='string'>"prod"</span> &#123;
+        &nbsp;&nbsp;&nbsp;&nbsp;Cors::default().allowed_origin(&amp;allowed_origin)
+        &nbsp;&nbsp;&#125; <span class='keyword'>else</span> &#123;
+        &nbsp;&nbsp;&nbsp;&nbsp;Cors::default().allow_any_origin()
         &nbsp;&nbsp;&#125; &#125;
       </code>
 
       <h3>Session Validation</h3>
       <p>
-        From <code>src/backend/src/session/validate_session.rs</code> - checks user
-        authentication:
+        From <code>src/backend/src/session/validate_session.rs</code> - checks
+        user authentication:
       </p>
       <code class='code-block'>
         <span class='keyword'>pub fn</span>
         <span class='function'>validate_session</span>(session: &amp;Session)
-        -&gt; anyhow::Result&lt;()&gt; &#123; &nbsp;&nbsp;<span class='keyword'
-          >let</span
-        > user_id: Option&lt;i64&gt; = session.get(<span class='string'
-          >"user_id"</span
-        >)?; &nbsp;&nbsp;<span class='keyword'>match</span> user_id &#123; &nbsp;&nbsp;&nbsp;&nbsp;<span
-          class='keyword'>Some</span
-        >(_) =&gt; &#123; session.renew(); <span class='keyword'>Ok</span>(())
-        &#125; &nbsp;&nbsp;&nbsp;&nbsp;<span class='keyword'>None</span> =&gt; <span
-          class='keyword'>Err</span
-        >(anyhow::anyhow!(<span class='string'>"Not authenticated"</span>))
-        &nbsp;&nbsp;&#125; &#125;
+        -&gt; anyhow::Result&lt;()&gt; &#123; &nbsp;&nbsp;
+        <span class='keyword'>let</span> user_id: Option&lt;i64&gt; =
+        session.get(<span class='string'>"user_id"</span>)?; &nbsp;&nbsp;
+        <span class='keyword'>match</span> user_id &#123;
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class='keyword'>Some</span>(_) =&gt;
+        &#123; session.renew(); <span class='keyword'>Ok</span>(()) &#125;
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class='keyword'>None</span> =&gt;{' '}
+        <span class='keyword'>Err</span>(anyhow::anyhow!(
+        <span class='string'>"Not authenticated"</span>)) &nbsp;&nbsp;&#125;
+        &#125;
       </code>
     </Section>
 
@@ -242,15 +245,18 @@ import ActixImage from '../sections/imgs/actix.png'
       </p>
       <ul class='live type2'>
         <li>
-          Run <code>cargo run</code> to start the development server with default
-          settings
+          Run <code>cargo run</code> to start the development server with
+          default settings
         </li>
         <li>
           Access the API at <code>http://localhost:8080/api/*</code>
         </li>
         <li>
-          Visit <a href='/login' target='_blank'><code>/login</code></a> to test the
-          server-side rendered authentication
+          Visit{' '}
+          <a href='/login' target='_blank'>
+            <code>/login</code>
+          </a>{' '}
+          to test the server-side rendered authentication
         </li>
         <li>
           Configure via command-line args or <code>Astrox.toml</code> file
@@ -260,13 +266,14 @@ import ActixImage from '../sections/imgs/actix.png'
         </li>
         <li>
           Check out WebSockets implementation of this template in my scrum poker
-          application at <a
-            href='https://scrumpoker.spaceout.pl/'
-            target='_blank'>https://scrumpoker.spaceout.pl/</a
-          >, github repository at <a
-            href='https://github.com/MassivDash/scrumpoker'
-            target='_blank'>https://github.com/MassivDash/scrumpoker</a
-          >
+          application at{' '}
+          <a href='https://scrumpoker.spaceout.pl/' target='_blank'>
+            https://scrumpoker.spaceout.pl/
+          </a>
+          , github repository at{' '}
+          <a href='https://github.com/MassivDash/scrumpoker' target='_blank'>
+            https://github.com/MassivDash/scrumpoker
+          </a>
         </li>
       </ul>
     </Section>

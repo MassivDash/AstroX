@@ -188,4 +188,17 @@ mod tests {
         handle_astro_line("astro ready", 4321, &ready, &opener);
         assert_eq!(opener.opened.borrow().len(), 1);
     }
+
+    #[test]
+    fn test_wait_until_ready_polls_until_flag_becomes_true() {
+        use std::sync::Arc;
+        let ready = Arc::new(AtomicBool::new(false));
+        let ready_clone = ready.clone();
+        std::thread::spawn(move || {
+            sleep(Duration::from_millis(20));
+            ready_clone.store(true, Ordering::SeqCst);
+        });
+        wait_until_ready(&ready);
+        assert!(ready.load(Ordering::SeqCst));
+    }
 }

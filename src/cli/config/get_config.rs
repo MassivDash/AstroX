@@ -51,17 +51,21 @@ pub fn get_config(args: &Vec<String>) -> Config {
     get_config_from(ASTROX_TOML, args)
 }
 
-/// Resolve the configuration used by the production commands.
-/// Astrox.toml wins, the default config is the fallback, and the environment is
+/// Resolve the configuration used by the production commands from `toml_path`.
+/// The toml file wins, the default config is the fallback, and the environment is
 /// always forced to prod.
-pub fn get_prod_config() -> Config {
-    let mut config = match read_toml(&ASTROX_TOML.to_string()) {
+pub fn get_prod_config_from(toml_path: &str) -> Config {
+    let mut config = match read_toml(&toml_path.to_string()) {
         Ok(config) => config,
-        Err(_) => get_config(&vec![]),
+        Err(_) => get_config_from(toml_path, &vec![]),
     };
 
     config.env = "prod".to_string();
     config
+}
+
+pub fn get_prod_config() -> Config {
+    get_prod_config_from(ASTROX_TOML)
 }
 
 pub const ASTROX_TOML: &str = "Astrox.toml";
